@@ -151,4 +151,5 @@ todo:
     hint: for i in range():
 2. 寫一個"簡單的猜數字遊戲" (只要能玩就好, 怎樣都行)
     hint: 使用 while 迴圈, break, 使用input() 取得使用者輸入
+    ///
 """
