@@ -10,7 +10,6 @@
 # not 運算符: 反轉布林值
 print("4. IF ELSE 條件判斷")
 age = 5
-
 def age_reduce(x):
     if x < 15:
         print("增加3歲")
