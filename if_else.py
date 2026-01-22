@@ -49,7 +49,7 @@ if score > 90 or score == 85:
     print("通過")
 
 """
-TODO: 
+todo: 
 1. 邏輯運算符: not -> 確認與寫範例
 2. 把範例看完, 可稍微變更值做嘗試
 """
@@ -189,37 +189,37 @@ TODO:
 # # ========================================
 # # 進階範例 6: 飲食推薦系統
 # # ========================================
-# print("\n--- 飲食推薦系統 ---")
-# time_of_day = 14  # 24小時制
-# is_hungry = True
-# has_diet_restriction = False
-# restriction_type = "素食"
+print("\n--- 飲食推薦系統 ---")
+time_of_day = 14  # 24小時制
+is_hungry = True
+has_diet_restriction = False
+restriction_type = "素食"
 
-# if not is_hungry:
-#     recommendation = "暫時不需要進食"
-# elif time_of_day >= 6 and time_of_day < 11:
-#     recommendation = "早餐時間: 推薦吃麥片、雞蛋或麵包"
-# elif time_of_day >= 11 and time_of_day < 14:
-#     recommendation = "午餐時間: 推薦吃米飯、麵條或漢堡"
-# elif time_of_day >= 14 and time_of_day < 17:
-#     recommendation = "下午茶時間: 推薦吃水果、餅乾或飲料"
-# elif time_of_day >= 17 and time_of_day < 21:
-#     recommendation = "晚餐時間: 推薦吃蔬菜、蛋白質或湯"
-# else:
-#     recommendation = "宵夜時間: 推薦吃清淡食物"
+if not is_hungry:
+    recommendation = "暫時不需要進食"
+elif time_of_day >= 6 and time_of_day < 11:
+    recommendation = "早餐時間: 推薦吃麥片、雞蛋或麵包"
+elif time_of_day >= 11 and time_of_day < 14:
+    recommendation = "午餐時間: 推薦吃米飯、麵條或漢堡"
+elif time_of_day >= 14 and time_of_day < 17:
+    recommendation = "下午茶時間: 推薦吃水果、餅乾或飲料"
+elif time_of_day >= 17 and time_of_day < 21:
+    recommendation = "晚餐時間: 推薦吃蔬菜、蛋白質或湯"
+else:
+    recommendation = "宵夜時間: 推薦吃清淡食物"
 
-# # 根據飲食限制調整推薦
-# if has_diet_restriction:
-#     if restriction_type == "素食":
-#         recommendation += " (避免肉類)"
-#     elif restriction_type == "無麩質":
-#         recommendation += " (避免麵粉製品)"
-#     elif restriction_type == "海鮮過敏":
-#         recommendation += " (避免海鮮)"
+# 根據飲食限制調整推薦
+if has_diet_restriction:
+    if restriction_type == "素食":
+        recommendation += " (避免肉類)"
+    elif restriction_type == "無麩質":
+        recommendation += " (避免麵粉製品)"
+    elif restriction_type == "海鮮過敏":
+        recommendation += " (避免海鮮)"
 
-# print(f"時間: {time_of_day}:00")
-# print(f"是否飢餓: {'是' if is_hungry else '否'}")
-# print(f"推薦: {recommendation}")
+print(f"時間: {time_of_day}:00")
+print(f"是否飢餓: {'是' if is_hungry else '否'}")
+print(f"推薦: {recommendation}")
 
 # not a == b 
 # (not a) == b 
