@@ -153,3 +153,23 @@ todo:
     hint: 使用 while 迴圈, break, 使用input() 取得使用者輸入
     ///
 """
+for i in range(20):
+    for j in range(20):
+        for k in range(20):
+            if i == 5 and j == 5 and k == 5:
+                print("找到目標!")
+                print(f"i={i}, j={j}, k={k}")
+                break
+""""
+5
+  5
+    0-20
+"""""
+number = input('請輸入數字 :')
+while number != '7':
+    print('猜錯了,請再試一次')
+    number = input('請輸入數字 :')
+    if number == '7':
+        print('猜對了!')
+        break
+
