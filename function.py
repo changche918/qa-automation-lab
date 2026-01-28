@@ -108,9 +108,6 @@ def say_hi():
     print("Hello!")
 
 say_hi()
-
-
-
 # TODO: 嘗試搞懂這兩個用法 *args 和 **kwargs & 變形 (a, b, **info) 
 # TODO: 嘗試 map, filter, L54~L61
 # TODO: 嘗試lambda複雜一點的內容
@@ -118,3 +115,35 @@ say_hi()
 # TODO: Preview classes (AI)
 
 """ ========= 將功課與筆記紀錄在下方 ========= """
+# todo 1 args kwargs
+def name(*args):
+    print(args)
+name('ryan', 'jason')
+
+def qa(**kwargs):
+    print(kwargs)
+qa(name="Ryan", age=35, job="QA")
+
+# todo 2 map, filter 
+print("map, filter")
+numbers = [1, 2, 3, 4, 5]
+doubled = list(map(lambda x: x * 2, numbers))
+print(f"Double: {doubled}")
+
+even = list(filter(lambda x: x % 2 == 0, numbers))
+print(f"Even numbers: {even}")
+
+nums = [1, 2, 3, 4]
+result = []
+
+for n in nums:
+    result.append(n * n)
+
+print(result)
+
+# todo 3 lambda
+num1  = lambda x,y : x + y
+print(num1(5, 10))
+
+num2 = lambda x: x if x > 0 else 0
+print(num2(-5))
