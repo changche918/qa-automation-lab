@@ -118,7 +118,7 @@ say_hi()
 # todo 1 args kwargs
 def name(*args):
     print(args)
-name('ryan', 'jason')
+name('ryan', 'jason' , 'mary')
 
 def qa(**kwargs):
     print(kwargs)
@@ -127,10 +127,10 @@ qa(name="Ryan", age=35, job="QA")
 # todo 2 map, filter 
 print("map, filter")
 numbers = [1, 2, 3, 4, 5]
-doubled = list(map(lambda x: x * 2, numbers))
+doubled = list(map(lambda x: x * 2, numbers))  # 請 AI 拆解
 print(f"Double: {doubled}")
 
-even = list(filter(lambda x: x % 2 == 0, numbers))
+even = list(filter(lambda x: x % 2 == 0, numbers))  # 請 AI 拆解
 print(f"Even numbers: {even}")
 
 nums = [1, 2, 3, 4]
