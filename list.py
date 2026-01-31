@@ -68,6 +68,7 @@ print('範例看這')
 a = ['ryan', 'lisa', 'mike']
 b = list(a)
 print(b)
+print(a)
 list('123')
 print(list('123')) 
 print(list((1,2,3)))

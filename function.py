@@ -147,3 +147,12 @@ print(num1(5, 10))
 
 num2 = lambda x: x if x > 0 else 0
 print(num2(-5))
+
+# map filter
+numbers = [1, 2, 3, 4, 5]
+# doubled = list(map(lambda x: x * 2, numbers))
+doubled = map(lambda x: x * 2, numbers)
+print(f"Double: {doubled}")
+
+even = list(filter(lambda x: x % 2 == 0, numbers))
+print(f"Even numbers: {even}")
