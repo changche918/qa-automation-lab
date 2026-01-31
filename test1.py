@@ -7,3 +7,22 @@
 for i in range(4, 0, -1):
     star = '*' * (2 * i - 1)
     print(star.center(9))
+
+def make_multiplier(n):
+    def multiply(x):
+        return x * n
+    return multiply
+times3 = make_multiplier(3)
+print(times3(5))  # 输出 15
+
+def make_multiplier(x ,n):
+    return x * n
+times3 = make_multiplier(3 ,5)
+print(times3)
+
+
+class Cat:
+    def sound(self):
+        return "meow"
+Cat.sound(self="test")
+print(Cat.sound(self="test"))

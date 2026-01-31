@@ -40,6 +40,11 @@ print(person_john)
 print(f"Species: {person_john.species}") #TODO: 1/31說
 
 # TODO: 與AI確認錯誤原因 print(Person.introduce("tets", "John", 30)) 
+print('確認錯誤')
+# print(Person.introduce("tets", "John", 30)) 
+print(Person.introduce())
+
+       
 
 # TODO: 繼承
 # 說明 super():
