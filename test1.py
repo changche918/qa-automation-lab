@@ -26,3 +26,20 @@ class Cat:
         return "meow"
 Cat.sound(self="test")
 print(Cat.sound(self="test"))
+
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+class Square(Rectangle):
+    def __init__(self, side_length):
+        super().__init__(side_length, side_length)
+
+# square = Square(4)
+b = Rectangle(4 ,5)
+print(b.area())
+# print(f"Square area: {square.area()}")
