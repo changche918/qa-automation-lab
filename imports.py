@@ -57,7 +57,7 @@ class Calculator:
             return multiply(x, y)
 
 # 在 main.py 中使用:
-from utilities.math_helper import add, multiply, Calculator
+# from utilities.math_helper import add, multiply, Calculator
 
 # 使用导入的函数
 print(add(5, 3))  # 输出: 8
