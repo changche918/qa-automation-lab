@@ -71,7 +71,7 @@ print(result)  # 输出: 24
 
 """
 TODO: 
-1. class繼承跨黨案使用
+1. class繼承跨檔案使用
 2. import結合..往前兩層資料夾 (自己寫範例)
 3. 嘗試理解與寫範例: 
     - sys.path.append(os.path.dirname(os.path.abspath(__file__))) 

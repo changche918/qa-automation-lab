@@ -20,17 +20,5 @@ class Boss:
     def __repr__(self):
         return f"Boss('{self.name}', {self.attack}, {self.hp}, {self.defense}, {self.speed})"
     
-class Boss_Phase2(Boss):
-    def __init__(self, name_phase2, attack_phase2, hp_phase2, defense_phase2, speed_phase2):
-        super().__init__(name_phase2, attack_phase2, hp_phase2, defense_phase2, speed_phase2)
-    def boss_name_phase2(self):
-        return "Super" + self.name
-    def boss_attack_phase2(self):
-        return self.attack + 50
-    def boss_hp_phase2(self):
-        return self.hp + 200
-    def boss_defense_phase2(self):
-        return self.defense + 100   
-    def boss_speed_phase2(self):
-        return self.speed + 20
+
         
