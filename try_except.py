@@ -8,7 +8,13 @@
 # - finally: 無論是否有異常都會執行 (清理資源)
 # - raise: 主動引發異常
 # - TODO: 常見異常: ValueError, TypeError, ZeroDivisionError, IndexError, KeyError (查清楚)
-
+""" 異常	原因	例子
+ValueError	值不合法	int("abc")
+TypeError	類型不合法	"hello" + 123
+ZeroDivisionError	除以零	10 / 0
+IndexError	序列索引超範圍	[1,2][5]
+KeyError	字典鍵不存在	{"a":1}["b"]
+"""
 print("9. TRY/EXCEPT 例外處理")
 
 try:
@@ -44,5 +50,7 @@ class CustomError(Exception):
 try:
     raise CustomError("這是自訂錯誤")
     # TODO: 嘗試 raise print('test') 會發生什麼 + 找到為什麼
+    # raise 只能丟「例外物件」，raise 後面只能是：Exception 類別或是 Exception 的實例
 except CustomError as e:
     print(f"捕捉異常: {e}")
+

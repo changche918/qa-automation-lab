@@ -75,7 +75,12 @@ TODO:
 2. import結合..往前兩層資料夾 (自己寫範例)
 3. 嘗試理解與寫範例: 
     - sys.path.append(os.path.dirname(os.path.abspath(__file__))) 
-    - sys.path.append('.')
+    - sys.path.append('.') 執行當下的目錄
+# __file__ 目前這支 Python 檔案的完整路徑（含檔名）
+找到目前檔案的位置 →
+取得它所在資料夾 →
+加進 Python 的模組搜尋路徑
+
 4. selenium環境安裝
 
 extra(想讀再讀)
