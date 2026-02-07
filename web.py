@@ -1,8 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import time
+import json
 
 
 """
@@ -35,22 +34,9 @@ text_5 = driver.find_elements(By.CSS_SELECTOR, ".btn.btn-sm.btn-outline-primary.
 text_5_href = driver.find_elements(By.CSS_SELECTOR, ".btn.btn-sm.btn-outline-primary.mt-2.mt-md-7")[1].get_attribute("href")
 print(f"抓到的文字是 : {text_5} ,連結是 {text_5_href}")
 
-with open("note.txt", "w", encoding="utf-8") as f:
-    f.write(f"{text_1}\n")
-    f.write(f"{text_1_href}\n")
-    f.write(f"{text_2}\n")
-    f.write(f"{text_2_href}\n")
-    f.write(f"{text_3}\n")
-    f.write(f"{text_3_href}\n")
-    f.write(f"{text_4}\n")
-    f.write(f"{text_4_href}\n")
-    f.write(f"{text_5}\n")
-    f.write(f"{text_5_href}\n")
+data = {text_1: text_1_href, text_2: text_2_href, text_3: text_3_href, text_4: text_4_href, text_5: text_5_href}
 
-
-
-
-
-
+with open("data.json", "w", encoding="utf-8") as file:
+    json.dump(data, file, indent=2, ensure_ascii=False)
 
 driver.quit()
