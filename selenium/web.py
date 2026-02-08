@@ -36,7 +36,7 @@ print(f"抓到的文字是 : {text_5} ,連結是 {text_5_href}")
 
 data = {text_1: text_1_href, text_2: text_2_href, text_3: text_3_href, text_4: text_4_href, text_5: text_5_href}
 
-with open("data.json", "w", encoding="utf-8") as file:
+with open("selenium\data.json", "w", encoding="utf-8") as file:
     json.dump(data, file, indent=2, ensure_ascii=False)
 
 driver.quit()
