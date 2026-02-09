@@ -29,15 +29,18 @@ driver.get("https://www.104.com.tw/")
 time.sleep(5)  # 等待網頁載入
 
 ### 職場新鮮事
-job_new_thing = driver.find_elements(By.CSS_SELECTOR, "row tabbar mb-1 mb-md-3 no-gutters cursor-pointer d-flex flex-nowrap flex-md-wrap overflow-auto py-1 px-4 px-md-1.mb-md-6")
+# job_new_thing = driver.find_elements(By.CSS_SELECTOR, ".swiper-wrapper")
+### 地區找工作
+# area_find_job = driver.find_elements(By.CSS_SELECTOR, ".swiper-wrapper")
 
-print(len(job_new_thing)) # 查看 job_new_thing 裡面有多少值
-a = []
-for item in job_new_thing:
-    link = item.find_element(By.TAG_NAME, "a")
-    text = link.text()
-    href = link.get_attribute("href")
-    a.append((text, href))
+# print(len(area_find_job)) # 查看 area_find_job 裡面有多少值
+# print(len(area_find_job))
+# a = []
+# for item in job_new_thing:
+#     link = item.find_element(By.TAG_NAME, "a")
+#     text = link.text()
+#     href = link.get_attribute("href")
+#     a.append((text, href))
 # for item in job_new_thing:
 #     link = item.find_element(By.TAG_NAME, "a")
 #     # print(link.text)
@@ -82,5 +85,27 @@ for item in job_new_thing:
 
 # with open("selenium\data.json", "w", encoding="utf-8") as file:
 #     json.dump(data, file, indent=2, ensure_ascii=False)
+
+parent = driver.find_element(
+    By.CSS_SELECTOR,
+    ".swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden"
+)
+
+items = parent.find_elements(By.CSS_SELECTOR, "a.category-item")
+
+for item in items:
+    title = item.find_element(
+        By.CSS_SELECTOR,
+        ".category-item__text__name"
+    ).text
+
+    desc = item.find_element(
+        By.CSS_SELECTOR,
+        ".category-item__text__desc"
+    ).text
+
+    print(title, desc)
+
+
 
 driver.quit()
