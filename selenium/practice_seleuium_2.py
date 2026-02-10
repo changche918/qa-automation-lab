@@ -35,7 +35,7 @@ job_recommend_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 
 
 # 2.只在這塊裡面抓 tab 的 a
 tabs = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.box-container.job-recommend .tabs .row.tabbar a")))
-
+print(tabs[1].text)
 for job_list in tabs:
     print(job_list.text, "=>", job_list.get_attribute("href"))
 
