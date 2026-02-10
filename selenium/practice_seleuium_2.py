@@ -1,7 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time
 import json
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 """
 TODO: 
@@ -26,86 +28,21 @@ TODO:
 """
 driver = webdriver.Chrome()
 driver.get("https://www.104.com.tw/")
-time.sleep(5)  # 等待網頁載入
+wait = WebDriverWait(driver, 10)
 
-### 職場新鮮事
-# job_new_thing = driver.find_elements(By.CSS_SELECTOR, ".swiper-wrapper")
-### 地區找工作
-# area_find_job = driver.find_elements(By.CSS_SELECTOR, ".swiper-wrapper")
+# 1.先抓「適合你的好工作」這整塊
+job_recommend_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.box-container.job-recommend")))
 
-# print(len(area_find_job)) # 查看 area_find_job 裡面有多少值
-# print(len(area_find_job))
-# a = []
-# for item in job_new_thing:
-#     link = item.find_element(By.TAG_NAME, "a")
-#     text = link.text()
-#     href = link.get_attribute("href")
-#     a.append((text, href))
-# for item in job_new_thing:
-#     link = item.find_element(By.TAG_NAME, "a")
-#     # print(link.text)
-#     if link.text == "AI推薦":
-#         ai_link = link.get_attribute("href")
-#         print(link.text, ai_link)
-#     elif link.text == "月薪五萬起":
-#         month_salary = link.get_attribute("href")
-#         print(link.text, month_salary)
-#     elif link.text == "遠距OK":
-#         wfh_ok = link.get_attribute("href")
-#         print(link.text, wfh_ok)
-#     elif link.text == "無經驗可":
-#         no_exp = link.get_attribute("href")
-#         print(link.text, no_exp)
+# 2.只在這塊裡面抓 tab 的 a
+tabs = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.box-container.job-recommend .tabs .row.tabbar a")))
 
-# results = []
+for job_list in tabs:
+    print(job_list.text, "=>", job_list.get_attribute("href"))
 
-# for item in job_new_thing:
-#     link = item.find_element(By.TAG_NAME, "a")
-#     text = link.text
-#     href = link.get_attribute("href")
+# 這一行會讓 json 再包一層
+data = {"適合你的好工作": {job_list.text: job_list.get_attribute("href")for job_list in tabs}}
 
-#     print(text, href)
-#     results.append((text, href))
-# data-gtm-index="搜尋欄位-header導流"
-
-# results = {}
-
-# for item in job_new_thing:
-#     link = item.find_element(By.TAG_NAME, "a")
-
-#     text = link.text.strip()
-#     href = link.get_attribute("href")
-
-#     results[text] = href
-
-# for text, href in results.items():
-#     print(text, href)
-
-
-
-# with open("selenium\data.json", "w", encoding="utf-8") as file:
-#     json.dump(data, file, indent=2, ensure_ascii=False)
-
-parent = driver.find_element(
-    By.CSS_SELECTOR,
-    ".swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden"
-)
-
-items = parent.find_elements(By.CSS_SELECTOR, "a.category-item")
-
-for item in items:
-    title = item.find_element(
-        By.CSS_SELECTOR,
-        ".category-item__text__name"
-    ).text
-
-    desc = item.find_element(
-        By.CSS_SELECTOR,
-        ".category-item__text__desc"
-    ).text
-
-    print(title, desc)
-
-
+with open("selenium\data.json", "w", encoding="utf-8") as file:
+    json.dump(data, file, indent=2, ensure_ascii=False)
 
 driver.quit()
