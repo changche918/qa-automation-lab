@@ -1,9 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+import gen_json
 
 """
 TODO: 
@@ -30,19 +30,29 @@ driver = webdriver.Chrome()
 driver.get("https://www.104.com.tw/")
 wait = WebDriverWait(driver, 10)
 
-# 1.先抓「適合你的好工作」這整塊
-job_recommend_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.box-container.job-recommend")))
-
-# 2.只在這塊裡面抓 tab 的 a
+# 1.只在「適合你的好工作」這塊裡面抓 tab 的 a
+# 這是顯式等待
 tabs = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.box-container.job-recommend .tabs .row.tabbar a")))
-print(tabs[1].text)
 for job_list in tabs:
     print(job_list.text, "=>", job_list.get_attribute("href"))
 
-# 這一行會讓 json 再包一層
-data = {"適合你的好工作": {job_list.text: job_list.get_attribute("href")for job_list in tabs}}
+# 職場新鮮事
+job_new_thing = wait.until(
+    EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".title.h1"))
+)
 
-with open("selenium\data.json", "w", encoding="utf-8") as file:
-    json.dump(data, file, indent=2, ensure_ascii=False)
+# 抓出跟履歷撰寫同一層的其他選項
+element = driver.find_element(
+    By.XPATH, "//a[contains(@data-gtm-index,'履歷撰寫')]"
+)
+parent = element.find_element(By.XPATH, "./..")   # 回到父層才能抓他下面全部
+other_thing = parent.find_elements(By.TAG_NAME, "a")
 
+for sub in other_thing:
+    print(sub.text, "=>", sub.get_attribute("href"))
+
+gen_json.DataSaver(title="適合你的好工作").save(tabs, "selenium\data_1.json")
+gen_json.DataSaver(title="職場新鮮事").save(other_thing, "selenium\data_2.json")
+
+# 關閉瀏覽器
 driver.quit()
