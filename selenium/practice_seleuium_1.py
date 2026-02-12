@@ -40,3 +40,22 @@ with open("selenium\data.json", "w", encoding="utf-8") as file:
     json.dump(data, file, indent=2, ensure_ascii=False)
 
 driver.quit()
+
+
+
+"""
+TODO: 
+1. 正常版本會包含前面的code邏輯
+2. 將第一版改為優化版
+3. debug "上市櫃" (或換寫法)
+4. (可讀性)
+5. 物件建立方式
+6. for迴圈盡量先少用一行用法 下方為sample
+  `  data = {}
+    for el in elements:
+        `data[el.text] = el.get_attribute("href")
+7. 單一職責 (思考功能拆分 盡量要單位小 **但不能過小**) 
+8. DataSaver 還有什麼功能可以先預寫3個 裡面可以pass 有空的話寫簡單的內容
+9. 嘗試不用XPATH抓 data-gtm-index 這些(可讀性)
+10. 嘗試直接抓文字, 類似: text()="中高齡"
+"""
