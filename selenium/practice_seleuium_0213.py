@@ -104,6 +104,12 @@ TODO:
 8. DataSaver 還有什麼功能可以先預寫3個 裡面可以pass 有空的話寫簡單的內容
 9. 嘗試不用XPATH抓 data-gtm-index 這些(可讀性)
 10. 嘗試直接抓文字, 類似: text()="中高齡"
+
+
+
+1. 需要知道每一行程式碼在尬麻
+2. 讓程式碼不會有bug & 使用function 
+  ex: 
+    go_to_job_clinic_elem = function(xxx) -> function是什麼都行自行命名(可不同檔案或同檔案, 但不能在主程式practice_seleuium) 
+3. driver抽出至另個檔案(function / class) **搭配2會有問題 (拿不到driver)**
 """
-
-
