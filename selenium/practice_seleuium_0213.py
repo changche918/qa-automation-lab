@@ -1,10 +1,18 @@
-from selenium import webdriver
+from driver import Browser
 from selenium.webdriver.common.by import By
 import gen_json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# --- 實際使用方式 ---
+# 1. 初始化物件
+bot = Browser("Chrome")
 
+# 2. 啟動瀏覽器
+bot.start_service()
+
+# 3. 隨意更換網址
+bot.open_page("https://www.104.com.tw/")
 """
 TODO: 
 1. 到https://www.104.com.tw/網站 -> 找到五個區塊並逐一命名, 最少成印出文字+link(href)
@@ -12,12 +20,12 @@ TODO:
 2. 存成txt檔案
     -> optimize hint: json格式的txt
 """
-driver = webdriver.Chrome()
-driver.get("https://www.104.com.tw/")
+
 
 # 登入看專屬職缺
-login_to_see_elem = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.XPATH, "//*[text()='登入看專屬職缺 ']")))
+# login_to_see_elem = WebDriverWait(driver, 10).until(
+#     EC.presence_of_element_located((By.XPATH, "//*[text()='登入看專屬職缺 ']")))
+login_to_see_elem = driver.find_element(By.XPATH, "//*[text()='登入看專屬職缺 ']")
 # login_to_see_elem_href = login_to_see_elem.get_attribute("href")
 # text_1 = driver.find_elements(By.CSS_SELECTOR, ".jb-link.jb-link-blue.h3")[0].text
 # text_1_href = driver.find_elements(By.CSS_SELECTOR, ".jb-link.jb-link-blue.h3")[0].get_attribute("href")
@@ -85,7 +93,7 @@ print(f"標籤名 : {key} , 連結 : {value}")
 gen_json_json = gen_json.DataSaver(title="適合你的好工作")
 gen_json_json.save(job_results_dict, "selenium\data.json")
 
-driver.quit()
+
 
 
 

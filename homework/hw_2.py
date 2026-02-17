@@ -47,6 +47,6 @@ try:
 
 except Exception as e: # AI 提供
     screenshot_name = "error.png"
-    driver.save_screenshot(screenshot_name)
+    driver.save_screenshot(screenshot_name) # AI 提供
 
     print("發生錯誤 :", e, "已截圖 :", screenshot_name )
