@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import os
-from datetime import datetime
+import gen_log
 
 driver = webdriver.Chrome()
 driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
@@ -27,23 +27,27 @@ try:
     elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     print(f"這次抓到的標題是 : {elem}")
     file_path = "homework\diff_log.txt"
-
+    log = gen_log.LogHandle(file_path)
     # 如果 log 存在，執行以下
-    if os.path.exists(file_path):
-        with open(file_path, "r", encoding="utf-8") as file:
-            old_title = file.read()
-            print(f"上次存的標題是 :{old_title}")
-        if (old_title.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
+    # if os.path.exists(file_path):
+    old_title = log.read()
+        # with open(file_path, "r", encoding="utf-8") as file:
+        #     old_title = file.read()
+    print(f"上次存的標題是 :{old_title}")
+    if (old_title.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
             print(f"不一樣! 這次的標題是{elem}")
-            with open("homework\diff_log.txt", "w", encoding="utf-8") as file: # 如果 log 存在，且標題不一樣，就寫入
-                now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # AI 提供
-                file.write(f"[{now_time}] {elem}\n") #　AI 提供
+            log.save(elem)
+            # with open("homework\diff_log.txt", "w", encoding="utf-8") as file: # 如果 log 存在，且標題不一樣，就寫入
+            #     now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # AI 提供
+            #     file.write(f"[{now_time}] {elem}\n") #　AI 提供
     else: # 如果 log 不存在，執行這邊
-        with open("homework\diff_log.txt", "w", encoding="utf-8") as file: # 如果 log 存在，且標題不一樣，就寫入
-            now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # AI 提供
-            # file.write(elem)
-            file.write(f"[{now_time}] {elem}\n") #　AI 提供
-            print(f"檔案不存在 or 新存入標題 :{elem}")
+            # log.save(elem)
+            print('沒有不一樣，不更動檔案')
+        # with open("homework\diff_log.txt", "w", encoding="utf-8") as file: # 如果 log 存在，且標題不一樣，就寫入
+        #     now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # AI 提供
+        #     # file.write(elem)
+        #     file.write(f"[{now_time}] {elem}\n") #　AI 提供
+        #     print(f"檔案不存在 or 新存入標題 :{elem}")
 
 except Exception as e: # AI 提供
     screenshot_name = "error.png"
