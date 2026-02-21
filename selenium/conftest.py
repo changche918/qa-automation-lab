@@ -18,10 +18,10 @@ from selenium import webdriver
 
 class ElementFinder:
     def __init__(self):
-        pass
-    def init_browser(url, elem_tuple):
-        driver = webdriver.Chrome()
-        driver.get(url)
-        target_elem = driver.find_element(*elem_tuple)
-        return target_elem # 建議回傳，否則外部拿不到結果
+        self.driver = webdriver.Chrome()
+    def get_url(self, url):
+        self.driver.get(url)
+    def find_elem(self, elem_tuple):
+        # 單純尋找並回傳元素
+        return self.driver.find_element(*elem_tuple)
 
