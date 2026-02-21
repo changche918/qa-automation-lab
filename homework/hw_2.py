@@ -40,7 +40,7 @@ try:
         #     old_title = file.read()
     print(f"上次存的標題是 :{old_title}")
     if (old_title.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
-        print((old_title.split("] ")[1].strip()) == elem)
+        
         print(f"不一樣! 這次的標題是{elem}")
         log.save(elem)
             # with open("homework\diff_log.txt", "w", encoding="utf-8") as file: # 如果 log 存在，且標題不一樣，就寫入
