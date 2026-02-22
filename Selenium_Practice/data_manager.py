@@ -3,7 +3,7 @@ import json
 class DataSaver:
     def __init__(self, title):
         self.title = title
-    def elem_dict(self, data):
+    def elem_dict(self, data): # 這個要改一下，不要用 elem
         self.data = data
     def save(self, data, filename):
         with open(filename, "w", encoding="utf-8") as file:

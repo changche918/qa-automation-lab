@@ -35,7 +35,7 @@ print("網頁已開啟並截圖 :", screenshot_name )
 try:
     elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     
-    file_path = "spring_festival_hw\change_log.txt"
+    file_path = "change_log.txt"
     log = file_manager.LogHandle(file_path)
     old_title2 = log.read_last_line()
     
