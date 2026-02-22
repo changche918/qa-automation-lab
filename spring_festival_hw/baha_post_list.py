@@ -28,7 +28,7 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
         - 修改原先log
     hint: for loop (???), if-else, class, function, file-control(ex: with), os(for example)
 """
-screenshot_name = "2026_02_22.png"
+screenshot_name = "web.png"
 driver.save_screenshot(screenshot_name)
 print("網頁已開啟並截圖 :", screenshot_name )
 
