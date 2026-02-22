@@ -31,10 +31,13 @@ try:
     
     file_path = "spring_festival_hw\change_log.txt"
     log = log_manager.LogHandle(file_path)
-    old_title = log.read()
-    print(f"上次存的標題是 :{old_title}")
-    
-    if (old_title.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
+    # old_title = log.read_file()
+    # print(f"上次存的標題是 :{old_title}")
+    old_title2 = log.read_line()
+    b = list(old_title2)
+    print(f"上次存的標題是 :{old_title2}")
+    print(b)
+    if (old_title2.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
         print(f"不一樣! 這次的標題是{elem}")
         log.save(elem)
     else: # 如果 log 不存在，執行這邊

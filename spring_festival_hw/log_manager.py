@@ -7,7 +7,7 @@ class LogHandle:
         self.data = data
         self.content = content
 
-    def read(self):
+    def read_file(self):
         # 檢查檔案是否存在，避免程式崩潰
         if os.path.exists(self.filename):
             with open(self.filename, "r", encoding="utf-8") as file:
@@ -16,10 +16,13 @@ class LogHandle:
         else:
             print(f"警告：找不到檔案 {self.filename}")
             return None
-
+    def read_line(self):
+        with open(self.filename, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+            print(f"Total lines: {len(lines)}")
     def save(self, data):
         # 直接使用初始化時的 self.filename，或是從外面傳入
-        with open(self.filename, "w", encoding="utf-8") as file:
+        with open(self.filename, "a", encoding="utf-8") as file:
             now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             file.write(f"[{now_time}] {data}\n")
             print(f"資料已成功寫入 {self.filename}")
