@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-import gen_json
+import selenium.data_manager as data_manager
 
 """
 TODO: 
@@ -51,8 +51,8 @@ other_thing = parent.find_elements(By.TAG_NAME, "a")
 for sub in other_thing:
     print(sub.text, "=>", sub.get_attribute("href"))
 
-gen_json.DataSaver(title="適合你的好工作").save(tabs, "selenium\data_1.json")
-gen_json.DataSaver(title="職場新鮮事").save(other_thing, "selenium\data_2.json")
+data_manager.DataSaver(title="適合你的好工作").save(tabs, "selenium\data_1.json")
+data_manager.DataSaver(title="職場新鮮事").save(other_thing, "selenium\data_2.json")
 
 # 關閉瀏覽器
 driver.quit()

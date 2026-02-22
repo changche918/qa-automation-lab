@@ -1,9 +1,7 @@
 
 from selenium.webdriver.common.by import By
-import gen_json
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import conftest
+import data_manager
+import drivers
 
 """
 TODO: 
@@ -13,7 +11,7 @@ TODO:
     -> optimize hint: json格式的txt
 """
 # 1. 建立實例 (這時會開啟第一個視窗)
-finder = conftest.ElementFinder()
+finder = drivers.ElementFinder()
 
 # 2. 前往目標網頁 (只需載入一次)
 finder.get_url("https://www.104.com.tw/")
@@ -97,7 +95,7 @@ for elem in job_type_dict:
 
 # # data = {text_1: text_1_href, text_2: text_2_href, text_3: text_3_href, text_4: text_4_href, text_5: text_5_href}
 
-gen_json_json = gen_json.DataSaver(title="適合你的好工作")
+gen_json_json = data_manager.DataSaver(title="適合你的好工作")
 gen_json_json.save(job_results_dict, "selenium\data.json")
 
 
