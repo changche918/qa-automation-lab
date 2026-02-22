@@ -1,11 +1,9 @@
-
 from selenium.webdriver.common.by import By
-import data_manager
-import drivers
-
+from data_manager import DataManager
+from drivers import WebController
 
 # 1. 建立實例 (這時會開啟第一個視窗)
-finder = drivers.ElementFinder()
+finder = WebController()
 
 # 2. 前往目標網頁 (只需載入一次)
 finder.get_url("https://www.104.com.tw/")
@@ -34,7 +32,8 @@ job_type_dict = [
     view_job_fit_elem
 ]
 
-job_results_dict = {}
+# job_results_dict =  {1, 2, 3, 4, 5} # 這行是拿來測試會進入 except 的用法
+job_results_dict =  {}
 
 for elem in job_type_dict:
     if elem: 
@@ -42,5 +41,6 @@ for elem in job_type_dict:
         link = elem.get_attribute("href")
         job_results_dict[name] = link
 
-gen_json_json = data_manager.DataSaver(title="適合你的好工作")
-gen_json_json.save(job_results_dict, "selenium\data.json")
+# 20260222
+gen_json_json = DataManager(title="適合你的好工作")
+gen_json_json.save(job_results_dict, "logs\data.json")

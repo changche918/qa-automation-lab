@@ -28,14 +28,14 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
         - 修改原先log
     hint: for loop (???), if-else, class, function, file-control(ex: with), os(for example)
 """
-screenshot_name = "web.png"
+screenshot_name = "screenshots\web.png"
 driver.save_screenshot(screenshot_name)
 print("網頁已開啟並截圖 :", screenshot_name )
 
 try:
     elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     
-    file_path = "change_log.txt"
+    file_path = "logs\change_log.txt"
     log = file_manager.LogHandle(file_path)
     old_title2 = log.read_last_line()
     
@@ -46,7 +46,7 @@ try:
         print(f"這次抓到的標題是 : {elem}，沒有不一樣，不寫入 log")
 
 except Exception as e: # AI 提供
-    screenshot_name_fail = "error.png"
+    screenshot_name_fail = "screenshots\error.png"
     driver.save_screenshot(screenshot_name_fail) # AI 提供
 
     print("發生錯誤 :", e, "已截圖 :", screenshot_name_fail )

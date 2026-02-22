@@ -1,6 +1,6 @@
 from selenium import webdriver
 
-class ElementFinder:
+class WebController:
     def __init__(self):
         self.driver = webdriver.Chrome()
     def get_url(self, url):
