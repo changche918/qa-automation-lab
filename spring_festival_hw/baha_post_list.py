@@ -1,9 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from logger import LogManager
 
-import log_manager
+import file_manager
 
+log = LogManager()
+log.info("--- 啟動 Chrome 瀏覽器 ---")
 driver = webdriver.Chrome()
+log.info("正要前往巴哈姆特論壇，天堂版")
 driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
 
 """
@@ -24,12 +28,15 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
         - 修改原先log
     hint: for loop (???), if-else, class, function, file-control(ex: with), os(for example)
 """
+screenshot_name = "2026_02_22.png"
+driver.save_screenshot(screenshot_name)
+print("網頁已開啟並截圖 :", screenshot_name )
 
 try:
     elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     
     file_path = "spring_festival_hw\change_log.txt"
-    log = log_manager.LogHandle(file_path)
+    log = file_manager.LogHandle(file_path)
     old_title2 = log.read_last_line()
     
     if (old_title2.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
@@ -39,7 +46,7 @@ try:
         print(f"這次抓到的標題是 : {elem}，沒有不一樣，不寫入 log")
 
 except Exception as e: # AI 提供
-    screenshot_name = "error.png"
-    driver.save_screenshot(screenshot_name) # AI 提供
+    screenshot_name_fail = "error.png"
+    driver.save_screenshot(screenshot_name_fail) # AI 提供
 
-    print("發生錯誤 :", e, "已截圖 :", screenshot_name )
+    print("發生錯誤 :", e, "已截圖 :", screenshot_name_fail )
