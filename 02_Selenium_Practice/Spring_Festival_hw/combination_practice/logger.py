@@ -1,19 +1,27 @@
 import logging
+import os
 
 class LogManager:
-    def __init__(self, log_file="automation.log"):
-        # 1. 建立 logger
+    def __init__(self, log_folder="logs", log_file="automation.log"):
+        # 1. 確保資料夾存在 (避免 FileNotFoundError)
+        if not os.path.exists(log_folder):
+            os.makedirs(log_folder)
+        
+        # 2. 合併路徑 (例如變成 "logs/automation.log")
+        # 這樣寫能自動處理不同作業系統的斜線問題
+        log_path = os.path.join(log_folder, log_file)
+        
+        # 3. 建立 logger
         self.logger = logging.getLogger("SeleniumCrawler")
         self.logger.setLevel(logging.INFO)
         
-        # 2. 避免重複添加 Handler (防止 Log 重複印出)
+        # 4. 避免重複添加 Handler
         if not self.logger.handlers:
-            # 設定輸出到檔案
-            file_handler = logging.FileHandler(log_file, encoding='utf-8')
-            # 設定輸出到控制台 (螢幕)
+            # 正確傳入完整路徑 log_path
+            file_handler = logging.FileHandler(log_path, encoding='utf-8')
             stream_handler = logging.StreamHandler()
             
-            # 設定格式：[時間] [層級] 內容
+            # 設定格式
             formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
             file_handler.setFormatter(formatter)
             stream_handler.setFormatter(formatter)
