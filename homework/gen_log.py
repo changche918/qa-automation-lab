@@ -1,25 +1,6 @@
 import os
 from datetime import datetime
 
-# class LogHandle:
-#     def __init__(self, filename, data, content):
-#         self.filename = filename
-#         self.data = data
-#         self.content = content
-#     # def elem_dict(self, data):
-
-#     def read(self):
-#         with open(self.filename, "r", encoding="utf-8") as file:
-#             self.content = file.read()
-#     def save(self, data, filename):
-#         # with open(filename, "w", encoding="utf-8") as file:
-#         #     json.dump(data, file, indent = 4, ensure_ascii=False)
-#         #     print(f"{filename} 儲存完成")
-#         with open(filename, "w", encoding="utf-8") as file: # 如果 log 存在，且標題不一樣，就寫入
-#             now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # AI 提供
-#             file.write(f"[{now_time}] {data}\n") #　AI 提供
-
-### 修改後 ###
 class LogHandle:
     def __init__(self, filename, data=None, content=None):
         self.filename = filename
