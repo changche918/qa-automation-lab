@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-import gen_log
+import homework.log_manager as log_manager
 
 driver = webdriver.Chrome()
 driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
@@ -32,7 +32,7 @@ try:
         
     print(f"這次抓到的標題是 : {elem}")
     file_path = "homework\diff_log.txt"
-    log = gen_log.LogHandle(file_path)
+    log = log_manager.LogHandle(file_path)
     # 如果 log 存在，執行以下
     # if os.path.exists(file_path):
     old_title = log.read()
