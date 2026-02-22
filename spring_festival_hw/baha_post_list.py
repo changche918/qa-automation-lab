@@ -26,22 +26,17 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
 """
 
 try:
-    elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text     
-    print(f"這次抓到的標題是 : {elem}")
+    elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     
     file_path = "spring_festival_hw\change_log.txt"
     log = log_manager.LogHandle(file_path)
-    # old_title = log.read_file()
-    # print(f"上次存的標題是 :{old_title}")
-    old_title2 = log.read_line()
-    b = list(old_title2)
-    print(f"上次存的標題是 :{old_title2}")
-    print(b)
+    old_title2 = log.read_last_line()
+    
     if (old_title2.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
         print(f"不一樣! 這次的標題是{elem}")
         log.save(elem)
     else: # 如果 log 不存在，執行這邊
-        print('沒有不一樣，不更動檔案')
+        print(f"這次抓到的標題是 : {elem}，沒有不一樣，不寫入 log")
 
 except Exception as e: # AI 提供
     screenshot_name = "error.png"

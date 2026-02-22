@@ -16,10 +16,16 @@ class LogHandle:
         else:
             print(f"警告：找不到檔案 {self.filename}")
             return None
-    def read_line(self):
+        
+    def read_last_line(self):
         with open(self.filename, "r", encoding="utf-8") as file:
             lines = file.readlines()
-            print(f"Total lines: {len(lines)}")
+        if lines:  # 先檢查檔案是不是空的，避免報錯
+            last_line = lines[-1]  # 取最後一筆並去掉換行符號
+            return last_line
+        else:
+            return None
+        
     def save(self, data):
         # 直接使用初始化時的 self.filename，或是從外面傳入
         with open(self.filename, "a", encoding="utf-8") as file:

@@ -54,7 +54,6 @@
 # except CustomError as e:
 #     print(f"捕捉異常: {e}")
 
-
 # try:
 #     x = int("abc")
 # except ValueError:
@@ -91,8 +90,6 @@ print(__file__)
 #     print("negative")
 # else:
 #     print("zero")
-
-
 
 # score = float(input("請輸入分數: "))
 # if score >= 90:

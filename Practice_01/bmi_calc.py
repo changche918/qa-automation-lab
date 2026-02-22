@@ -21,7 +21,6 @@
 #     bmi = round(weight / (height ** 2), 2)
 #     print(f"{name}，您的BMI是 {bmi}")
 
-
 #
 # ryan_bmi = 19
 # amy_bmi = 20
