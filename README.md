@@ -30,7 +30,31 @@ TODO:
 
 ----aditional-----
 1. 有空調整 data_manager相關(檢查自己所有程式): 使用方式&命名搭配
-```
+
+## 20260223 tips
+TODO:
+1. folder層級修改 & Log/Screenshot相關檢查
+2. .gitignore -> 自己查+實作
+3. 熟悉git使用方法 -> 勿僅用git add . 嘗試各別檔案搭配觀看git status
+4. REPO Structure修正 (README)
+5. alert 
+  - 優化 輸入框 輸入文字 並印出
+  - 嘗試不使用time sleep / 使他100%穩定
+6. hover
+  - 嘗試不使用time sleep / 使他100%穩定 -> 若把滑鼠移走
+7. iframe
+  - 命名可讀性修正
+  - 使他100%穩定 / 保護他
+8. shadow-root
+  - 使他100%穩定 / 保護他
+9. baha_post_list -> 可讀性  *已經有的命名(domain之類的)盡量使用相同的 e.g. gamer, vip*
+10. 思考: data_manager 使用self.data的可能性 
+11. 改成自己要的遊戲
+
+---
+
+
+
 python_project
 ├─ 01_Basic_Learning
 │  ├─ Course
