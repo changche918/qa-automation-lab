@@ -42,62 +42,49 @@ TODO:
   - 嘗試不使用time sleep / 使他100%穩定
 6. hover
   - 嘗試不使用time sleep / 使他100%穩定 -> 若把滑鼠移走
-7. iframe
+7. iframe  => OK
   - 命名可讀性修正
   - 使他100%穩定 / 保護他
-8. shadow-root
+8. shadow-root => OK
   - 使他100%穩定 / 保護他
-9. baha_post_list -> 可讀性  *已經有的命名(domain之類的)盡量使用相同的 e.g. gamer, vip*
+9. baha_post_list -> 可讀性  *已經有的命名(domain之類的)盡量使用相同的 e.g. gamer, vip*  => ok
 10. 思考: data_manager 使用self.data的可能性 
 11. 改成自己要的遊戲
 
 ---
-
-
-
+# 2026/2/24
+'''
 python_project
 ├─ 01_Basic_Learning
 │  ├─ Course
 │  │  ├─ 01_print.py
-│  │  ├─ 02_lists.py
-│  │  ├─ 03_dictionaries.py
-│  │  ├─ 04_if_else.py
-│  │  ├─ 05_for_loop.py
-│  │  ├─ 06_functions.py
-│  │  ├─ 07_classes.py
-│  │  ├─ 08_imports.py
-│  │  ├─ 09_try_except.py
-│  │  └─ 10_file_handing.py
+│  │  └─ 02_lists.py
 │  └─ Practice
 │     ├─ basic.py
-│     ├─ bmi_calc.py
-│     ├─ boss.py
-│     ├─ boss_v1.py
-│     └─ boss_v2.py
-├─ 02_Selenium_Practice
-│  ├─ data.json
-│  ├─ my_104_hw
-│  │  ├─ 104_run_log.py
-│  │  ├─ data_manager.py
-│  │  └─ drivers.py
-│  ├─ README.md
-│  └─ Spring_Festival_hw
-│     ├─ basic_practice
-│     │  ├─ alert.py
-│     │  ├─ hovers.py
-│     │  ├─ iframe.py
-│     │  └─ shadow_root.py
-│     └─ combination_practice
-│        ├─ baha_post_list.py
-│        ├─ file_manager.py
-│        └─logger.py
-├─ logs
-│  ├─ automation.log
-│  ├─ change_log.txt
-│  └─ data.json
+│     └─ bmi_calc.py
+├─ 02_Selenium_Learning
+│  ├─ Practice
+│  │  ├─ my_104_hw
+│  │  │  ├─ 104_run_log.py
+│  │  │  ├─ data_manager.py
+│  │  │  ├─ drivers.py
+│  │  │  └─ logs
+│  │  │     └─ data.json
+│  │  └─ Spring_Festival_hw
+│  │     ├─ basic_practice
+│  │     │  ├─ alert.py
+│  │     │  └─ hovers.py
+│  │     └─ combination_practice
+│  │        ├─ file_manager.py
+│  │        ├─ gamer_post_crawler.py
+│  │        ├─ logger.py
+│  │        ├─ logs
+│  │        │  ├─ automation.log
+│  │        │  └─ change_log.txt
+│  │        └─ screenshots
+│  │           └─ web.png
+│  └─ README.md
 ├─ README.md
-├─ screenshots
-│  └─ web.png
 └─ tests
    └─ ui.py
 

@@ -27,6 +27,10 @@ driver.find_element(By.XPATH, "//button[text()='Click for JS Prompt']").click()
 time.sleep(1)
 alert3 = driver.switch_to.alert
 print(f"警示框內容是: {alert1.text}")
+
+# 輸入文字
+alert3.send_keys("My's Ryan")
+
 alert3.accept()
 
 result_text = driver.find_element(By.ID, "result")
