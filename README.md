@@ -40,7 +40,7 @@ TODO:
 5. alert 
   - 優化 輸入框 輸入文字 並印出
   - 嘗試不使用time sleep / 使他100%穩定
-6. hover
+6. hover => OK
   - 嘗試不使用time sleep / 使他100%穩定 -> 若把滑鼠移走
 7. iframe  => OK
   - 命名可讀性修正
