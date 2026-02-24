@@ -28,14 +28,14 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
         - 修改原先log
     hint: for loop (???), if-else, class, function, file-control(ex: with), os(for example)
 """
-screenshot_name = "screenshots\web.png"
+screenshot_name = "combination_practice\screenshots\web.png"
 driver.save_screenshot(screenshot_name)
 print("網頁已開啟並截圖 :", screenshot_name )
 
 try:
     elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     
-    file_path = "logs\change_log.txt"
+    file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\change_log.txt"
     log = file_manager.LogHandle(file_path)
     old_title2 = log.read_last_line()
     

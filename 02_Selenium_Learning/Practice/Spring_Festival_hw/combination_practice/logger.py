@@ -2,7 +2,7 @@ import logging
 import os
 
 class LogManager:
-    def __init__(self, log_folder="logs", log_file="automation.log"):
+    def __init__(self, log_folder="02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs", log_file="automation.log"):
         # 1. 確保資料夾存在 (避免 FileNotFoundError)
         if not os.path.exists(log_folder):
             os.makedirs(log_folder)
