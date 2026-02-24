@@ -33,10 +33,10 @@ TODO:
 
 ## 20260223 tips
 TODO:
-1. folder層級修改 & Log/Screenshot相關檢查
-2. .gitignore -> 自己查+實作
+1. folder層級修改 & Log/Screenshot相關檢查 => ok
+2. .gitignore -> 自己查+實作 => ok
 3. 熟悉git使用方法 -> 勿僅用git add . 嘗試各別檔案搭配觀看git status
-4. REPO Structure修正 (README)
+4. REPO Structure修正 (README) 
 5. alert 
   - 優化 輸入框 輸入文字 並印出
   - 嘗試不使用time sleep / 使他100%穩定
