@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from logger import LogManager
-from pathlib import Path
+import os
 
 import file_manager
 
@@ -17,16 +17,13 @@ driver.save_screenshot(screenshot_name)
 print("網頁已開啟並截圖 :", screenshot_name )
 
 try:
-    raw_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\madhead_change_log.txt"
-    file_path = Path(raw_path)
+    elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[6].text
+
+    file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\madhead_change_log.txt"
     log = file_manager.LogHandle(file_path)
 
-    elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[6].text
-    # file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\madhead_change_log.txt"
-    
-    if not file_path.exists():
-        file_path.touch()
-        with open(raw_path, "w", encoding="utf-8") as file:
+    if not os.path.exists(file_path):
+        with open(file_path, "w", encoding="utf-8") as file:
             file.write("[yyyy-mm-dd hh:mm:ss] 這是範例行。\n")
 
     old_title2 = log.read_last_line()
