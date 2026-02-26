@@ -30,7 +30,7 @@ try:
     
     if (old_title2.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
         print(f"不一樣! 這次的標題是{elem}")
-        # 2. 檢查檔案，不存在則用 'a' (append) 模式開啟並立即關閉來建立它
+        # 檢查檔案，不存在則用 'a' (append) 模式開啟並立即關閉來建立它
         log.save(elem)
     else:
         print(f"這次抓到的標題是 : {elem}，沒有不一樣，不寫入 log")
