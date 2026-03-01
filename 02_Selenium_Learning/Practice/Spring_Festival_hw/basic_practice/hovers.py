@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-# import time
+import time
 
 driver = webdriver.Chrome()
 driver.get("https://the-internet.herokuapp.com/hovers")
@@ -40,7 +40,7 @@ wait = WebDriverWait(driver, 10)
 
 
 
-# 2026/2/24 加上 retry 寫法
+# 20260224 加上 retry 寫法
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
@@ -58,16 +58,18 @@ for i in range(3):
         view_profile_text = wait.until(EC.visibility_of_element_located((By.LINK_TEXT, "View profile")))
         if view_profile_text.text == 'View profile':
             view_profile_text.click()
-            print('成功點擊')
+            new_page = wait.until(EC.visibility_of_element_located((By.TAG_NAME, "h1")))
+            if new_page.text.strip().lower() == "not found":
+                print("已成功進入 Not Found 頁面")
             break
 
     except TimeoutException:
         print("抓取超時：10 秒內沒看到目標元素")
-        driver.switch_to.default_content()
+
 
     except NoSuchElementException:
         print("元素不存在")
-        driver.switch_to.default_content()
+
         
     except Exception as e:
         print(f"其他未知錯誤: {e}")

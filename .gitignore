@@ -1,15 +1,16 @@
 # 忽略相依套件
-# node_modules/
+# node_modules/ 這是一個龐大的外部套件庫。當你執行 npm install 時，程式會根據清單（package.json）把所有需要的程式碼下載到這個資料夾。
 __pycache__/
 
 # 忽略環境變數（包含敏感資訊）
 .env
-# *.pem
+# *.pem  SSH 登入：例如登入 AWS 伺服器時需要的金鑰檔（如 my-key.pem）。，SSL/TLS 憑證：網站用來建立 HTTPS 安全連線的加密檔案。
+
 
 # 忽略系統產生的雜物
-.DS_Store
-Thumbs.db
+# .DS_Store 誰產生的： 當你用 Mac 的 Finder（檔案瀏覽器）打開任何一個資料夾時，系統就會自動建立它。
+# Thumbs.db 當你在 Windows 中以「縮圖」模式（例如：大圖示、中圖示）檢視資料夾時，系統會自動建立。
 
 # 忽略編譯產出
-# dist/
-# build/
+# dist/ 當你執行打包指令時，Python 會先在這裡收集所有需要的原始碼、編譯後的檔案（例如 .pyc）以及相依套件。
+# build/ 打包完成後的安裝包（例如 .tar.gz 原始碼包、.whl 輪子檔）或是轉好的 .exe 執行檔，都會存放在這裡。
