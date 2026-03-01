@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from data_manager import DataManager
-from drivers import WebController
+from common.drivers import WebController
 
 # 1. 建立實例 (這時會開啟第一個視窗)
 finder = WebController()

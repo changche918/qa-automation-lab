@@ -31,7 +31,7 @@ TODO:
 3. 命名: # 1. 建立實例 (這時會開啟第一個視窗) finder = drivers.ElementFinder() 
 4. 出錯問題調整 data_manager.py (e.g. 送不是dict程式會直接中止)
 
-----aditional-----
+**aditional**
 1. 有空調整 data_manager相關(檢查自己所有程式): 使用方式&命名搭配
 
 ---
@@ -69,6 +69,6 @@ TODO:
 4. [ ] 最外層README調整 & 思考呈現方式
 5. [ ] alert Refactoring (e.g 區塊 or 開關)
 6. [ ] debug -> basic_practice (except)
-7. [ ] hover -> 驗證是否合理 V
-8. [ ] shadow_root -> 是否有方式替代find_element
-9. [ ] 共用driver (設計裡面)
+7. [x] hover -> 驗證是否合理
+8. [x] shadow_root -> 是否有方式替代find_element
+9. [ ] 共用driver (設計裡面) ( 20260301處理中 )
