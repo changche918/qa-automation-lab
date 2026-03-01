@@ -6,6 +6,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 driver = webdriver.Chrome()
 driver.get("https://the-internet.herokuapp.com/shadowdom")
+
 """"
 4. shadow-root
     url = https://the-internet.herokuapp.com/shadowdom
@@ -24,7 +25,7 @@ wait = WebDriverWait(driver, 10)
 # inner_p = root.find_element(By.CSS_SELECTOR, "slot")
 # print(inner_p.text)
 
-# 2026/2/24 加上 retry 寫法
+# 20260224 加上 retry 寫法
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
@@ -36,7 +37,10 @@ for i in range(3):
         root = host.shadow_root
         
         # 3. 在 shadow_root 內部尋找元素
-        inner_p = root.find_element(By.CSS_SELECTOR, "slot")
+        # inner_p = root.find_element(By.CSS_SELECTOR, "slot")
+
+        # 如果要將 line 40 改成 EC 寫法要改成這樣 :
+        inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
         print(f"抓取成功，輸出為 : {inner_p.text}")
         break
 
