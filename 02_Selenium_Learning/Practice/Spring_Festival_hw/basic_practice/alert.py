@@ -17,21 +17,22 @@ driver.get("https://the-internet.herokuapp.com/javascript_alerts")
 
 wait = WebDriverWait(driver, 10)
 
-# 20260301 優化程式
+# 20260226 優化程式，使用 for 迴圈執行 find_element
+# 20260302 調整變數名稱
 for i in range(3):
     try:
-        alert_elem_1 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Alert']")))
-        alert_elem_2 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Confirm']")))
-        alert_elem_3 = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Prompt']")))
+        alert_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Alert']")))
+        confirm_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Confirm']")))
+        prompt_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Prompt']")))
 
-        three_alert_button = [alert_elem_1, alert_elem_2, alert_elem_3]
-        for alert_button in three_alert_button:
-            alert_button.click()
+        javascript_alerts = [alert_elem, confirm_elem, prompt_elem]
+        for button in javascript_alerts:
+            button.click()
             alert_title = driver.switch_to.alert
             print(f"警示框內容是 : {alert_title.text}")
             alert_title.accept()
         
-        alert_elem_3.click()
+        prompt_elem.click()
         alert_third = driver.switch_to.alert
 
         alert_third.send_keys("My's Ryan")

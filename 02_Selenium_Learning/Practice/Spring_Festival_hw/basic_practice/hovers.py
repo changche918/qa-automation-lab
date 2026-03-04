@@ -40,7 +40,7 @@ wait = WebDriverWait(driver, 10)
 
 
 
-# 20260224 加上 retry 寫法
+# 20260223 加上 retry 寫法
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")

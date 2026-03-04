@@ -25,7 +25,7 @@ wait = WebDriverWait(driver, 10)
 # inner_p = root.find_element(By.CSS_SELECTOR, "slot")
 # print(inner_p.text)
 
-# 20260224 加上 retry 寫法
+# 20260223 加上 retry 寫法
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
