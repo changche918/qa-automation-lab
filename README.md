@@ -14,5 +14,6 @@ python_project
 │              ├─logs
 │              ├─screenshots
 │              └─__pycache__
-├─common  >>> 放所有資料夾可共用的 function
+├─utils
+│ └─drivers  >>> 放所有資料夾可共用的 function
 └─tests >>> 這是用來做一些小測試用的資料夾 ( 可忽略不看 )

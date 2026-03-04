@@ -1,6 +1,9 @@
 from selenium.webdriver.common.by import By
-from data_manager import DataManager
-from common.drivers import WebController
+from utils.data_manager import DataManager
+from utils.drivers import WebController
+
+# 20260302 調整由最外層取得 data_manager & drivers function，
+    # 執行須使用語法 : python -m 02_Selenium_Learning.Practice.my_104_hw.104_run_log 
 
 # 1. 建立實例 (這時會開啟第一個視窗)
 finder = WebController()
@@ -43,4 +46,4 @@ for elem in job_type_dict:
 
 # 20260222
 gen_json_json = DataManager(title="適合你的好工作")
-gen_json_json.save(job_results_dict, "logs\data.json")
+gen_json_json.save(job_results_dict, "02_Selenium_Learning\Practice\my_104_hw\logs\data.json")
