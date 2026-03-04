@@ -2,13 +2,13 @@ from selenium.webdriver.common.by import By
 from utils.data_manager import DataManager
 from utils.drivers import WebController
 
-# 20260302 調整由最外層取得 data_manager & drivers function，
-    # 執行須使用語法 : python -m 02_Selenium_Learning.Practice.my_104_hw.104_run_log 
+# 20260302 調整由最外層取得 data_manager & drivers function，PR #4
+# 執行須使用語法 : python -m 02_Selenium_Learning.Practice.my_104_hw.104_run_log
 
-# 1. 建立實例 (這時會開啟第一個視窗)
+# 建立實例 (這時會開啟第一個視窗)
 finder = WebController()
 
-# 2. 前往目標網頁 (只需載入一次)
+# 前往目標網頁 (只需載入一次)
 finder.get_url("https://www.104.com.tw/")
 
 # 登入看專屬職缺
@@ -44,6 +44,5 @@ for elem in job_type_dict:
         link = elem.get_attribute("href")
         job_results_dict[name] = link
 
-# 20260222
-gen_json_json = DataManager(title="適合你的好工作")
+gen_json_json = DataManager(title="適合你的好工作") 
 gen_json_json.save(job_results_dict, "02_Selenium_Learning\Practice\my_104_hw\logs\data.json")

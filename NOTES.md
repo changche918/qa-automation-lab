@@ -83,14 +83,13 @@ TODO:
 3. [ ] 寫完確認 (任何情況都要 -> 上傳前、上傳完成) 
 4. [ ] 最外層README調整 & 思考呈現方式
 5. [ ] alert Refactoring (e.g 區塊 or 開關)
-6. [ ] debug -> basic_practice (except)
+6. [x] debug -> basic_practice (except)
 7. [x] hover -> 驗證是否合理
 8. [x] shadow_root -> 是否有方式替代find_element
-9. [ ] 共用driver (設計裡面) ( 20260301處理中 )
+9. [x] 共用driver (設計裡面) 
 
 ---
-## 20260303
+## 20260302
 
 1. 歷程管理 & 日期 -> 設計
 2. 推導過程 e.g. -> 單一符合 -> 多個符合 -> 邊界符合 (edge) or 其他情境 -> 找到最適合的方式(能解決你大部分的問題)
-3. 

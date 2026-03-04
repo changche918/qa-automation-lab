@@ -1,4 +1,4 @@
-## 📂 資料夾架構 20260224
+## 📂 資料夾架構 ##
 ```
 python_project
 ├─01_Basic_Learning   >>> 這是 python 課程 + 基礎練習的資料夾

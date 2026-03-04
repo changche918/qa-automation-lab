@@ -18,7 +18,7 @@ print("網頁已開啟並截圖 :", screenshot_name )
 
 try:
     elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[6].text
-
+    
     file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\madhead_change_log.txt"
     log = file_manager.LogHandle(file_path)
 
