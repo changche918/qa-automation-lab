@@ -26,8 +26,9 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=84452")
         - 印出差異
         - 存下差異
         - 修改原先log
-    hint: for loop (???), if-else, class, function, file-control(ex: with), os(for example)
+    hint: for loop, if-else, class, function, file-control(ex: with), os(for example)
 """
+
 screenshot_name = "combination_practice\screenshots\web.png"
 driver.save_screenshot(screenshot_name)
 print("網頁已開啟並截圖 :", screenshot_name )

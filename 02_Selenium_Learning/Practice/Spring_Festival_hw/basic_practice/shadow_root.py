@@ -30,7 +30,7 @@ for i in range(3):
         # 3. 在 shadow_root 內部尋找元素
         # inner_p = root.find_element(By.CSS_SELECTOR, "slot")
 
-        # 如果要將 line 40 改成 EC 寫法要改成這樣 :
+        # 如果要將 line 31 改成 EC 寫法要改成這樣 :
         inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
         print(f"抓取成功，輸出為 : {inner_p.text}")
         break
