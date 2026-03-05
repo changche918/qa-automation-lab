@@ -1,5 +1,44 @@
 # 開發紀錄筆記
+
+## 20260118
+
+TODO: 
+1. int, float, string的差異
+2. 熟悉terminal各目錄執行
+3. f-string用法
+
+---
+## 20260119
+
+TODO: BMI運算並將結果存成list和dict 各一個程式
+
+---
+## 20260207
+
+TODO: 
+1. 到https://www.104.com.tw/網站 -> 找到五個區塊並逐一命名, 最少成印出文字+link(href)
+    -> optimize hint: 能拆class/function | 能把區塊拆分更細 |
+2. 存成txt檔案
+    -> optimize hint: json格式的txt
+---
+## 20260209
+
+TODO: 
+1. 隱式等待與顯式等待 
+2. 命名(可讀性) ex: text_1
+3. debug "上市櫃"
+4. **用迴圈嘗試**, 避免使用[0]這種
+5. 修改json檔案的結構 hint: dict or list 
+ex: 
+  suit_job = {
+    "適合你的好工作": {xxx}
+  }
+6. 抓元素可以嘗試用更清楚的 or 唯一值 or 不會變動的
+7. 嘗試直接抓文字, 類似: text()="中高齡"
+
+---
 ## 20260212
+
 TODO: 
 1. 正常版本會包含前面的code邏輯
 2. 將第一版改為優化版
@@ -83,14 +122,13 @@ TODO:
 3. [ ] 寫完確認 (任何情況都要 -> 上傳前、上傳完成) 
 4. [ ] 最外層README調整 & 思考呈現方式
 5. [ ] alert Refactoring (e.g 區塊 or 開關)
-6. [ ] debug -> basic_practice (except)
+6. [x] debug -> basic_practice (except)
 7. [x] hover -> 驗證是否合理
 8. [x] shadow_root -> 是否有方式替代find_element
-9. [ ] 共用driver (設計裡面) ( 20260301處理中 )
+9. [x] 共用driver (設計裡面) 
 
 ---
-## 20260303
+## 20260302
 
 1. 歷程管理 & 日期 -> 設計
 2. 推導過程 e.g. -> 單一符合 -> 多個符合 -> 邊界符合 (edge) or 其他情境 -> 找到最適合的方式(能解決你大部分的問題)
-3. 

@@ -18,7 +18,7 @@ driver.get("https://the-internet.herokuapp.com/javascript_alerts")
 wait = WebDriverWait(driver, 10)
 
 # 20260226 優化程式，使用 for 迴圈執行 find_element
-# 20260302 調整變數名稱
+# 20260302 調整變數名稱 PR #4
 for i in range(3):
     try:
         alert_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Alert']")))

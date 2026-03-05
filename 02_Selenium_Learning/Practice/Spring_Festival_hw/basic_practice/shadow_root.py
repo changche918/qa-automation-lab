@@ -13,17 +13,8 @@ driver.get("https://the-internet.herokuapp.com/shadowdom")
     *target = print: name="my-text"'s text (My default text)
     hint: shadow-root
 """
-wait = WebDriverWait(driver, 10)
 
-# # 1. 找到宿主元素 (Host)
-# host = driver.find_element(By.CSS_SELECTOR, "my-paragraph")
-
-# # 2. 取得 shadow_root
-# root = host.shadow_root
-
-# # 3. 在 shadow_root 內部尋找元素
-# inner_p = root.find_element(By.CSS_SELECTOR, "slot")
-# print(inner_p.text)
+wait = WebDriverWait(driver, 10) 
 
 # 20260223 加上 retry 寫法
 for i in range(3):
@@ -39,7 +30,7 @@ for i in range(3):
         # 3. 在 shadow_root 內部尋找元素
         # inner_p = root.find_element(By.CSS_SELECTOR, "slot")
 
-        # 如果要將 line 40 改成 EC 寫法要改成這樣 :
+        # 如果要將 line 31 改成 EC 寫法要改成這樣 :
         inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
         print(f"抓取成功，輸出為 : {inner_p.text}")
         break
@@ -54,3 +45,13 @@ for i in range(3):
         print(f"其他未知錯誤: {e}")
 else:
         print("已達到最大重試 3 次，抓取失敗。")
+
+# # 1. 找到宿主元素 (Host)
+# host = driver.find_element(By.CSS_SELECTOR, "my-paragraph")
+
+# # 2. 取得 shadow_root
+# root = host.shadow_root
+
+# # 3. 在 shadow_root 內部尋找元素
+# inner_p = root.find_element(By.CSS_SELECTOR, "slot")
+# print(inner_p.text)
