@@ -1,5 +1,41 @@
 # 開發紀錄筆記
+
+## 20260118
+
+TODO: 
+1. int, float, string的差異
+2. 熟悉terminal各目錄執行
+3. f-string用法
+
+## 20260119
+
+TODO: BMI運算並將結果存成list和dict 各一個程式
+
+## 20260207
+
+TODO: 
+1. 到https://www.104.com.tw/網站 -> 找到五個區塊並逐一命名, 最少成印出文字+link(href)
+    -> optimize hint: 能拆class/function | 能把區塊拆分更細 |
+2. 存成txt檔案
+    -> optimize hint: json格式的txt
+
+## 20260209
+
+TODO: 
+1. 隱式等待與顯式等待 
+2. 命名(可讀性) ex: text_1
+3. debug "上市櫃"
+4. **用迴圈嘗試**, 避免使用[0]這種
+5. 修改json檔案的結構 hint: dict or list 
+ex: 
+  suit_job = {
+    "適合你的好工作": {xxx}
+  }
+6. 抓元素可以嘗試用更清楚的 or 唯一值 or 不會變動的
+7. 嘗試直接抓文字, 類似: text()="中高齡"
+
 ## 20260212
+
 TODO: 
 1. 正常版本會包含前面的code邏輯
 2. 將第一版改為優化版
