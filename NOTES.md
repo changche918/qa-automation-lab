@@ -7,10 +7,12 @@ TODO:
 2. 熟悉terminal各目錄執行
 3. f-string用法
 
+---
 ## 20260119
 
 TODO: BMI運算並將結果存成list和dict 各一個程式
 
+---
 ## 20260207
 
 TODO: 
@@ -18,7 +20,7 @@ TODO:
     -> optimize hint: 能拆class/function | 能把區塊拆分更細 |
 2. 存成txt檔案
     -> optimize hint: json格式的txt
-
+---
 ## 20260209
 
 TODO: 
@@ -34,6 +36,7 @@ ex:
 6. 抓元素可以嘗試用更清楚的 or 唯一值 or 不會變動的
 7. 嘗試直接抓文字, 類似: text()="中高齡"
 
+---
 ## 20260212
 
 TODO: 
