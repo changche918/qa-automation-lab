@@ -15,9 +15,21 @@ class WebController:
         """切回主頁面 default content"""
         self.driver.switch_to.default_content()
 
-    def alert_switch(self):
-        return self.driver.switch_to.alert # 這邊一定要記得 return 外面呼叫才能拿到東西
+    # def alert_switch(self):
+    #     return self.driver.switch_to.alert # 這邊一定要記得 return 外面呼叫才能拿到東西
     
+    def wait_alert(self, timeout=10):
+        """
+        等待 alert 出現，並回傳 alert 物件
+        """
+        # 等待 alert 出現
+        WebDriverWait(self.driver, timeout).until(EC.alert_is_present())
+        
+        # 回傳 alert 物件（和原本 alert_switch 功能相同）
+        return self.driver.switch_to.alert
+
+
+
     def find_elem(self, elem_tuple):
         # 單純尋找並回傳元素
         return self.driver.find_element(*elem_tuple)

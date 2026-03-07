@@ -39,7 +39,7 @@ for i in range(3):
         
         for button in javascript_alerts:
             button.click()
-            alert_title = finder.alert_switch()
+            alert_title = finder.wait_alert()
             print(f"警示框內容是 : {alert_title.text}")
             alert_title.accept()
         
@@ -50,13 +50,14 @@ for i in range(3):
         # alert_third.send_keys("My's Ryan")
         # alert_third.accept()
         '''
-
         prompt_elem.click() # 只對 prompt alert 做操作
-        alert_box = WebDriverWait(finder.driver, 10).until(EC.alert_is_present())
+        # alert_box = WebDriverWait(finder.driver, 10).until(EC.alert_is_present())
+        alert_box = finder.wait_alert()
         alert_box.send_keys("My's Ryan")
         alert_box.accept()
 
-        result_text = finder.driver.find_element(By.ID, "result")
+        # result_text = finder.driver.find_element(By.ID, "result")
+        result_text = finder.visit_elem(By.ID, "result")
         print (result_text.text)
         break
 
