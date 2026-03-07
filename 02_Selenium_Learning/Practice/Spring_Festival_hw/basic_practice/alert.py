@@ -3,10 +3,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+import sys
+import os
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", "..", "..",".."))
+sys.path.append(project_root)
 
-driver = webdriver.Chrome()
-driver.get("https://the-internet.herokuapp.com/javascript_alerts")
+from utils.drivers import WebController
+
 
 """
 3. Alert / Confirm 對話框
@@ -14,11 +18,14 @@ driver.get("https://the-internet.herokuapp.com/javascript_alerts")
     *target = click all btn, finally print (id="result")'s text
     hint: handle pop-up
 """
-
-wait = WebDriverWait(driver, 10)
-
 # 20260226 優化程式，使用 for 迴圈執行 find_element
 # 20260302 調整變數名稱 PR #4
+# 20260305 加上引用 drivers function，並調整 alert 原本寫法 PR #?
+
+finder = WebController()
+finder.get_url("https://the-internet.herokuapp.com/javascript_alerts")
+wait = WebDriverWait(finder.driver, 10)
+
 for i in range(3):
     try:
         alert_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Alert']")))
@@ -26,30 +33,35 @@ for i in range(3):
         prompt_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Prompt']")))
 
         javascript_alerts = [alert_elem, confirm_elem, prompt_elem]
+        
         for button in javascript_alerts:
             button.click()
-            alert_title = driver.switch_to.alert
+            alert_title = finder.alert_switch()
             print(f"警示框內容是 : {alert_title.text}")
             alert_title.accept()
         
-        prompt_elem.click()
-        alert_third = driver.switch_to.alert
+        '''暫保留以下寫法 (以便比對新舊寫法)
+        # prompt_elem.click()
+        # alert_third = finder.alert_switch
+        
+        # alert_third.send_keys("My's Ryan")
+        # alert_third.accept()
+        '''
 
-        alert_third.send_keys("My's Ryan")
-        alert_third.accept()
+        prompt_elem.click() # 只對 prompt alert 做操作
+        alert_box = WebDriverWait(finder.driver, 10).until(EC.alert_is_present())
+        alert_box.send_keys("My's Ryan")
+        alert_box.accept()
 
-        result_text = driver.find_element(By.ID, "result")
+        result_text = finder.driver.find_element(By.ID, "result")
         print (result_text.text)
-        driver.quit()
         break
 
     except TimeoutException:
         print("抓取超時：10 秒內沒看到目標元素")
-        driver.switch_to.default_content()
 
     except NoSuchElementException:
         print("元素不存在")
-        driver.switch_to.default_content()
         
     except Exception as e:
         print(f"其他未知錯誤: {e}")

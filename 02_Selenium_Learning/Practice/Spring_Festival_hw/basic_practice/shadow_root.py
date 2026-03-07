@@ -3,9 +3,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+import sys
+import os
 
-driver = webdriver.Chrome()
-driver.get("https://the-internet.herokuapp.com/shadowdom")
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", "..", "..",".."))
+sys.path.append(project_root)
+
+from utils.drivers import WebController
+
+finder = WebController()
+finder.get_url("https://the-internet.herokuapp.com/shadowdom")
+wait = WebDriverWait(finder.driver, 10)
 
 """"
 4. shadow-root
@@ -13,10 +21,9 @@ driver.get("https://the-internet.herokuapp.com/shadowdom")
     *target = print: name="my-text"'s text (My default text)
     hint: shadow-root
 """
-
-wait = WebDriverWait(driver, 10) 
-
 # 20260223 加上 retry 寫法
+# 20260305 加上引用 drivers function，並調整 shadow 原本寫法 PR #?
+
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
@@ -32,6 +39,7 @@ for i in range(3):
 
         # 如果要將 line 31 改成 EC 寫法要改成這樣 :
         inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
+
         print(f"抓取成功，輸出為 : {inner_p.text}")
         break
 

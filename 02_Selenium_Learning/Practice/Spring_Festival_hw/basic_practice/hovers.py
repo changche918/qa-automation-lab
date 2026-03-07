@@ -4,9 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException 
+import sys
+import os
 
-driver = webdriver.Chrome()
-driver.get("https://the-internet.herokuapp.com/hovers")
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", "..", "..",".."))
+sys.path.append(project_root)
+
+from utils.drivers import WebController
+
+finder = WebController()
+finder.get_url("https://the-internet.herokuapp.com/hovers")
+wait = WebDriverWait(finder.driver, 10)
 
 """
 ## 基礎練習 ##
@@ -17,9 +25,9 @@ driver.get("https://the-internet.herokuapp.com/hovers")
 
 2/22 確認hovers為何錯誤    
 """
-wait = WebDriverWait(driver, 10) 
-
 # 20260223 加上 retry 寫法
+# 20260305 加上引用 drivers function，並調整 hovers 原本寫法 PR #?
+
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
@@ -27,7 +35,7 @@ for i in range(3):
         avatar = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "figure")))
 
         # 2. 執行懸停動作
-        actions = ActionChains(driver)
+        actions = ActionChains(finder.driver)
         actions.move_to_element(avatar).perform()
 
         # 3. 等待文字出現
@@ -38,7 +46,7 @@ for i in range(3):
         if view_profile_text.text == 'View profile':
             view_profile_text.click()
             new_page = wait.until(EC.visibility_of_element_located((By.TAG_NAME, "h1")))
-            if new_page.text.strip().lower() == "not found":
+            if new_page.text == "Not Found": # 這邊需要完整比對 Not Found 字串
                 print("已成功進入 Not Found 頁面")
             break
 
