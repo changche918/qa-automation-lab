@@ -142,10 +142,10 @@ TODO:
 3. [X] "not found" -> 相容性 -> stg staging -staging
     "Not Found" -> PM規定的文字 -> 完全不能有誤差
 ------
-1. [?] 確認路徑為何不能使用, (可額外嘗試讓各路徑都可以執行)
-2. [?] 都改共用driver + 哪邊可抽成function (e.g. wait.until(EC.element_to_be_clickable))
-3. [] 減少重複code (e.g. driver.switch_to.default_content()) -> hint: 回到default狀態
-4. [] 確認 inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
+1. [X] 確認路徑為何不能使用, (可額外嘗試讓各路徑都可以執行)
+2. [X] 都改共用driver + 哪邊可抽成function (e.g. wait.until(EC.element_to_be_clickable))
+3. [X] 減少重複code (e.g. driver.switch_to.default_content()) -> hint: 回到default狀態
+4. [?] 確認 inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
 
 筆記 : 
 1. PEP8 規範要弄熟

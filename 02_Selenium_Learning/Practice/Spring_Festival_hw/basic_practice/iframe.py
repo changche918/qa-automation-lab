@@ -10,6 +10,10 @@ sys.path.append(project_root)
 
 from utils.drivers import WebController
 
+finder = WebController()
+finder.get_url("https://the-internet.herokuapp.com/iframe")
+# wait = WebDriverWait(finder.driver, 10)
+
 """
 2. IFrame 處理
     url = https://the-internet.herokuapp.com/iframe
@@ -17,19 +21,17 @@ from utils.drivers import WebController
     hint: iframe
 """
 # 20260223 加上 retry 寫法
-# 20260305 加上引用 drivers function，並調整 iframe 原本寫法(switch iframe) PR #?
-
-finder = WebController()
-finder.get_url("https://the-internet.herokuapp.com/iframe")
-wait = WebDriverWait(finder.driver, 10)
+# 20260305 加上引用 drivers function，並調整 iframe 原本寫法(switch iframe) PR #6
 
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
         
         # 切換 iframe 並尋找元素
-        wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
-        input_form = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".mce-content-body p")))
+        finder.visit_elem(By.ID, "mce_0_ifr")
+        # wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
+        finder.wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
+        input_form = finder.visit_elem(By.CSS_SELECTOR, ".mce-content-body p")
         
         print(f"抓取成功，輸出為 : {input_form.text}")
         break

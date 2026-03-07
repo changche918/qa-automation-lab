@@ -1,4 +1,3 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,6 +10,9 @@ sys.path.append(project_root)
 
 from utils.drivers import WebController
 
+finder = WebController()
+finder.get_url("https://the-internet.herokuapp.com/javascript_alerts")
+# wait = WebDriverWait(finder.driver, 10)
 
 """
 3. Alert / Confirm 對話框
@@ -20,18 +22,19 @@ from utils.drivers import WebController
 """
 # 20260226 優化程式，使用 for 迴圈執行 find_element
 # 20260302 調整變數名稱 PR #4
-# 20260305 加上引用 drivers function，並調整 alert 原本寫法 PR #?
+# 20260305 加上引用 drivers function，並調整 alert 原本寫法 PR #6
 
-finder = WebController()
-finder.get_url("https://the-internet.herokuapp.com/javascript_alerts")
-wait = WebDriverWait(finder.driver, 10)
 
 for i in range(3):
     try:
-        alert_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Alert']")))
-        confirm_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Confirm']")))
-        prompt_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Prompt']")))
-
+        alert_elem = finder.visit_elem(By.XPATH, "//button[text()='Click for JS Alert']")
+        confirm_elem = finder.visit_elem(By.XPATH, "//button[text()='Click for JS Confirm']")
+        prompt_elem = finder.visit_elem(By.XPATH, "//button[text()='Click for JS Prompt']")
+        
+        # alert_elem = wait.until(EC.element_to_be_((By.XPATH, "//button[text()='Click for JS Alert']")))
+        # confirm_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Confirm']")))
+        # prompt_elem = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click for JS Prompt']")))
+        
         javascript_alerts = [alert_elem, confirm_elem, prompt_elem]
         
         for button in javascript_alerts:
