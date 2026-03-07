@@ -1,5 +1,6 @@
 # 開發紀錄筆記
 
+---
 ## 20260118
 
 TODO: 
@@ -132,3 +133,21 @@ TODO:
 
 1. 歷程管理 & 日期 -> 設計
 2. 推導過程 e.g. -> 單一符合 -> 多個符合 -> 邊界符合 (edge) or 其他情境 -> 找到最適合的方式(能解決你大部分的問題)
+
+---
+## 20260305
+
+1. [] AI使用: 一次對話不要過多, 若太多可以拆分, 或是清除視窗再問(拆分單元的概念) -> new session 避免hallucination
+2. [] AI不一定必須使用json / markdown格式才會比較清楚, 是因為你在使用這些格式的時候, 腦袋已經先整理清楚了 #輸出json會比較好做後續應用
+3. [X] "not found" -> 相容性 -> stg staging -staging
+    "Not Found" -> PM規定的文字 -> 完全不能有誤差
+------
+1. [X] 確認路徑為何不能使用, (可額外嘗試讓各路徑都可以執行)
+2. [X] 都改共用driver + 哪邊可抽成function (e.g. wait.until(EC.element_to_be_clickable))
+3. [X] 減少重複code (e.g. driver.switch_to.default_content()) -> hint: 回到default狀態
+4. [?] 確認 inner_p = wait.until(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
+
+筆記 : 
+1. PEP8 規範要弄熟
+2. 要知道程式用法，e.g. lower >>> 不在意大小寫， '==' >>> 完整比對
+3. 一個課程一個 PR
