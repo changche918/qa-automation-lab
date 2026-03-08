@@ -11,7 +11,6 @@ from utils.drivers import WebController
 
 finder = WebController()
 finder.get_url("https://the-internet.herokuapp.com/iframe")
-# wait = WebDriverWait(finder.driver, 10)
 
 """
 2. IFrame 處理
@@ -21,18 +20,19 @@ finder.get_url("https://the-internet.herokuapp.com/iframe")
 """
 # 20260223 加上 retry 寫法
 # 20260305 加上引用 drivers function，並調整 iframe 原本寫法(switch iframe) PR #6
+# 20260307 刪除多餘註解 PR #7
 
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
         
         # 切換 iframe 並尋找元素
-        finder.visit_elem(By.ID, "mce_0_ifr")
-        # wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
+        finder.wait_element_visible(By.ID, "mce_0_ifr")
         finder.wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
-        input_form = finder.visit_elem(By.CSS_SELECTOR, ".mce-content-body p")
+        input_form = finder.wait_element_visible(By.CSS_SELECTOR, ".mce-content-body p")
         
         print(f"抓取成功，輸出為 : {input_form.text}")
+        
         break
 
     except TimeoutException:
@@ -45,15 +45,7 @@ for i in range(3):
 
     except Exception as e:
         print(f"其他未知錯誤: {e}")
-        finder.iframe_switch() # 失敗也要記得切回主畫面再重試
+         # 失敗也要記得切回主畫面再重試
 else:
         print("已達到最大重試 3 次，抓取失敗。")
-
-# 等待 iframe 出現並自動切換進去
-# WebDriverWait(driver, 10).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
-
-# 現在已經在 iframe 裡面了，直接操作
-# input_form = wait.until(
-#     EC.visibility_of_element_located((By.CSS_SELECTOR, ".mce-content-body.mce-content-readonly p")))
-# print(input_form.text)
-# driver.switch_to.default_content()
+        

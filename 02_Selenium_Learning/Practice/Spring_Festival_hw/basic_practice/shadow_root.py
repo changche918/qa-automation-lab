@@ -10,7 +10,6 @@ from utils.drivers import WebController
 
 finder = WebController()
 finder.get_url("https://the-internet.herokuapp.com/shadowdom")
-# wait = WebDriverWait(finder.driver, 10)
 
 """"
 4. shadow-root
@@ -20,30 +19,30 @@ finder.get_url("https://the-internet.herokuapp.com/shadowdom")
 """
 # 20260223 加上 retry 寫法
 # 20260305 加上引用 drivers function，並調整 shadow 原本寫法 PR #6
+# 20260307 刪除多餘註解 PR #7
 
 for i in range(3):
     try:
         print(f"第 {i+1} 次抓取元素")
         
         # 1. 找到宿主元素 (Host)
-        # host = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "my-paragraph")))
-        host = finder.visit_elem(By.CSS_SELECTOR, "my-paragraph")
+        host = finder.wait_element_visible(By.CSS_SELECTOR, "my-paragraph")
         
         # 2. 取得 shadow_root
         root = host.shadow_root
         
         # 3. 在 shadow_root 內部尋找元素
-        # inner_p = root.find_element(By.CSS_SELECTOR, "slot")
-
-        # 如果要將 line 31 改成 EC 寫法要改成這樣 :
-        # inner_p = finder.wait_elem(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
+        inner_p = root.find_element(By.CSS_SELECTOR, "slot")
+        # inner_p = finder.wait_element_visible(lambda x: root.find_element(By.CSS_SELECTOR, "slot")) 
+        ''' 
+        lambda 的 x 可改成 _ ，因為是一次性變數，推薦用 _ 代表
+        lambda 用法 : add = lambda x, y : x + y，# 使用時再把數字傳進去
+                        print(add(5, 3))  # 結果會是 8
+        '''
         
-        '''這邊套用 function = visit_elem 後不正確，待解決 
-        inner_p = finder.visit_elem(By.CSS_SELECTOR, "slot")
-
         print(f"抓取成功，輸出為 : {inner_p.text}")
         break
-        '''
+
     except TimeoutException:
         print("抓取超時：10 秒內沒看到目標元素")
 
@@ -54,13 +53,3 @@ for i in range(3):
         print(f"其他未知錯誤: {e}")
 else:
         print("已達到最大重試 3 次，抓取失敗。")
-
-# # 1. 找到宿主元素 (Host)
-# host = driver.find_element(By.CSS_SELECTOR, "my-paragraph")
-
-# # 2. 取得 shadow_root
-# root = host.shadow_root
-
-# # 3. 在 shadow_root 內部尋找元素
-# inner_p = root.find_element(By.CSS_SELECTOR, "slot")
-# print(inner_p.text)

@@ -5,18 +5,7 @@ class DataManager:
         self.title = title
 
 # 20260222 調整 function 內寫法
-
-    ''' 以下 elem_dict 這個沒有存在必要
-        def elem_dict(self, data):
-    #     self.data = data
-
-    # 只有在這種邏輯下才需要 elem_dict (或 set_data)
-    # mgr = DataManager("MyData")
-    # mgr.set_data(my_list)  # 先存進去
-    # mgr.clean_data()       # 內部處理，不需要傳入 data
-    # mgr.save("out.json")   # 內部存檔，不需要傳入 data
-
-    '''
+# 20260307 刪除多餘註解 PR #7
 
     def save(self, data, filename):
         # with open(filename, "w", encoding="utf-8") as file:
