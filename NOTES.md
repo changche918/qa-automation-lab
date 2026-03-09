@@ -158,7 +158,7 @@ TODO:
 
 1. [] 查一下 sys.path(.) 寫法，或是放一個共用路徑，一開始就 import 以及 os.path 的詳細寫法
 2. [X] 命名重要性 visit 是動詞，如果單純用 visit_elem 會不懂意思，要用 visible 比較清楚
-3. [] function 要加上用法註解不然別人會看不懂
+3. [X] function 要加上用法註解不然別人會看不懂
 4. [] wait.alert 與 wait.alert_switch 用法不完全貼切 (wait_and_switch) 可寫在 function 註解說明
 5. [X] alert.py 程式中，若要新舊比對要思考一下怎麼紀錄，不然會很亂 (建議可以刪掉，PR 自己就會有紀錄了)
 6. [?] get_url 抽 function (未來建議實作)
@@ -168,11 +168,11 @@ TODO:
     def iframe_switch(self):
         """切回主頁面 default content"""
         self.driver.switch_to.default_content()
-10. []查一下 inner_p = finder.wait_elem(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
+10. [X]查一下 inner_p = finder.wait_elem(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
     _ >>> 的意思
     lambda 要同時 wait + find 動作
-11. [] drivers find_elem 要改一下，確認 *elem_tuple >>> 意思是? (跟下面只傳一個參數的用法牴觸 by_type)
-12. [] 調整 combination_practice 寫法 (抽共用)
+11. [X] drivers find_elem 要改一下，確認 *elem_tuple >>> 意思是? (跟下面只傳一個參數的用法牴觸 by_type)
+12. [X] 調整 combination_practice 寫法 (抽共用)
 13. [X] headless 用法
 
 ---

@@ -45,7 +45,6 @@ for i in range(3):
 
     except Exception as e:
         print(f"其他未知錯誤: {e}")
-         # 失敗也要記得切回主畫面再重試
+        finder.iframe_switch() # 失敗也要記得切回主畫面再重試
 else:
         print("已達到最大重試 3 次，抓取失敗。")
-        

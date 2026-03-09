@@ -17,19 +17,19 @@ finder.get_url("https://www.104.com.tw/")
 
 
 # 登入看專屬職缺
-login_to_see_elem = finder.find_elem(By.XPATH, "//*[text()='登入看專屬職缺 ']") 
+login_to_see_elem = finder.wait_element_visible(By.XPATH, "//*[text()='登入看專屬職缺 ']") 
 
 # 地區找工作
-area_to_find_elem = finder.find_elem(By.XPATH, "//*[text()='地區找工作']")
+area_to_find_elem = finder.wait_element_visible(By.XPATH, "//*[text()='地區找工作']")
 
 # 上市櫃
-listing_and_OTC_elem = finder.find_elem(By.XPATH, "//*[text()='上市櫃']")
+listing_and_OTC_elem = finder.wait_element_visible(By.XPATH, "//*[text()='上市櫃']")
 
 # 前往職涯診所
-go_to_job_clinic_elem = finder.find_elem(By.XPATH, "//*[text()='前往職涯診所']")
+go_to_job_clinic_elem = finder.wait_element_visible(By.XPATH, "//*[text()='前往職涯診所']")
 
 # 檢視職業適合度
-view_job_fit_elem = finder.find_elem(By.XPATH, "//*[text()='檢視職業適合度']")
+view_job_fit_elem = finder.wait_element_visible(By.XPATH, "//*[text()='檢視職業適合度']")
 
 
 job_type_dict = [
