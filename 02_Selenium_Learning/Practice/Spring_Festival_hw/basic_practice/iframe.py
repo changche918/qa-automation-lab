@@ -28,7 +28,7 @@ for i in range(3):
         
         # 切換 iframe 並尋找元素
         finder.wait_element_visible(By.ID, "mce_0_ifr")
-        finder.wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr")))
+        finder.wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mce_0_ifr"))) # 由外向內 (鑽進小視窗)
         input_form = finder.wait_element_visible(By.CSS_SELECTOR, ".mce-content-body p")
         
         print(f"抓取成功，輸出為 : {input_form.text}")
@@ -37,7 +37,7 @@ for i in range(3):
 
     except TimeoutException:
         print("抓取超時：10 秒內沒看到目標元素")
-        finder.iframe_switch()
+        finder.iframe_switch() # 由內向外 (回到主頁面)
 
     except NoSuchElementException:
         print("元素不存在")
