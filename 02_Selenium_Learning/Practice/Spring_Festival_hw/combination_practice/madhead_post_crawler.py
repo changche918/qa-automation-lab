@@ -1,23 +1,29 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from logger import LogManager
 import os
-
+import sys
 import file_manager
+
+# 20260307 調整變數名稱 PR #7
 
 log = LogManager()
 log.info("--- 啟動 Chrome 瀏覽器 ---")
-driver = webdriver.Chrome()
-log.info("正要前往巴哈姆特論壇，神魔之塔")
-driver.get("https://forum.gamer.com.tw/B.php?bsn=23805")
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", "..", "..",".."))
+sys.path.append(project_root)
+
+from utils.drivers import WebController
+
+finder = WebController()
+log.info("正要前往巴哈姆特論壇，神魔之塔")
+finder.get_url("https://forum.gamer.com.tw/B.php?bsn=23805")
 
 screenshot_name = "combination_practice\screenshots\web_madhead.png"
-driver.save_screenshot(screenshot_name)
+finder.driver.save_screenshot(screenshot_name)
 print("網頁已開啟並截圖 :", screenshot_name )
 
 try:
-    elem = driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[6].text
+    find_title_elem = finder.driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[6].text
     
     file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\madhead_change_log.txt"
     log = file_manager.LogHandle(file_path)
@@ -26,17 +32,17 @@ try:
         with open(file_path, "w", encoding="utf-8") as file:
             file.write("[yyyy-mm-dd hh:mm:ss] 這是範例行。\n")
 
-    old_title2 = log.read_last_line()
+    last_log_line = log.read_last_line()
     
-    if (old_title2.split("] ")[1].strip()) != elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
-        print(f"不一樣! 這次的標題是{elem}")
+    if (last_log_line.split("] ")[1].strip()) != find_title_elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
+        print(f"不一樣! 這次的標題是{find_title_elem}")
         # 檢查檔案，不存在則用 'a' (append) 模式開啟並立即關閉來建立它
-        log.save(elem)
+        log.save(find_title_elem)
     else:
-        print(f"這次抓到的標題是 : {elem}，沒有不一樣，不寫入 log")
+        print(f"這次抓到的標題是 : {find_title_elem}，沒有不一樣，不寫入 log")
 
 except Exception as e: # AI 提供
-    screenshot_name_fail = "screenshots\error_madhead.png"
-    driver.save_screenshot(screenshot_name_fail) # AI 提供
+    fail_screenshot_name = "screenshots\error_madhead.png"
+    finder.driver.save_screenshot(fail_screenshot_name) # AI 提供
 
-    print("發生錯誤 :", e, "已截圖 :", screenshot_name_fail )
+    print("發生錯誤 :", e, "已截圖 :", fail_screenshot_name )

@@ -1,30 +1,35 @@
 from selenium.webdriver.common.by import By
-from utils.data_manager import DataManager
+import sys
+import os
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", "..",".."))
+sys.path.append(project_root)
+
 from utils.drivers import WebController
+from utils.data_manager import DataManager
 
-# 20260302 調整由最外層取得 data_manager & drivers function，PR #4
-# 執行須使用語法 : python -m 02_Selenium_Learning.Practice.my_104_hw.104_run_log
-
-# 建立實例 (這時會開啟第一個視窗)
 finder = WebController()
-
-# 前往目標網頁 (只需載入一次)
 finder.get_url("https://www.104.com.tw/")
 
+
+# 20260302 調整由最外層取得 data_manager & drivers function，PR #4
+# 20260307 刪除多餘註解，套用 function PR #7
+
+
 # 登入看專屬職缺
-login_to_see_elem = finder.find_elem((By.XPATH, "//*[text()='登入看專屬職缺 ']")) # 傳入 Tuple (元組) 需要兩個 ((
+login_to_see_elem = finder.wait_element_visible(By.XPATH, "//*[text()='登入看專屬職缺 ']") 
 
 # 地區找工作
-area_to_find_elem = finder.find_elem((By.XPATH, "//*[text()='地區找工作']"))
+area_to_find_elem = finder.wait_element_visible(By.XPATH, "//*[text()='地區找工作']")
 
 # 上市櫃
-listing_and_OTC_elem = finder.find_elem((By.XPATH, "//*[text()='上市櫃']"))
+listing_and_OTC_elem = finder.wait_element_visible(By.XPATH, "//*[text()='上市櫃']")
 
 # 前往職涯診所
-go_to_job_clinic_elem = finder.find_elem((By.XPATH, "//*[text()='前往職涯診所']"))
+go_to_job_clinic_elem = finder.wait_element_visible(By.XPATH, "//*[text()='前往職涯診所']")
 
 # 檢視職業適合度
-view_job_fit_elem = finder.find_elem((By.XPATH, "//*[text()='檢視職業適合度']"))
+view_job_fit_elem = finder.wait_element_visible(By.XPATH, "//*[text()='檢視職業適合度']")
 
 
 job_type_dict = [
@@ -35,7 +40,6 @@ job_type_dict = [
     view_job_fit_elem
 ]
 
-# job_results_dict =  {1, 2, 3, 4, 5} # 這行是拿來測試會進入 except 的用法
 job_results_dict =  {}
 
 for elem in job_type_dict:

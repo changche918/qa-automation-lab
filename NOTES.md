@@ -151,3 +151,29 @@ TODO:
 1. PEP8 規範要弄熟
 2. 要知道程式用法，e.g. lower >>> 不在意大小寫， '==' >>> 完整比對
 3. 一個課程一個 PR
+
+
+---
+## 20260307
+
+1. [?] 查一下 sys.path(.) 寫法，或是放一個共用路徑，一開始就 import 以及 os.path 的詳細寫法
+2. [X] 命名重要性 visit 是動詞，如果單純用 visit_elem 會不懂意思，要用 visible 比較清楚
+3. [X] function 要加上用法註解不然別人會看不懂
+4. [X] wait.alert 與 wait.alert_switch 用法不完全貼切 (wait_and_switch) 可寫在 function 註解說明
+5. [X] alert.py 程式中，若要新舊比對要思考一下怎麼紀錄，不然會很亂 (建議可以刪掉，PR 自己就會有紀錄了)
+6. [?] get_url 抽 function (未來建議實作)
+7. [X] hovers 的 avatar 意思是?
+8. [?] iframe_switch 用意是? 嘗試不要寫三次 (except 那邊)，也要確保程式可繼續執行，需要切回來，不然後面的程式也會跟著死
+9. [?] 以下 function 須重新設計，應該不是只有 default_content? 應保留可以切換其他視窗的方法比較好
+    def iframe_switch(self):
+        """切回主頁面 default content"""
+        self.driver.switch_to.default_content()
+10. [X]查一下 inner_p = finder.wait_elem(lambda _: root.find_element(By.CSS_SELECTOR, "slot"))
+    _ >>> 的意思
+    lambda 要同時 wait + find 動作
+11. [X] drivers find_elem 要改一下，確認 *elem_tuple >>> 意思是? (跟下面只傳一個參數的用法牴觸 by_type)
+12. [X] 調整 combination_practice 寫法 (抽共用)
+13. [X] headless 用法
+
+---
+## 20260309

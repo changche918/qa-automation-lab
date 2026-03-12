@@ -19,7 +19,7 @@ class LogHandle:
         
     def read_last_line(self):
         with open(self.filename, "r", encoding="utf-8") as file:
-            lines = file.readlines()
+            lines = file.readlines() # 效果 : ['第一行內容\n', '第二行內容\n', '最後一行']
         if lines:  # 先檢查檔案是不是空的，避免報錯
             last_line = lines[-1]  # 取最後一筆並去掉換行符號
             return last_line
