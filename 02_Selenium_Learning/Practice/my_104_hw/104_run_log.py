@@ -49,4 +49,4 @@ for elem in job_type_dict:
         job_results_dict[name] = link
 
 gen_json_json = DataManager(title="適合你的好工作") 
-gen_json_json.save(job_results_dict, "02_Selenium_Learning\Practice\my_104_hw\logs\data.json")
+gen_json_json.save_json(job_results_dict, "02_Selenium_Learning\Practice\my_104_hw\logs\data.json")

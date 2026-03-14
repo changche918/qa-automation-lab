@@ -50,7 +50,7 @@ try:
     
     if (last_log_line.split("] ")[1].strip()) != find_title_elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
         print(f"不一樣! 這次的標題是{find_title_elem}")
-        log.save(file_path, find_title_elem)
+        log.write_log(file_path, find_title_elem)
     else:
         print(f"這次抓到的標題是 : {find_title_elem}，沒有不一樣，不寫入 log")
 

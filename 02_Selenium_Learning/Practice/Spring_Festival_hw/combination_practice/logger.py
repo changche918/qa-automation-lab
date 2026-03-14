@@ -1,6 +1,7 @@
 import logging
 import os
 
+#TODO 找時間看懂以下 log 產生方式
 class LogManager:
     def __init__(self, log_folder="02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs", log_file="automation.log"):
         # 1. 確保資料夾存在 (避免 FileNotFoundError)
