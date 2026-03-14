@@ -176,4 +176,13 @@ TODO:
 13. [X] headless 用法
 
 ---
-## 20260309
+## 20260312
+
+1. [X] alert.py 為什麼要這行 prompt_elem.click()，點了第 3 個 alert，又再次點一次 alert 並輸入
+2. [?] hovers.py >>> 有時間再做，if view_profile_text.text == 'View profile':，這邊沒有 else 處理，也許是 print text 出來看抓錯成什麼 ?
+3. [?] file_manager.py
+    - 哪裡用到 self.data? sava 裡面已經有 data 了，或是單純處理 data function
+    - LogHandler 弄懂這個 class 在幹嘛
+    - 這個 class 內的各個 funciton 怎麼應用，畫架構圖
+    - read_file 沒用到 ?
+    - 目前寫法會變成要宣告 3 次 a_log = LogHandle()、b_log = LogHandle()、 c_log = LogHandle()，不方便
