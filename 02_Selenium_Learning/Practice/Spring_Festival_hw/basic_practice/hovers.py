@@ -42,6 +42,7 @@ for i in range(3):
         view_profile_text = finder.wait_element_visible(By.LINK_TEXT, "View profile")
 
         if view_profile_text.text == 'View profile':
+        # 20260312 TODO : 這邊可能加入 else 不然會怪怪的
             view_profile_text.click()
             new_page = finder.wait_element_visible(By.TAG_NAME, "h1")
             if new_page.text == "Not Found": # 這邊需要完整比對 Not Found 字串
