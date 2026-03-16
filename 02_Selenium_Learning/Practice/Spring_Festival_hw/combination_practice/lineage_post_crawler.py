@@ -45,12 +45,12 @@ try:
     find_title_elem = finder.driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[3].text
     
     file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\change_log.txt"
-    log = file_manager.LogHandle(file_path)
-    last_log_line = log.read_last_line()
+    log = file_manager.LogHandler()
+    last_log_line = log.read_all_lines(file_path, -1)
     
     if (last_log_line.split("] ")[1].strip()) != find_title_elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
         print(f"不一樣! 這次的標題是{find_title_elem}")
-        log.save(find_title_elem)
+        log.write_log(file_path, find_title_elem)
     else:
         print(f"這次抓到的標題是 : {find_title_elem}，沒有不一樣，不寫入 log")
 

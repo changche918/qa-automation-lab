@@ -7,10 +7,7 @@ class DataManager:
 # 20260222 調整 function 內寫法
 # 20260307 刪除多餘註解 PR #7
 
-    def save(self, data, filename):
-        # with open(filename, "w", encoding="utf-8") as file:
-        #     json.dump(data, file, indent = 4, ensure_ascii=False)
-        #     print(f"{filename} 儲存完成")
+    def save_json(self, data, filename):
         try:
         # 嘗試使用 JSON 格式儲存
             with open(filename, "w", encoding="utf-8") as file:
