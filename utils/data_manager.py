@@ -6,7 +6,6 @@ class DataManager:
 
 # 20260222 調整 function 內寫法
 # 20260307 刪除多餘註解 PR #7
-
     def save_json(self, data, filename):
         try:
         # 嘗試使用 JSON 格式儲存

@@ -5,7 +5,6 @@ import sys
 import file_manager
 
 # 20260307 調整變數名稱 PR #7
-
 log = LogManager()
 log.info("--- 啟動 Chrome 瀏覽器 ---")
 

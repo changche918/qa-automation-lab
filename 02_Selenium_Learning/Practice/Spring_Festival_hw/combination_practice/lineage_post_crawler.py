@@ -5,7 +5,6 @@ import sys
 import file_manager
 
 # 20260307 調整變數名稱 PR #7
-
 """
 ## 組合練習 ##
 1. 偵測內容(範例: 第一個class=b-list__row b-list-item b-imglist-item有無更新, 此整行有無更新, 若有時間可嘗試更細的判斷)

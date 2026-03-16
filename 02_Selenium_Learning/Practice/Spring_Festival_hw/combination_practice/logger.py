@@ -1,7 +1,6 @@
 import logging
 import os
 
-#TODO 找時間看懂以下 log 產生方式
 class LogManager:
     def __init__(self, log_folder="02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs", log_file="automation.log"):
         # 1. 確保資料夾存在 (避免 FileNotFoundError)
@@ -9,8 +8,7 @@ class LogManager:
             os.makedirs(log_folder)
         
         # 2. 合併路徑 (例如變成 "logs/automation.log")
-        # 這樣寫能自動處理不同作業系統的斜線問題
-        log_path = os.path.join(log_folder, log_file)
+        log_path = os.path.join(log_folder, log_file) # 這樣寫能自動處理不同作業系統的斜線問題
         
         # 3. 建立 logger
         self.logger = logging.getLogger("SeleniumCrawler")
