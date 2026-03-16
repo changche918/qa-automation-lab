@@ -2,12 +2,12 @@ import logging
 import os
 
 class LogManager:
-    def __init__(self, log_folder="02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs", log_file="automation.log"):
+    def __init__(self, log_folder="02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs", log_file="automation_log.txt"):
         # 1. 確保資料夾存在 (避免 FileNotFoundError)
         if not os.path.exists(log_folder):
             os.makedirs(log_folder)
         
-        # 2. 合併路徑 (例如變成 "logs/automation.log")
+        # 2. 合併路徑 (例如變成 "logs/automationlog")
         log_path = os.path.join(log_folder, log_file) # 這樣寫能自動處理不同作業系統的斜線問題
         
         # 3. 建立 logger

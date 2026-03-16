@@ -2,9 +2,9 @@ from selenium.webdriver.common.by import By
 from logger import LogManager
 import os
 import sys
-import file_manager
 
 # 20260307 調整變數名稱 PR #7
+# 20260317 調整套用 file_manager function PR #9
 log = LogManager()
 log.info("--- 啟動 Chrome 瀏覽器 ---")
 
@@ -12,6 +12,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", ".."
 sys.path.append(project_root)
 
 from utils.drivers import WebController
+from utils.file_manager import FileHandler
 
 finder = WebController()
 log.info("正要前往巴哈姆特論壇，神魔之塔")
@@ -25,14 +26,14 @@ try:
     find_title_elem = finder.driver.find_elements(By.CSS_SELECTOR, ('.b-list__main__title'))[6].text
     
     file_path = "02_Selenium_Learning\Practice\Spring_Festival_hw\combination_practice\logs\madhead_change_log.txt"
-    log = file_manager.LogHandler()
+    log = FileHandler()
 
-    last_log_line = log.read_all_lines(file_path, -1)
+    last_log_line = log.read_txt_lines(file_path, -1)
     
     if (last_log_line.split("] ")[1].strip()) != find_title_elem: # 比對 log 檔的標題，跟新的標題一不一樣。加 strip 怕比對失敗
         print(f"不一樣! 這次的標題是{find_title_elem}")
         # 檢查檔案，不存在則用 'a' (append) 模式開啟並立即關閉來建立它
-        log.write_log(file_path, find_title_elem)
+        log.save_txt(file_path, find_title_elem)
     else:
         print(f"這次抓到的標題是 : {find_title_elem}，沒有不一樣，不寫入 log")
 
