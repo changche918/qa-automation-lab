@@ -8,6 +8,7 @@ __pycache__/
 
 # 忽略 log 檔案
 **/logs/*.txt
+**/logs/*.log
 
 # 忽略系統產生的雜物
 # .DS_Store 誰產生的： 當你用 Mac 的 Finder（檔案瀏覽器）打開任何一個資料夾時，系統就會自動建立它。
