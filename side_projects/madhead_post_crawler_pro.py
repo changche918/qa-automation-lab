@@ -17,25 +17,33 @@ from selenium.webdriver.support import expected_conditions as EC
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(project_root)
 
+from utils.file_manager import FileHandler
+
+file_path = "side_projects\logs\madhead_log.txt"
+log = FileHandler()
 driver = webdriver.Chrome()
 driver.get("https://forum.gamer.com.tw/B.php?bsn=23805")
 
 
-    
-
 # 等待文章出現
 wait = WebDriverWait(driver, 10)
-articles = wait.until(
-    EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row"))
-)
+articles = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row")))
 
 titles = []
 
 for art in articles:
+    # 檢查該 row 的 class 屬性中是否包含 'm-sticky' (以巴哈姆特為例)
+    # 或者檢查是否有置頂圖示的 class
+    if "b-list__row b-list__row--sticky" in art.get_attribute("class"):
+        continue  # 如果是置頂，就跳過這一次迴圈
+        
     try:
         title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
-        titles.append(title_elem.text)
+        original_title = title_elem.text
+        titles.append(f"[{title_elem.text}] {title_elem.text}\n")
+        
     except:
-        # 如果該 row 沒有 title，直接跳過
         continue
+
+log.save_txt(file_path, titles)
 print(titles)
