@@ -6,7 +6,7 @@ __pycache__/
 .env
 # *.pem  SSH 登入：例如登入 AWS 伺服器時需要的金鑰檔（如 my-key.pem）。，SSL/TLS 憑證：網站用來建立 HTTPS 安全連線的加密檔案。
 
-# 忽略 log 檔案
+# 忽略 log 檔案 (# 20260319 TODO 查一下 * or ** 差異)
 **/logs/*.txt
 **/logs/*.log
 

@@ -205,3 +205,16 @@ TODO:
     - 套入多種情境 > 有沒有符合，更好的方式，能不能擴充，合併 ? 未來調整可能性 ?
 5. gitignore : logs/*.txt ，看要怎麼調整讓他忽略 log 不要上傳
 
+
+---
+## 20260319
+
+1. file_manager 可以用副檔名方式去切 [0, -3] 來寫判斷式
+    - if elif 寫就好
+    - 當 class or function 太多可以切分
+        e.g. class aaa
+             class bbb
+             class ccc
+    - 試一下繼承檔案方式 super (file 細且小 , data 繼承 file 處理更細節)
+2. log 檔不存在會有錯誤 (跑去 ignore 刪除了)
+3. 綜合討論 > 15，從最上面文章標題開始抓，直到符合 > 15 標準，存標題，點進去那篇文章，把文章內容 (文字 + URL https://forum.gamer.com.tw/C.php?bsn=23805&snA=729803&tnum=14 ) 存下來，把所有留言的分頁掃完，抓 GP 最高的回覆內容印出來
