@@ -19,7 +19,7 @@ sys.path.append(project_root)
 
 from utils.file_manager import FileHandler
 
-file_path = "side_projects\logs\madhead_log.txt"
+file_path = "side_projects/logs/madhead_log.txt"
 log = FileHandler()
 driver = webdriver.Chrome()
 driver.get("https://forum.gamer.com.tw/B.php?bsn=23805")
@@ -32,18 +32,35 @@ articles = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".b-
 titles = []
 
 for art in articles:
-    # 檢查該 row 的 class 屬性中是否包含 'm-sticky' (以巴哈姆特為例)
-    # 或者檢查是否有置頂圖示的 class
-    if "b-list__row b-list__row--sticky" in art.get_attribute("class"):
-        continue  # 如果是置頂，就跳過這一次迴圈
-        
-    try:
-        title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
-        original_title = title_elem.text
-        titles.append(f"[{title_elem.text}] {title_elem.text}\n")
-        
-    except:
-        continue
+    # 關鍵修正 1：加上 'not'，排除置頂文章
+    if "b-list__row--sticky" not in art.get_attribute("class"):
+        try:
+            title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
+            
+            # 嘗試抓取 GP
+            try:
+                gp_elem = art.find_element(By.CSS_SELECTOR, ".b-list__summary .b-gp")
+                gp_text = gp_elem.text
+                
+                # 處理 GP 數字：如果是「爆」或空值處理
+                if gp_text == "爆":
+                    gp_value = 100 # 給它一個大數值
+                elif gp_text == "" or gp_text == "0":
+                    gp_value = 0
+                else:
+                    gp_value = int(gp_text) # 轉成整數才能做正確的數字比較
+            except:
+                gp_value = 0
 
+            # 關鍵修正 2：使用整數進行數字比較
+            if gp_value > 15:
+                # 格式化存入，這樣 log 才會漂亮
+                titles.append(f"[{gp_value}] {title_elem.text}")
+                print(f"找到熱門文章：[{gp_value}] {title_elem.text}")
+
+        except Exception as e:
+            # 防止單一文章抓取失敗導致整個程式中斷
+            continue
+
+# 最後再呼叫你的 function
 log.save_txt(file_path, titles)
-print(titles)
