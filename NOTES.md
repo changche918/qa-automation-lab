@@ -186,3 +186,22 @@ TODO:
     - 這個 class 內的各個 funciton 怎麼應用，畫架構圖
     - read_file 沒用到 ?
     - 目前寫法會變成要宣告 3 次 a_log = LogHandle()、b_log = LogHandle()、 c_log = LogHandle()，不方便
+
+---
+## 20260314
+
+1. file_manager : 
+    - num >>> 建議改成 line_num 或 rows_num ??? 
+    - readlines 跟 readfile 類似
+    - readlines 資料量過大 開不起來用這個
+    - read file  資料量過大 會開不起來
+    - read_all_lines 不要去建立預設檔
+    - write_log 也不用給他預設值
+    - def read_all_lines(self, file_path, num):> read_all_lines 不等於 讀取檔案指令行，要用 specified
+2. 補充 : __init__ 可加可不加
+3. class LogManager: 看熟這隻 (找時間看懂以下 log 產生方式)
+4. data_managger: 
+    - save_json 缺少註解，self.title 沒用到 ? filename 不貼切 ? data_manager 跟 file_manager 相近 ? ( 可用繼承或切開 )
+    - 套入多種情境 > 有沒有符合，更好的方式，能不能擴充，合併 ? 未來調整可能性 ?
+5. gitignore : logs/*.txt ，看要怎麼調整讓他忽略 log 不要上傳
+

@@ -6,7 +6,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..", ".."
 sys.path.append(project_root)
 
 from utils.drivers import WebController
-from utils.data_manager import DataManager
+from utils.file_manager import FileHandler
 
 finder = WebController()
 finder.get_url("https://www.104.com.tw/")
@@ -14,6 +14,7 @@ finder.get_url("https://www.104.com.tw/")
 
 # 20260302 調整由最外層取得 data_manager & drivers function，PR #4
 # 20260307 刪除多餘註解，套用 function PR #7
+# 202603xx 調整套用 file_manager function PR #9
 
 
 # 登入看專屬職缺
@@ -48,5 +49,5 @@ for elem in job_type_dict:
         link = elem.get_attribute("href")
         job_results_dict[name] = link
 
-gen_json_json = DataManager(title="適合你的好工作") 
+gen_json_json = FileHandler() 
 gen_json_json.save_json(job_results_dict, "02_Selenium_Learning\Practice\my_104_hw\logs\data.json")
