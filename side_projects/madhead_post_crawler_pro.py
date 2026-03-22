@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # 20260321 TODO
 """
 抓取綜合討論人氣 > 15 的文章，條件 :
-    - 從最上面文章標題開始抓，直到符合 > 15 標準
+    - 從最上面文章標題開始抓，直到符合 > 15 標準 # 20260322 debug mode 看為什麼出錯(抓到不要的文章)，is_display > 看失效在哪
     - 將該文章標題存起來
     - 點進去最高人氣那篇文章，將文章內容存下來
         - 文字 + URL https://forum.gamer.com.tw/C.php?bsn=23805&snA=729803&tnum=14
@@ -82,11 +82,14 @@ if best_art_elem:
     page = 1
 
     while True:
+        # base_url = https://forum.gamer.com.tw/C.php?bsn=23805&snA=610529&tnum=23087
+        # page 1 = https://forum.gamer.com.tw/C.php?bsn=23805&page=1&snA=610529&tnum=23087
+        # page 2 = https://forum.gamer.com.tw/C.php?bsn=23805&page=2&snA=610529&tnum=23087
+
         url = f"{base_url}&page={page}"
         print(f"抓第 {page} 頁")
 
         driver.get(url)
-
         posts = wait.until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".c-post")))
 
@@ -98,20 +101,20 @@ if best_art_elem:
         # 判斷是否最後一頁（關鍵）
         # next_btn = driver.find_elements(By.CSS_SELECTOR, ".BH-pagebtnA a")
         # 如果你只想找該區域內的「a」標籤（按鈕本身）
-        next_btn = driver.find_elements(By.CSS_SELECTOR, '[data-gtm="C頁上方分頁"] a')
-        
-        has_next = False
-        for btn in next_btn:
-            if "下一頁" in btn.text:
-                has_next = True
-                break
+        # next_btn = driver.find_elements(By.CSS_SELECTOR, '[data-gtm="C頁上方分頁"] a')[1] # 第 0 個不是
 
-        if not has_next:
-            print("已到最後一頁")
-            break
+        # has_next = False
+        # for btn in next_btn:
+        #     if "下一頁" in btn.text:
+        #         has_next = True
+        #         break
 
-        page += 1
+        # if not has_next:
+        #     print("已到最後一頁")
+        #     break
 
-        print(f"總共抓到 {len(all_post_ids)} 筆")
-        print(all_post_ids[:10])  # 先看前10筆
+        # page += 1
+
+        # print(f"總共抓到 {len(all_post_ids)} 筆")
+        # print(all_post_ids[:10])  # 先看前10筆
     
