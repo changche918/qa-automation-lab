@@ -70,3 +70,47 @@ if best_art_elem:
     best_art_elem.click()
     current_page_url = driver.current_url
     print(f"目前正在爬取的頁面：{current_page_url}")
+
+    base_url = current_page_url 
+    all_post_ids = []
+
+    page = 1
+
+    while True:
+        url = f"{base_url}&page={page}"
+        print(f"抓第 {page} 頁")
+
+        driver.get(url)
+
+        try:
+            # 等待留言出現
+            posts = wait.until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".c-post"))
+            )
+        except:
+            print("沒有更多頁了")
+            break
+
+        # 抓 id
+        for post in posts:
+            post_id = post.get_attribute("id")  # 例如 post_360276123
+            all_post_ids.append(post_id)
+
+        # 🔥 判斷是否最後一頁（關鍵）
+        next_btn = driver.find_elements(By.CSS_SELECTOR, ".BH-pagebtnA a")
+        
+        has_next = False
+        for btn in next_btn:
+            if "下一頁" in btn.text:
+                has_next = True
+                break
+
+        if not has_next:
+            print("已到最後一頁")
+            break
+
+        page += 1
+
+        print(f"總共抓到 {len(all_post_ids)} 筆")
+        print(all_post_ids[:10])  # 先看前10筆
+    
