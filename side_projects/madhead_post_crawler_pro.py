@@ -4,9 +4,13 @@ import sys
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+import time
+import random
 
-# 20260321 TODO
+# 20260321 新增巴哈姆特 - 神魔版，爬文章及標題 # PR 10
 """
+TODO :
 抓取綜合討論人氣 > 15 的文章，條件 :
     - 從最上面文章標題開始抓，直到符合 > 15 標準 # 20260322 debug mode 看為什麼出錯(抓到不要的文章)，is_display > 看失效在哪
     - 將該文章標題存起來
@@ -27,22 +31,26 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=23805")
 
 # 等待文章出現
 wait = WebDriverWait(driver, 10)
-list1 = driver.find_element(By.CSS_SELECTOR, '.b-list__filter__gp.is-select').click()
-driver.find_element(By.XPATH, "//select[@class='b-list__filter__gp is-select']//option[@value='200']").click()
+
+# 點擊 GP 的篩選
+# list1 = driver.find_element(By.CSS_SELECTOR, '.b-list__filter__gp.is-select').click()
+# driver.find_element(By.XPATH, "//select[@class='b-list__filter__gp is-select']//option[@value='200']").click()
 
 articles = wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row")))
 
 titles = []
 best_gp = -1
+best_gp_1 = -1
 best_art_elem = None
+best_post_id = ""
 
 for art in articles:
-#     if "b-list__row--sticky" not in art.get_attribute("class"):
+     if "b-list__row--sticky" not in art.get_attribute("class"):
         try:
             title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
             gp_elem = art.find_element(By.CSS_SELECTOR, ".b-gp")
             gp_text = gp_elem.text
-                
+
             # 處理 GP 數字：如果是「爆」或空值處理
             if gp_text == "爆":
                 gp_value = 100 # 給它一個大數值
@@ -73,48 +81,80 @@ if best_art_elem:
 
     log.save_txt(file_path, current_page_url)
     
+    # 文章內第一則回覆
     post_content = driver.find_elements(By.CSS_SELECTOR, ".c-article__content")[0].text
+
     log.save_txt(file_path, post_content)
 
     base_url = current_page_url 
     all_post_ids = []
 
-    page = 1
+    # page = 0 
 
     while True:
-        # base_url = https://forum.gamer.com.tw/C.php?bsn=23805&snA=610529&tnum=23087
-        # page 1 = https://forum.gamer.com.tw/C.php?bsn=23805&page=1&snA=610529&tnum=23087
-        # page 2 = https://forum.gamer.com.tw/C.php?bsn=23805&page=2&snA=610529&tnum=23087
+        try:
+            posts = wait.until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".c-post")))
+            a = driver.find_elements(By.CSS_SELECTOR, ".next")[0].click()
 
-        url = f"{base_url}&page={page}"
-        print(f"抓第 {page} 頁")
+            time.sleep(random.uniform(2, 5))
 
-        driver.get(url)
-        posts = wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".c-post")))
+            # 取得文章內各種回覆的 GP
+            try:
+                # 1. 抓取這頁所有的樓層區塊 (巴哈的樓層通常在 .c-section 內)
+                posts = driver.find_elements(By.CSS_SELECTOR, "section[id^='post_']")
+                
+                best_gp = -1
+                best_content = ""
+                best_post_id = ""
 
-        # 抓 id
-        for post in posts:
-            post_id = post.get_attribute("id")  # 例如 post_360276123
-            all_post_ids.append(post_id)
+                print(f"開始掃描本頁共 {len(posts)} 樓層...")
 
-        # 判斷是否最後一頁（關鍵）
-        # next_btn = driver.find_elements(By.CSS_SELECTOR, ".BH-pagebtnA a")
-        # 如果你只想找該區域內的「a」標籤（按鈕本身）
-        # next_btn = driver.find_elements(By.CSS_SELECTOR, '[data-gtm="C頁上方分頁"] a')[1] # 第 0 個不是
+                for post in posts:
+                    try:
+                        # 2. 抓取該樓層的 GP 數
+                        # GP 數字通常在 .get-gp .number 裡面
+                        gp_elem = post.find_element(By.CSS_SELECTOR, ".get-gp .number")
+                        gp_text = gp_elem.text.strip()
 
-        # has_next = False
-        # for btn in next_btn:
-        #     if "下一頁" in btn.text:
-        #         has_next = True
-        #         break
+                        # 3. 處理 GP 數值（套用之前的邏輯）
+                        if gp_text == "爆":
+                            gp_value = 99999
+                        elif not gp_text or gp_text == "0":
+                            gp_value = 0
+                        else:
+                            # 只拿數字部分，處理像 "99+" 的情況
+                            clean_gp = "".join(filter(str.isdigit, gp_text))
+                            gp_value = int(clean_gp) if clean_gp else 0
 
-        # if not has_next:
-        #     print("已到最後一頁")
-        #     break
+                        # 4. 擂台賽：找出 GP 最高的樓層
+                        if gp_value > best_gp:
+                            best_gp = gp_value
+                            best_post_id = post.get_attribute("id")
+                            
+                            # 抓取該樓層的文章內文 (.c-article__content)
+                            # 有時候內文在 .c-post__body 內
+                            try:
+                                content_elem = post.find_element(By.CSS_SELECTOR, ".c-article__content")
+                                best_content = content_elem.text
+                            except:
+                                best_content = "無法取得內文"
 
-        # page += 1
+                    except Exception as e:
+                        # 略過一些可能沒有 GP 的系統訊息樓層
+                        continue
 
-        # print(f"總共抓到 {len(all_post_ids)} 筆")
-        # print(all_post_ids[:10])  # 先看前10筆
-    
+                    # 5. 最後印出結果
+                    print("\n" + "="*50)
+                    display_gp = "爆" if best_gp == 99999 else best_gp
+                    print(f"🏆 本頁 GP 最高樓層 ID: {best_post_id}")
+                    print(f"🔥 GP 點數: {display_gp}")
+                    print("-" * 30)
+                    print(f"內容摘要:\n{best_content[:300]}...") # 只印前 300 字
+                    print("="*50)    
+
+            finally:
+                driver.quit()
+        except NoSuchElementException:
+                print("沒有下一頁了，停止")
+                break

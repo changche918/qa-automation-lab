@@ -218,3 +218,13 @@ TODO:
     - 試一下繼承檔案方式 super (file 細且小 , data 繼承 file 處理更細節)
 2. log 檔不存在會有錯誤 (跑去 ignore 刪除了)
 3. 綜合討論 > 15，從最上面文章標題開始抓，直到符合 > 15 標準，存標題，點進去那篇文章，把文章內容 (文字 + URL https://forum.gamer.com.tw/C.php?bsn=23805&snA=729803&tnum=14 ) 存下來，把所有留言的分頁掃完，抓 GP 最高的回覆內容印出來
+
+---
+## 20260322
+1. 繼續調整 madhead_post_crawler_pro.py 的程式
+    - 注意頁面網址
+        - base_url = https://forum.gamer.com.tw/C.php?bsn=23805&snA=610529&tnum=23087
+        - page 1 = https://forum.gamer.com.tw/C.php?bsn=23805&page=1&snA=610529&tnum=23087
+        - page 2 = https://forum.gamer.com.tw/C.php?bsn=23805&page=2&snA=610529&tnum=23087
+        - url = f"{base_url}&page={page}"
+        - print(f"抓第 {page} 頁,url 是 = {url}")
