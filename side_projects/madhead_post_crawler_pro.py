@@ -71,6 +71,11 @@ if best_art_elem:
     current_page_url = driver.current_url
     print(f"目前正在爬取的頁面：{current_page_url}")
 
+    log.save_txt(file_path, current_page_url)
+    
+    post_content = driver.find_elements(By.CSS_SELECTOR, ".c-article__content")[0].text
+    log.save_txt(file_path, post_content)
+
     base_url = current_page_url 
     all_post_ids = []
 
@@ -82,22 +87,18 @@ if best_art_elem:
 
         driver.get(url)
 
-        try:
-            # 等待留言出現
-            posts = wait.until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".c-post"))
-            )
-        except:
-            print("沒有更多頁了")
-            break
+        posts = wait.until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".c-post")))
 
         # 抓 id
         for post in posts:
             post_id = post.get_attribute("id")  # 例如 post_360276123
             all_post_ids.append(post_id)
 
-        # 🔥 判斷是否最後一頁（關鍵）
-        next_btn = driver.find_elements(By.CSS_SELECTOR, ".BH-pagebtnA a")
+        # 判斷是否最後一頁（關鍵）
+        # next_btn = driver.find_elements(By.CSS_SELECTOR, ".BH-pagebtnA a")
+        # 如果你只想找該區域內的「a」標籤（按鈕本身）
+        next_btn = driver.find_elements(By.CSS_SELECTOR, '[data-gtm="C頁上方分頁"] a')
         
         has_next = False
         for btn in next_btn:
