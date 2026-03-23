@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import sys
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
 sys.path.append(project_root)
 
 from utils.file_manager import FileHandler

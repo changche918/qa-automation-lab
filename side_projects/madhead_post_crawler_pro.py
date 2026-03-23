@@ -6,9 +6,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import time
-from find_high_gp import FindHighGP
+from utils.find_high_gp import FindHighGP
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..",".."))
 sys.path.append(project_root)
 
 from utils.file_manager import FileHandler
