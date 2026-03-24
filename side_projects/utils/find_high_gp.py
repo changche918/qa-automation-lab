@@ -4,6 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import sys
 
+# 20260324 新增 function PR #10
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
 sys.path.append(project_root)
 
@@ -29,14 +30,14 @@ class FindHighGP:
             gp_elements = post.find_elements(By.CSS_SELECTOR, ".postgp")
             
             if gp_elements:
-                gp_text = gp_elements[0].text.strip()
+                gp_text = gp_elements[0].text.strip() # 先抓大範圍，再從大範圍裡抓小東西
 
                 if "爆" in gp_text:
                     gp_value = 99999
                 else:
-                    # AI 提供 - 只保留數字，過濾掉非數字字元
-                    clean_gp = "".join(filter(str.isdigit, gp_text))
-                    gp_value = int(clean_gp) if clean_gp else 0
+                    # 只保留數字，過濾掉非數字字元
+                    clean_gp = "".join(filter(str.isdigit, gp_text)) # TODO 待理解
+                    gp_value = int(clean_gp) if clean_gp else 0 # TODO 待理解
 
                     if gp_value > page_best_gp:
                         page_best_gp = gp_value
@@ -45,10 +46,7 @@ class FindHighGP:
                         except:
                             page_best_content = "無法取得內文"
 
-                # print(f"找到 GP: {gp_text}")
             else:
                 print("此樓層找不到 GP 標籤，跳過")
-
-        print(f"本頁最高 GP 為: {page_best_gp}")
-        print(f"內容摘要:\n{page_best_content}...") # 只印前100字避免洗版
+                
         log.save_txt(file_path, page_best_content)
