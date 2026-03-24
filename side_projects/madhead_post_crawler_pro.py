@@ -59,7 +59,7 @@ for art in articles: # articles = 文章清單，art = 每篇文章
 
         except Exception as e:
             print(f"這樓跳過了，原因：{e}")  # 印出錯誤原因，但依然繼續跑下一輪
-            continue  # 程式不會停止，而是直接放棄這一輪，立刻執行下一輪，待優化
+            continue  # 程式不會停止，而是直接放棄這一輪，立刻執行下一輪
 
 log.save_txt(file_path, titles)
 
@@ -87,3 +87,5 @@ while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
         break
 
 driver.quit()  # 關閉瀏覽器
+
+
