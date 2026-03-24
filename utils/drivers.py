@@ -2,17 +2,20 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 
 # 20260305 加上 alert_switch、wait_elem function PR #6
 # 20260307 改寫 function，以及加上 function 說法 PR #7
 class WebController:
     def __init__(self):
-        self.options = Options()  # 設定瀏覽器選項
-        self.options.add_argument("--headless=new")  # 開啟「無頭模式」 (Headless Mode)
-        self.driver = webdriver.Chrome(options=self.options)
-        self.wait = WebDriverWait(self.driver, 10)
+        # self.options = Options()  # 設定瀏覽器選項
+        # self.options.add_argument("--headless=new")  # 開啟「無頭模式」 (Headless Mode)
+        # self.driver = WebDriver.Chrome(options=self.options)
+        # self.wait = WebDriverWait(self.driver, 10)
+        chrome_options = Options()
+        chrome_options.add_argument("--start-maximized")
+        self.driver = webdriver.Chrome(options=chrome_options)
 
     def get_url(self, url):
         """前往指定的網頁網址。

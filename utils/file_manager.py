@@ -52,8 +52,14 @@ class FileHandler:
             return False
         with open(file_path, "a", encoding="utf-8") as file:
             now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            file.write(f"[{now_time}] {data}\n")
+            if isinstance(data, list):
+                for item in data:
+                    file.write(f"[{now_time}]{item}\n")
+            else:
+            # 如果只是單一字串，就維持原樣
+                    file.write(f"[{now_time}] {data}\n")
             print(f"資料已成功寫入 {file_path}")
+
 
     def save_json(self, data, file_path):
         """

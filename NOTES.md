@@ -205,3 +205,47 @@ TODO:
     - 套入多種情境 > 有沒有符合，更好的方式，能不能擴充，合併 ? 未來調整可能性 ?
 5. gitignore : logs/*.txt ，看要怎麼調整讓他忽略 log 不要上傳
 
+
+---
+## 20260319
+
+1. file_manager 可以用副檔名方式去切 [0, -3] 來寫判斷式
+    - if elif 寫就好
+    - 當 class or function 太多可以切分
+        e.g. class aaa
+             class bbb
+             class ccc
+    - 試一下繼承檔案方式 super (file 細且小 , data 繼承 file 處理更細節)
+2. log 檔不存在會有錯誤 (跑去 ignore 刪除了)
+3. 綜合討論 > 15，從最上面文章標題開始抓，直到符合 > 15 標準，存標題，點進去那篇文章，把文章內容 (文字 + URL https://forum.gamer.com.tw/C.php?bsn=23805&snA=729803&tnum=14 ) 存下來，把所有留言的分頁掃完，抓 GP 最高的回覆內容印出來
+
+---
+## 20260322
+
+1. 繼續調整 madhead_post_crawler_pro.py 的程式
+    - 注意頁面網址
+        - base_url = https://forum.gamer.com.tw/C.php?bsn=23805&snA=610529&tnum=23087
+        - page 1 = https://forum.gamer.com.tw/C.php?bsn=23805&page=1&snA=610529&tnum=23087
+        - page 2 = https://forum.gamer.com.tw/C.php?bsn=23805&page=2&snA=610529&tnum=23087
+        - url = f"{base_url}&page={page}"
+        - print(f"抓第 {page} 頁,url 是 = {url}")
+
+---
+## 20260324
+
+1. 查一下 API 常用狀態碼
+2. 看一下這個影片 https://www.youtube.com/watch?v=zvKadd9Cflc&t=1s
+3. find_high_gp.py
+    - 為什麼有這個 ? if gp_text == "爆":
+    - log.save_txt(file_path, page_best_content) 這個跟主程式的 log 重複了，儘量避免寫重複的
+    - 可以適當一下補一下 log，或 print 出這一行是抓什麼位置 ?
+        - posts = self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "section[id^='post_']")))
+    - 這個想一下要不要共用，儘量避免寫死 file_path = "side_projects/logs/madhead_log.txt" 
+    - 這個可以用繼承寫法  def __init__(self, driver):  
+4. madhead_post_crawler_pro.py
+    - log 優化 (總log - 個別查)
+    - 寫一下為什麼用 -1 best_gp = -1
+    - 優化一下這段 if gp_text == "爆": ~~~ best_art_elem = title_elem
+        - 看一下這段有沒有更好的寫法 if gp_value > best_gp: 應該有另一種比大小的方法
+    - 這段測試的方法，可以把值改大測試，if gp_value > 15: (需要加上如果沒有 > 15 的怎辦?)
+    - 搞清楚為什麼要加 contiune ，應該可以不用 ? 因為如果錯誤的話，後面 log.save 都沒意義
