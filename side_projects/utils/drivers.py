@@ -1,22 +1,10 @@
-from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.webdriver import WebDriver
 
 
-# 20260305 加上 alert_switch、wait_elem function PR #6
-# 20260307 改寫 function，以及加上 function 說法 PR #7
 class WebController:
-    def __init__(self):
-        # 1. 先設定瀏覽器參數
-        chrome_options = Options()
-        chrome_options.add_argument("--start-maximized")
-        
-        # 2. 啟動瀏覽器 (這行一定要在 wait 之前)
-        self.driver = webdriver.Chrome(options=chrome_options)
-        
-        # 3. 瀏覽器啟動後，再把 driver 交給 WebDriverWait
+    def __init__(self, driver):
+        self.driver = driver
         self.wait = WebDriverWait(self.driver, 10)
 
     def get_url(self, url):
