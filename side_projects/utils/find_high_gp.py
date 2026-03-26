@@ -11,7 +11,7 @@ class FindHighGP(WebController):
 
     def scan_high_gp_content(self):
         results = []
-        page_best_gp = -1
+        page_best_gp = -1 # 文章最少是 0，所以初始值給 -1 來比大小
         page_best_content = "無內容"
 
         # 1. 確保這頁樓層載入
@@ -43,6 +43,3 @@ class FindHighGP(WebController):
                 print("此樓層找不到 GP 標籤，跳過")
 
         return results
-            
-                
-        

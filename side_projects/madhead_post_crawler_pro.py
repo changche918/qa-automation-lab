@@ -41,7 +41,7 @@ articles = wait.until(
 )
 
 titles = []
-best_gp = -1 # 文章最少是 0，所以初始值給 0 來比大小
+best_gp = -1 # 文章最少是 0，所以初始值給 -1 來比大小
 best_art_elem = None
 
 for art in articles: # articles = 文章清單，art = 每篇文章
