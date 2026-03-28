@@ -37,8 +37,7 @@ driver.get("https://forum.gamer.com.tw/B.php?bsn=23805")
 # 抓文章列表頁
 wait = WebDriverWait(driver, 10)
 articles = wait.until(
-    EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row"))
-)
+    EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row")))
 
 titles = []
 best_gp = -1 # 文章最少是 0，所以初始值給 -1 來比大小
@@ -51,7 +50,7 @@ for art in articles: # articles = 文章清單，art = 每篇文章
             gp_elem = art.find_element(By.CSS_SELECTOR, ".b-gp")
             gp_text = gp_elem.text
 
-            if gp_text == "爆":
+            if gp_text == "爆": # 20260327 這段不合理，如果有超過 "爆" 設定的 100，就會失真，查一下有沒有更好寫法
                 gp_value = 100
             elif gp_text == "" or gp_text == "0":
                 gp_value = 0
@@ -72,7 +71,7 @@ for art in articles: # articles = 文章清單，art = 每篇文章
             
             # 比較目前的 (best_gp, best_art_elem) 與新的 (gp_value, title_elem)
             # 取較大者並同時更新兩個變數
-            best_gp, best_art_elem = max((best_gp, best_art_elem), (gp_value, title_elem))
+            best_gp, best_art_elem = max((best_gp, best_art_elem), (gp_value, title_elem)) # 20260327 比較 max 跟 if gp_value > best_gp:best_gp = gp_value
 
         except Exception as e:
             print(f"這樓跳過了，原因：{e}")  # 印出錯誤原因，但依然繼續跑下一輪

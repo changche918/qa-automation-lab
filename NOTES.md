@@ -249,3 +249,13 @@ TODO:
         - [X] 看一下這段有沒有更好的寫法 if gp_value > best_gp: 應該有另一種比大小的方法
     - [X] 這段測試的方法，可以把值改大測試，if gp_value > 15: (需要加上如果沒有 > 15 的怎辦?)
     - [X] 搞清楚為什麼要加 contiune ，應該可以不用 ? 因為如果錯誤的話，後面 log.save 都沒意義
+
+---
+## 20260327
+
+1. 清掉 github 舊的 (不要的) branch，請查出幾種方式
+2. 可以考慮用 copilt
+3. webcontroller 有寫了共用 function 但是外面沒有用到，需要優化 (主程式寫了很多重複的東西 line 19 - 31 )
+4. 看 path 能不能不要重複寫路徑 file_path、content_path 
+5. 查一下 404 跟網址的意思
+6. 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
