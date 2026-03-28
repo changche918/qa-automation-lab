@@ -259,3 +259,4 @@ TODO:
 4. 看 path 能不能不要重複寫路徑 file_path、content_path 
 5. 查一下 404 跟網址的意思
 6. 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
+7. madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫

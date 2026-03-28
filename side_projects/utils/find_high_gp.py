@@ -1,13 +1,13 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from utils.drivers import WebController
-
+from selenium.webdriver.support.ui import WebDriverWait
 
 # 20260324 新增 function PR #10
 # 20260326 調整程式寫法，將 log.save 移出去處理，並繼承 driver 寫法 PR #11
-class FindHighGP(WebController):
+class FindHighGP():
     def __init__(self, driver):
-        super().__init__(driver)
+        self.driver = driver
+        self.wait = WebDriverWait(self.driver, 10)
 
     def scan_high_gp_content(self):
         results = []
