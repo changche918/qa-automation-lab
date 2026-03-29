@@ -18,7 +18,7 @@ content_path = "side_projects/logs/madhead_content_log.txt"
 
 log = FileHandler()
 driver_control = WebController()
-finder = FindHighGP(driver_control)
+finder = FindHighGP(driver_control.driver)
 # 20260322 初版 PR #10
 # 20260324 調整程式寫法，使其可以取分頁 + GP PR #10
 # 20260326 調整程式寫法，log.save 邏輯 PR #11
@@ -31,7 +31,7 @@ driver_control.get_url("https://forum.gamer.com.tw/B.php?bsn=23805")
 # driver.get("https://forum.gamer.com.tw/C.php?bsn=23805&snA=724765&tnum=81&bPage=8")
 
 # 抓文章列表頁
-wait = WebDriverWait(driver_control, 10)
+wait = WebDriverWait(driver_control, 10) 
 articles = wait.until(
     EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row"))
 )
@@ -43,8 +43,8 @@ best_art_elem = None
 for art in articles:  # articles = 文章清單，art = 每篇文章
     if "b-list__row--sticky" not in art.get_attribute("class"):  # 排除置頂文
         try:
-            title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
-            gp_elem = art.find_element(By.CSS_SELECTOR, ".b-gp")
+            title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__row.b-list-item .b-list__main__title")
+            gp_elem = art.find_element(By.CSS_SELECTOR, ".b-list__summary__gp")
             gp_text = gp_elem.text
 
             if "爆" in gp_text:
@@ -77,35 +77,35 @@ for art in articles:  # articles = 文章清單，art = 每篇文章
 
 log.save_txt(file_path, titles)
 
-if best_art_elem:
-    best_art_elem.click()
-    time.sleep(3)  # 等待跳轉
-    current_page_url = driver_control.get_current_url
-    log.save_txt(file_path, [f"文章網址: {current_page_url}"])
+# if best_art_elem:
+#     best_art_elem.click()
+#     time.sleep(3)  # 等待跳轉
+#     current_page_url = driver_control.get_current_url()
+#     log.save_txt(file_path, [f"文章網址: {current_page_url}"])
 
-finder.scan_high_gp_content()  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
-best_text = finder.scan_high_gp_content()
-log.save_txt(content_path, best_text)
+# finder.scan_high_gp_content()  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
+# best_text = finder.scan_high_gp_content()
+# log.save_txt(content_path, best_text)
 
-# 以下是換頁後 + 找到那頁 GP 最高的回覆文
-while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
-    btns = driver_control.find_elements(
-        By.CSS_SELECTOR, ".next"
-    )  # 下一頁的按鈕元素 (是 list)
-    no_next_button = driver_control.find_elements(
-        By.CSS_SELECTOR, ".next.no"
-    )  # 沒有下一頁的按鈕元素 (是 list)
+# # 以下是換頁後 + 找到那頁 GP 最高的回覆文
+# while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
+#     btns = driver_control.find_elements(
+#         By.CSS_SELECTOR, ".next"
+#     )  # 下一頁的按鈕元素 (是 list)
+#     no_next_button = driver_control.find_elements(
+#         By.CSS_SELECTOR, ".next.no"
+#     )  # 沒有下一頁的按鈕元素 (是 list)
 
-    # 判斷 list 是否有東西
-    if len(btns) > 0 and len(no_next_button) == 0:
-        next_btn = btns[0]
-        next_btn.click()
-        time.sleep(5)
-        print("換頁成功")
-        best_text = finder.scan_high_gp_content()
-        log.save_txt(content_path, best_text)
-    else:
-        print("完全找不到下一頁按鈕，停止")
-        break
+#     # 判斷 list 是否有東西
+#     if len(btns) > 0 and len(no_next_button) == 0:
+#         next_btn = btns[0]
+#         next_btn.click()
+#         time.sleep(5)
+#         print("換頁成功")
+#         best_text = finder.scan_high_gp_content()
+#         log.save_txt(content_path, best_text)
+#     else:
+#         print("完全找不到下一頁按鈕，停止")
+#         break
 
-driver_control.close_windows
+# driver_control.close_windows()

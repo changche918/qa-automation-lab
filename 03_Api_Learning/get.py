@@ -1,15 +1,24 @@
 import requests
 
-# 1. 定義 API 網址 (Endpoint)
-url = "https://jsonplaceholder.typicode.com/posts/1"
+# 1. 定義 API 網址
+url = "https://httpbin.org/get"
 
 # 2. 發出請求
 response = requests.get(url)
 
-# 3. 檢查狀態碼 (200 代表成功)
-if response.status_code == 200:
-    # 4. 將回傳的 JSON 轉為 Python 字典 (Dictionary)
-    data = response.json()
-    print(f"成功抓取！文章標題是：{data['title']}")
-else:
-    print(f"請求失敗，狀態碼：{response.status_code}")
+print(response.status_code)
+print(response.headers)
+print(response.text)
+
+
+
+# 1. 定義 API 網址
+url_brotli = "https://httpbin.org/brotli"
+
+# 2. 發出請求
+response_brotli = requests.get(url_brotli)
+
+print(f"狀態碼: {response_brotli.status_code}")
+print(f"回應標頭: {response_brotli.headers.get('Content-Encoding')}") # 應該會顯示 'br'
+print(f"內容類型: {response_brotli.headers.get('Content-Type')}")
+print(response_brotli.text)
