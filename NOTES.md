@@ -278,5 +278,4 @@ TODO:
 headers 類似 CF_ID CF_TOKEN，可以查一下
 Beautifulsoup 可以玩一下，結合 API (requests)
 API User-Agent 一定要帶
-打一下 get API 練習網址
-https://httpbin.org/
+打一下 get API 練習網址 (https://httpbin.org/)
