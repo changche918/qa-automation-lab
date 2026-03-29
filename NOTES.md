@@ -233,19 +233,31 @@ TODO:
 ---
 ## 20260324
 
-1. 查一下 API 常用狀態碼
-2. 看一下這個影片 https://www.youtube.com/watch?v=zvKadd9Cflc&t=1s
+1. [] 查一下 API 常用狀態碼
+2. [] 看一下這個影片 https://www.youtube.com/watch?v=zvKadd9Cflc&t=1s
 3. find_high_gp.py
-    - 為什麼有這個 ? if gp_text == "爆":
-    - log.save_txt(file_path, page_best_content) 這個跟主程式的 log 重複了，儘量避免寫重複的
-    - 可以適當一下補一下 log，或 print 出這一行是抓什麼位置 ?
-        - posts = self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "section[id^='post_']")))
-    - 這個想一下要不要共用，儘量避免寫死 file_path = "side_projects/logs/madhead_log.txt" 
-    - 這個可以用繼承寫法  def __init__(self, driver):  
+    - [X] 為什麼有這個 ? if gp_text == "爆":  A: 目前在手機上看才有
+    - [X] log.save_txt(file_path, page_best_content) 這個跟主程式的 log 重複了，儘量避免寫重複的
+    - [X] 可以適當一下補一下 log，或 print 出這一行是抓什麼位置 ?
+        - [] posts = self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "section[id^='post_']")))
+    - [?] 這個想一下要不要共用，儘量避免寫死 file_path = "side_projects/logs/madhead_log.txt" 
+    - [X] 這個可以用繼承寫法  def __init__(self, driver):  
 4. madhead_post_crawler_pro.py
-    - log 優化 (總log - 個別查)
-    - 寫一下為什麼用 -1 best_gp = -1
-    - 優化一下這段 if gp_text == "爆": ~~~ best_art_elem = title_elem
-        - 看一下這段有沒有更好的寫法 if gp_value > best_gp: 應該有另一種比大小的方法
-    - 這段測試的方法，可以把值改大測試，if gp_value > 15: (需要加上如果沒有 > 15 的怎辦?)
-    - 搞清楚為什麼要加 contiune ，應該可以不用 ? 因為如果錯誤的話，後面 log.save 都沒意義
+    - [X] log 優化 (總log - 個別查)
+    - [X] 寫一下為什麼用 -1 best_gp = -1
+    - [X] 優化一下這段 if gp_text == "爆": ~~~ best_art_elem = title_elem
+        - [X] 看一下這段有沒有更好的寫法 if gp_value > best_gp: 應該有另一種比大小的方法
+    - [X] 這段測試的方法，可以把值改大測試，if gp_value > 15: (需要加上如果沒有 > 15 的怎辦?)
+    - [X] 搞清楚為什麼要加 contiune ，應該可以不用 ? 因為如果錯誤的話，後面 log.save 都沒意義
+
+---
+## 20260327
+
+1. 清掉 github 舊的 (不要的) branch，請查出幾種方式
+2. 可以考慮用 copilt
+3. webcontroller 有寫了共用 function 但是外面沒有用到，需要優化 (主程式寫了很多重複的東西 line 19 - 31 )
+4. 看 path 能不能不要重複寫路徑 file_path、content_path 
+5. 查一下 404 跟網址的意思
+    - 404 錯誤的核心訊息就是**「路徑對不上」**。不論是人為輸入錯誤、系統架構更動，還是程式邏輯漏洞，只要伺服器無法在預期位置找到對應的內容，就會回傳 404。
+6. 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
+7. madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫

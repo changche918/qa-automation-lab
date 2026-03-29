@@ -1,25 +1,17 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import os
-import sys
+from selenium.webdriver.support.ui import WebDriverWait
 
 # 20260324 新增 function PR #10
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
-sys.path.append(project_root)
-
-from utils.file_manager import FileHandler
-
-file_path = "side_projects/logs/madhead_log.txt"
-log = FileHandler()
-
-class FindHighGP:
+# 20260326 調整程式寫法，將 log.save 移出去處理，並繼承 driver 寫法 PR #11
+class FindHighGP():
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 10)
 
     def scan_high_gp_content(self):
-        page_best_gp = -1
+        results = []
+        page_best_gp = -1 # 文章最少是 0，所以初始值給 -1 來比大小
         page_best_content = "無內容"
 
         # 1. 確保這頁樓層載入
@@ -43,10 +35,11 @@ class FindHighGP:
                         page_best_gp = gp_value
                         try:
                             page_best_content = post.find_element(By.CSS_SELECTOR, ".c-article__content").text
+                            results.append(page_best_content)
                         except:
                             page_best_content = "無法取得內文"
-
+                            
             else:
                 print("此樓層找不到 GP 標籤，跳過")
-                
-        log.save_txt(file_path, page_best_content)
+
+        return results
