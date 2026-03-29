@@ -18,11 +18,11 @@ content_path = "side_projects/logs/madhead_content_log.txt"
 
 log = FileHandler()
 driver_control = WebController()
-finder = FindHighGP(driver_control.driver)
+finder = FindHighGP(driver_control)
 # 20260322 初版 PR #10
 # 20260324 調整程式寫法，使其可以取分頁 + GP PR #10
 # 20260326 調整程式寫法，log.save 邏輯 PR #11
-# 20260328 調整爆的寫法
+# 20260329 調整爆的寫法 PR #11
 # 真實專案要爬的頁面
 driver_control.get_url("https://forum.gamer.com.tw/B.php?bsn=23805")
 

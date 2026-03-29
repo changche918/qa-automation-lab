@@ -258,5 +258,6 @@ TODO:
 3. webcontroller 有寫了共用 function 但是外面沒有用到，需要優化 (主程式寫了很多重複的東西 line 19 - 31 )
 4. 看 path 能不能不要重複寫路徑 file_path、content_path 
 5. 查一下 404 跟網址的意思
+    - 404 錯誤的核心訊息就是**「路徑對不上」**。不論是人為輸入錯誤、系統架構更動，還是程式邏輯漏洞，只要伺服器無法在預期位置找到對應的內容，就會回傳 404。
 6. 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
 7. madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫
