@@ -254,28 +254,30 @@ TODO:
 ## 20260327
 
 1. [X] 清掉 github 舊的 (不要的) branch，請查出幾種方式
-2. [?] 可以考慮用 copilt
+2. [X] 可以考慮用 copilt
 3. [X] webcontroller 有寫了共用 function 但是外面沒有用到，需要優化 (主程式寫了很多重複的東西 line 19 - 31 )
-4. [?] 看 path 能不能不要重複寫路徑 file_path、content_path 
+4. [X] 看 path 能不能不要重複寫路徑 file_path、content_path 
 5. [X] 查一下 404 跟網址的意思
     - 404 錯誤的核心訊息就是**「路徑對不上」**。不論是人為輸入錯誤、系統架構更動，還是程式邏輯漏洞，只要伺服器無法在預期位置找到對應的內容，就會回傳 404。
-6. 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
-7. madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫
+6. [X] 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
+7. [X] madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫
 
 ---
 ## 20260329
 
-1. madhead_post_crawler.py 爆的寫法，取出最大的，或是都取出，或是看回復數，或是時間
-2. github setting 加入私人的權限
-3. 執行 python -XXX 兩種模式，執行 "爆" 的方式，或是要不要全部發給你
-    - 發一個爆
-    - 全發爆
-    - 全發 headless 執行
-4. github 看一下指令有哪些，可以畫圖，指出功能
-5. 可以結合 gemini 問答方式
+1. madhead_post_crawler.py 
+    - [X] 主程式，wait = WebDriverWait(driver_control, 10) 應該不需要
+    - [X] 執行 python -XXX 兩種模式，執行 "爆" 的方式 :
+        - 發一個爆
+        - 全發爆
+        - headless 執行
+2. [?] github setting 可以看一下怎麼加入私人的權限
+3. [X] github 看一下指令有哪些，可以畫圖，指出功能
+        - ![alt text](image-1.png)
+4. [?] 可以結合 gemini 問答方式
+5. API
+    - [X] headers 可以查一下
+    - [?] Beautifulsoup 可以玩一下，結合 API (requests)
+    - [X] API User-Agent 一定要帶
+    - [X] 打一下 get API 練習網址 (https://httpbin.org/)
 
-為什麼還要這個 wait = WebDriverWait(driver_control, 10)  (madhead 主程式)
-headers 類似 CF_ID CF_TOKEN，可以查一下
-Beautifulsoup 可以玩一下，結合 API (requests)
-API User-Agent 一定要帶
-打一下 get API 練習網址 (https://httpbin.org/)
