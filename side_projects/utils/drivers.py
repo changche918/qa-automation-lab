@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+# 20260402 增加無頭模式與選擇執行模式 PR #12
 class WebController():
     def __init__(self, headless=False):
         # 1. 先設定 Options (選項)

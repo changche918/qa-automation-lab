@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 # 20260324 新增 function PR #10
 # 20260326 調整程式寫法，將 log.save 移出去處理，並繼承 driver 寫法 PR #11
+# 20260402 增加 function，區分撈第一筆及所有爆文章 PR #12
 class FindHighGP():
     def __init__(self, driver):
         self.driver = driver
@@ -25,7 +26,7 @@ class FindHighGP():
                 gp_text = gp_elements[0].text.strip() # 先抓大範圍，再從大範圍裡抓小東西
 
                 if "爆" in gp_text:
-                    gp_value = 99999
+                    gp_value = float("inf")
                 else:
                     # 只保留數字，過濾掉非數字字元
                     clean_gp = "".join(filter(str.isdigit, gp_text)) # TODO 待理解
