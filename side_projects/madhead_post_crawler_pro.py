@@ -29,6 +29,7 @@ args = parser.parse_args() # 把你在 terminal 打的東西解析成變數 (--h
 
 log = FileHandler()
 driver_control = WebController(headless=args.headless) # 用使用者指定的模式，去建立一個瀏覽器控制器
+
 # finder = FindHighGP(driver_control.driver)
 # 20260322 初版 PR #10
 # 20260324 調整程式寫法，使其可以取分頁 + GP PR #10

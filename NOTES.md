@@ -281,3 +281,19 @@ TODO:
     - [X] API User-Agent 一定要帶
     - [X] 打一下 get API 練習網址 (https://httpbin.org/)
 
+## 20260402
+
+1. 查一下 git 二級指令 restore、rebase、merge等 ...
+2. madhead_post_crawler_pro.py 主程式 :
+    - 整理一下 code + 註解
+    - 用 f'string 處理 log 檔名，舉例 : print(f"side_projects/logs/{file_path}log.txt")
+    - 查一下 argparse.ArgumentParser 有沒有相似的套件?
+    - parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用
+    - args 加上可以帶參數、可縮寫的彈性用法
+    - 當需帶入的參數變多時，如何增加可讀性 (line36)，driver_control = WebController(headless=args.headless)
+3. find_high_gp.py :
+    - 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
+        - 一併調整主程式的，修正 if 判斷式(結合find_high_gp.py 檔的function)
+4. get API 查一下怎麼爬巴哈網站
+
+
