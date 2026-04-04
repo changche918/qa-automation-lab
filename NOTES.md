@@ -283,17 +283,37 @@ TODO:
 
 ## 20260402
 
-1. 查一下 git 二級指令 restore、rebase、merge等 ...
+1. [X] 查一下 git 二級指令 restore、rebase、merge 等 ...
+    - git restore file.txt (還原最後一次 file.txt 檔案的 commit)
+    - git merge : 把分支合併 git checkout main、git merge feature
+    - git rebase : 把你的 commit「接到別的分支後面」，git checkout feature、git rebase main
+    - git reset : 回到某個版本 
+    - git revert <commit_id> : 清掉上一個 commit 點
 2. madhead_post_crawler_pro.py 主程式 :
-    - 整理一下 code + 註解
-    - 用 f'string 處理 log 檔名，舉例 : print(f"side_projects/logs/{file_path}log.txt")
-    - 查一下 argparse.ArgumentParser 有沒有相似的套件?
-    - parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用
-    - args 加上可以帶參數、可縮寫的彈性用法
-    - 當需帶入的參數變多時，如何增加可讀性 (line36)，driver_control = WebController(headless=args.headless)
+    - [X] 整理一下 code + 註解
+    - [X] 用 f'string 處理 log 檔名，舉例 : print(f"side_projects/logs/{file_path}log.txt")
+    - [] 查一下 argparse.ArgumentParser 有沒有相似的套件 ?
+        - click
+        - typer
+        - Fire
+    - [] parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用
+        - store_true 帶參數時設為 true
+        - store_false 帶參數時設為 False
+        - store 預設儲存傳入的值
+        - store_const 帶參數時設為指定常數
+            - parser.add_argument("--mode", action="store_const", const="debug")
+            - python script.py --mode → args.mode = "debug"
+        - append 多次使用時，值加入 list
+            - parser.add_argument("--tag", action="append")
+            - python script.py --tag a --tag b → args.tag = ["a", "b"]
+        - count 計算參數出現次數
+            - parser.add_argument("-v", action="count", default=0)
+            - python script.py -vvv → args.v = 3
+    - [] args 加上可以帶參數、可縮寫的彈性用法
+    - [] 當需帶入的參數變多時，如何增加可讀性 (line36)，driver_control = WebController(headless=args.headless)
 3. find_high_gp.py :
-    - 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
-        - 一併調整主程式的，修正 if 判斷式(結合find_high_gp.py 檔的function)
-4. get API 查一下怎麼爬巴哈網站
+    - [X] 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
+        - [X] 一併調整主程式的，修正 if 判斷式(結合find_high_gp.py 檔的function)
+4. [] get API 查一下怎麼爬巴哈網站
 
 
