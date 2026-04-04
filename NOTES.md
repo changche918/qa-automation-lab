@@ -285,18 +285,23 @@ TODO:
 
 1. [X] 查一下 git 二級指令 restore、rebase、merge 等 ...
     - git restore file.txt (還原最後一次 file.txt 檔案的 commit)
+        - 怎麼使用
     - git merge : 把分支合併 git checkout main、git merge feature
+        - 怎麼使用
     - git rebase : 把你的 commit「接到別的分支後面」，git checkout feature、git rebase main
+        - 怎麼使用
     - git reset : 回到某個版本 
+        - 怎麼使用 (情境)
     - git revert <commit_id> : 清掉上一個 commit 點
+        - 怎麼使用
 2. madhead_post_crawler_pro.py 主程式 :
     - [X] 整理一下 code + 註解
     - [X] 用 f'string 處理 log 檔名，舉例 : print(f"side_projects/logs/{file_path}log.txt")
-    - [] 查一下 argparse.ArgumentParser 有沒有相似的套件 ?
+    - [?] 查一下 argparse.ArgumentParser 有沒有相似的套件 ?
         - click
         - typer
         - Fire
-    - [] parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用
+    - [?] parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用 (查一下怎麼使用，可以的話常用的加在程式碼中，自行判斷)
         - store_true 帶參數時設為 true
         - store_false 帶參數時設為 False
         - store 預設儲存傳入的值
@@ -309,11 +314,9 @@ TODO:
         - count 計算參數出現次數
             - parser.add_argument("-v", action="count", default=0)
             - python script.py -vvv → args.v = 3
-    - [] args 加上可以帶參數、可縮寫的彈性用法
-    - [] 當需帶入的參數變多時，如何增加可讀性 (line36)，driver_control = WebController(headless=args.headless)
+    - [?] args 加上可以帶參數、可縮寫的彈性用法
+    - [?] 當需帶入的參數變多時，如何增加可讀性，driver_control = WebController(headless=args.headless) 20260404 : 當 args 變多，會不會變得很難讀?
 3. find_high_gp.py :
     - [X] 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
         - [X] 一併調整主程式的，修正 if 判斷式(結合find_high_gp.py 檔的function)
-4. [] get API 查一下怎麼爬巴哈網站
-
-
+4. [?] get API 查一下怎麼爬巴哈網站

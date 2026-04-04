@@ -50,6 +50,7 @@ class FindHighGP():
         best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
         best_art_elem = None
 
+        # 1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題
         choice = input("\n請輸入編號選擇功能 (1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題): ").strip()
         
         # 抓文章列表頁
@@ -63,6 +64,7 @@ class FindHighGP():
                     title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
                     gp_elem = art.find_elements(By.CSS_SELECTOR, ".b-list__summary__gp.b-gp")
 
+                    gp_value = 0
                     if gp_elem:
                         gp_text = gp_elem[0].text
                         if "爆" in gp_text and choice == "1":
@@ -74,15 +76,7 @@ class FindHighGP():
                         else:
                             gp_value = int(gp_text)
 
-                        # 文章 GP 比大小，印出超過 15 的
-                        # 用前面語法將 gp_text 轉成 gp_value，best_gp 是初始設定 -1，之後會被新的 gp_value 取代
-                        # if gp_value > 15:
-                        #     titles.append(f"[{gp_value}] {title_elem.text}")
-                        #     if gp_value > best_gp:
-                        #         best_gp = gp_value
-                        #         best_art_elem = title_elem
-
-                        # 另一種寫法比大小寫法
+                        # 取文章 gp 大於 15的文章，並把標題存到 titles 裡
                         if gp_value > 15:
                             titles.append(f"[{gp_value}] {title_elem.text}")
 
