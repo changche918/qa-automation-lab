@@ -44,15 +44,12 @@ class FindHighGP():
                 print("此樓層找不到 GP 標籤，跳過")
 
         return results
-    
-    def scan_high_gp_post(self):
+
+    def scan_high_gp_post(self, choice):
         titles = []
         best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
         best_art_elem = None
 
-        # 1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題
-        choice = input("\n請輸入編號選擇功能 (1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題): ").strip()
-        
         # 抓文章列表頁
         articles = self.wait.until(
             EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row.b-list-item"))

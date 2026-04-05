@@ -281,6 +281,7 @@ TODO:
     - [X] API User-Agent 一定要帶
     - [X] 打一下 get API 練習網址 (https://httpbin.org/)
 
+---
 ## 20260402
 
 1. [X] 查一下 git 二級指令 restore、rebase、merge 等 ...
@@ -314,9 +315,78 @@ TODO:
         - count 計算參數出現次數
             - parser.add_argument("-v", action="count", default=0)
             - python script.py -vvv → args.v = 3
-    - [?] args 加上可以帶參數、可縮寫的彈性用法
-    - [?] 當需帶入的參數變多時，如何增加可讀性，driver_control = WebController(headless=args.headless) 20260404 : 當 args 變多，會不會變得很難讀?
+    - [?] args 加上可以帶參數、可縮寫的彈性用法，當需帶入的參數變多時，如何增加可讀性，driver_control = WebController(headless=args.headless) 
 3. find_high_gp.py :
     - [X] 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
         - [X] 一併調整主程式的，修正 if 判斷式(結合find_high_gp.py 檔的function)
+4. [?] get API 查一下怎麼爬巴哈網站
+
+---
+## 20260404
+1. 查一下 git 二級指令的實際用法
+    - [] git restore file.txt (還原最後一次 file.txt 檔案的 commit)
+        - 怎麼使用
+    - [] git merge : 把分支合併 git checkout main、git merge feature
+        - 怎麼使用
+    - [] git rebase : 把你的 commit「接到別的分支後面」，git checkout feature、git rebase main
+        - 怎麼使用
+    - [] git reset : 回到某個版本 
+        - 怎麼使用 (情境)
+    - [] git revert <commit_id> : 清掉上一個 commit 點
+        - 怎麼使用
+2. madhead_post_crawler_pro.py
+    - [X] log 路徑寫法不用拆太細
+    - [?] parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用 (查一下怎麼使用，可以的話常用的加在程式碼中，自行判斷)
+        - store_true 帶參數時設為 true
+        - store_false 帶參數時設為 False
+        - store 預設儲存傳入的值
+        - store_const 帶參數時設為指定常數
+            - parser.add_argument("--mode", action="store_const", const="debug")
+            - python script.py --mode → args.mode = "debug"
+        - append 多次使用時，值加入 list
+            - parser.add_argument("--tag", action="append")
+            - python script.py --tag a --tag b → args.tag = ["a", "b"]
+        - count 計算參數出現次數
+            - parser.add_argument("-v", action="count", default=0)
+            - python script.py -vvv → args.v = 3
+    - [X] args 加上可以帶參數、可縮寫的彈性用法，當需帶入的參數變多時，如何增加可讀性，driver_control = WebController(headless=args.headless) 
+        - 方法 1 : 參數多適合，可讀性高
+            ``` 主程式寫法
+            driver_control = WebController(**vars(args))
+                '''補充
+                ** => 把 args dict 拆開
+                vars(args) => 把 args 轉成 dict 
+                '''
+            # function 內寫法
+                def __init__(self, headless, timeout, proxy, **kwargs): 
+                '''補充 : **kwargs 多傳的參數就丟垃圾桶
+                    def my_function(a, b, **kwargs):
+                    print(a, b, kwargs)  # 印出真正的參數值
+                    ---
+                    my_function(a='AAA', b='BBB', c='CCC') # 印出：AAA BBB {'c': 'CCC'}
+                '''
+                self.headless = headless
+                self.timeout  = timeout
+                self.proxy    = proxy
+            ```
+        - 方法 2 : 使用字典方法，缺點行數會變多一點，但一樣可讀性高
+            ``` 主程式寫法
+            controller_config = {
+                "headless": args.headless,
+                "timeout":  args.timeout,
+                }
+            driver_control = WebController(**controller_config) 
+                ```
+                補充 : ** => 把 dict 的每一個 key-value pair，展開成 key=value 的形式
+                ```
+            ```
+        - 方法 3 : 直接換行，最簡單，且直覺，缺點就是一樣多行
+            ``` 主程式寫法
+            driver_control = WebController(
+                headless=args.headless,
+                timeout=args.timeout,
+                )
+            ```
+3. find_high_gp.py :
+    - [X] 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
 4. [?] get API 查一下怎麼爬巴哈網站

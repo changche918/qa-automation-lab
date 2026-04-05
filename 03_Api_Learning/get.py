@@ -39,16 +39,52 @@ import requests
 
 # ==================================================
 
-# 20260402 巴哈神模版，自己帶 header，模擬瀏覽器行為
-# 1. 定義 API 網址
-url_gamer = "https://api.gamer.com.tw/lite/v1/get_jid.php?bsn=23805"
+# 巴哈神魔版，自己帶 header，模擬瀏覽器行為
+# url_gamer = "https://api.gamer.com.tw/lite/v1/get_jid.php?bsn=23805"
 
-# 2. 發出請求
-response_gamer = requests.get(url_gamer)
+# headers = {
+#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+#     "Referer": "https://www.gamer.com.tw/",
+#     "Origin": "https://www.gamer.com.tw",
+#     "Accept": "application/json, text/plain, */*",
+#     "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+# }
 
-print(f"狀態碼: {response_gamer.status_code}")
-print(f"回應標頭: {response_gamer.headers.get('Content-Encoding')}") 
-print(f"內容類型: {response_gamer.headers.get('Content-Type')}")
-print(response_gamer.text)
+# response_gamer = requests.get(url_gamer, headers=headers)
+
+# print(f"狀態碼: {response_gamer.status_code}")
+# print(response_gamer.text)
 
 
+# ===== AI 提供 =====
+from bs4 import BeautifulSoup
+
+url = "https://forum.gamer.com.tw/B.php?bsn=23805"
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Referer": "https://forum.gamer.com.tw/",
+}
+
+response = requests.get(url, headers=headers)
+soup = BeautifulSoup(response.text, "html.parser")
+
+articles = []
+links = soup.find_all("a")
+
+for link in links:
+    text = link.get_text(strip=True)
+    href = link.get("href", "")
+    
+    # 只要有 snA 參數的（文章主連結），排除純數字（頁碼）和日期格式
+    if "C.php" in href and "snA" in href and "page" not in href and "last" not in href:
+        if text and not text.isdigit():
+            articles.append({
+                "title": text,
+                "url": "https://forum.gamer.com.tw/" + href
+            })
+
+for i, a in enumerate(articles, 1):
+    print(f"{i}. {a['title']}")
+    print(f"   {a['url']}")
+    print()
