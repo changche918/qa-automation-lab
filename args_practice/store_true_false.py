@@ -13,10 +13,10 @@ args = parser.parse_args()  # 解析 terminal 輸入的參數
 print(args)                 # 印出整個 Namespace
 
 # python main.py --headless
-# # → args.headless = True
+# → args.headless = True
 
 # python main.py --visible
-# # → args.visible = False
+# → args.visible = False
 
 # python main.py  # 都不打
 # → args.headless = False（store_true 預設是 False）

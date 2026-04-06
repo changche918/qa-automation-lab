@@ -56,18 +56,21 @@ class FindHighGP():
         )
 
         for art in articles:  # articles = 文章清單，art = 每篇文章
+            # 20260405 有沒有可能不要跑那麼多次判斷置頂文(這個最後再調)
             if "b-list__row--sticky" not in art.get_attribute("class"):  # 排除置頂文
                 try:
+                    # 20260405 優化:先抓GP再抓文章比較好
                     title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
                     gp_elem = art.find_elements(By.CSS_SELECTOR, ".b-list__summary__gp.b-gp")
 
                     gp_value = 0
                     if gp_elem:
                         gp_text = gp_elem[0].text
+                        # 20260405 if "爆" 這兩個寫法邏輯錯誤。可以優化，用 if 判斷 choice = 1 else ...
                         if "爆" in gp_text and choice == "1":
                             gp_value = float("inf")
                         elif "爆" in gp_text and choice == "2":
-                            titles.append(f"[{gp_text}] {title_elem.text}")
+                            titles.append(f"[{gp_text}] {title_elem.text}") # 20260405 跟下面>15的重複了
                         elif gp_text == "" or gp_text == "0":
                             gp_value = 0
                         else:
@@ -79,6 +82,7 @@ class FindHighGP():
 
                         # 比較目前的 (best_gp, best_art_elem) 與新的 (gp_value, title_elem)
                         # 取較大者並同時更新兩個變數
+                        # 20260405 max 怎麼用的
                         best_gp, best_art_elem = max(
                             (best_gp, best_art_elem), (gp_value, title_elem)
                         )

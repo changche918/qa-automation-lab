@@ -21,7 +21,7 @@ from side_projects.utils.drivers import WebController
 log_dir = "side_projects/logs/madhead_"
 file_extension = "log.txt"
 
-file_path = f"{log_dir}post_{file_extension}"
+file_path = f"{log_dir}post_{file_extension}" # 20260405 可讀性調整
 content_path = f"{log_dir}content_{file_extension}"
 
 # log 路徑寫法 (3)，Path(__file__) 目前檔案位置，.resolve() = 絕對路徑，parent = 上一層資料夾
@@ -30,7 +30,6 @@ content_path = f"{log_dir}content_{file_extension}"
 # content_path = log_dir / "madhead_content_log.txt"
 
 # 執行無頭模式的設定
-
 parser = argparse.ArgumentParser() # 我要開始定義這支程式可以吃哪些參數
 parser.add_argument("--headless", action="store_true") # 只要你有打 --headless，就幫你設成 True
 args = parser.parse_args() # 把你在 terminal 打的東西解析成變數 (--headless = True)
@@ -50,7 +49,8 @@ driver_control.get_url("https://forum.gamer.com.tw/B.php?bsn=23805")
 
 # def main():
 # 1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題 (這行限定放在主程式)
-choice = input("\n請輸入編號選擇功能 (1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題): ").strip()
+choice = input("\n請輸入編號選擇功能 (1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題): ").strip() 
+# 20260405 choice 可讀性偏差
 
 finder = FindHighGP(driver_control.driver)
 titles, best_art_elem = finder.scan_high_gp_post(choice)
