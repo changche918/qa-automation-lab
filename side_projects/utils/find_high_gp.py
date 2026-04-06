@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 # 20260324 新增 function PR #10
 # 20260326 調整程式寫法，將 log.save 移出去處理，並繼承 driver 寫法 PR #11
+# 20260402 增加 function，區分撈第一筆及所有爆文章 PR #12
 class FindHighGP():
     def __init__(self, driver):
         self.driver = driver
@@ -25,7 +26,7 @@ class FindHighGP():
                 gp_text = gp_elements[0].text.strip() # 先抓大範圍，再從大範圍裡抓小東西
 
                 if "爆" in gp_text:
-                    gp_value = 99999
+                    gp_value = float("inf")
                 else:
                     # 只保留數字，過濾掉非數字字元
                     clean_gp = "".join(filter(str.isdigit, gp_text)) # TODO 待理解
@@ -43,3 +44,49 @@ class FindHighGP():
                 print("此樓層找不到 GP 標籤，跳過")
 
         return results
+
+    def scan_high_gp_post(self, choice):
+        titles = []
+        best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
+        best_art_elem = None
+
+        # 抓文章列表頁
+        articles = self.wait.until(
+            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".b-list__row.b-list-item"))
+        )
+
+        for art in articles:  # articles = 文章清單，art = 每篇文章
+            # 20260405 有沒有可能不要跑那麼多次判斷置頂文(這個最後再調)
+            if "b-list__row--sticky" not in art.get_attribute("class"):  # 排除置頂文
+                try:
+                    # 20260405 優化:先抓GP再抓文章比較好
+                    title_elem = art.find_element(By.CSS_SELECTOR, ".b-list__main__title")
+                    gp_elem = art.find_elements(By.CSS_SELECTOR, ".b-list__summary__gp.b-gp")
+
+                    gp_value = 0
+                    if gp_elem:
+                        gp_text = gp_elem[0].text
+                        # 20260405 if "爆" 這兩個寫法邏輯錯誤。可以優化，用 if 判斷 choice = 1 else ...
+                        if "爆" in gp_text and choice == "1":
+                            gp_value = float("inf")
+                        elif "爆" in gp_text and choice == "2":
+                            titles.append(f"[{gp_text}] {title_elem.text}") # 20260405 跟下面>15的重複了
+                        elif gp_text == "" or gp_text == "0":
+                            gp_value = 0
+                        else:
+                            gp_value = int(gp_text)
+
+                        # 取文章 gp 大於 15的文章，並把標題存到 titles 裡
+                        if gp_value > 15:
+                            titles.append(f"[{gp_value}] {title_elem.text}")
+
+                        # 比較目前的 (best_gp, best_art_elem) 與新的 (gp_value, title_elem)
+                        # 取較大者並同時更新兩個變數
+                        # 20260405 max 怎麼用的
+                        best_gp, best_art_elem = max(
+                            (best_gp, best_art_elem), (gp_value, title_elem)
+                        )
+
+                except Exception as e:
+                    print(f"這樓跳過了，原因：{e}")  # 印出錯誤原因，但依然繼續跑下一輪
+        return titles, best_art_elem
