@@ -1,13 +1,27 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--mode", action="store_const", const=42)
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--json', dest='fmt',
+                   action='store_const', const='json')
+group.add_argument('--csv', dest='fmt',
+                   action='store_const', const='csv')
+parser.set_defaults(fmt='json')
+args = parser.parse_args()
 
-args = parser.parse_args()  # 解析 terminal 輸入的參數
-print(args)                 # 印出整個 Namespace
+print(f"匯出格式：{args.fmt}")
 
-# python main.py --mode
-# # → args.mode = 42  固定存你指定的值
 
-# python main.py  # 不打
-# # → args.mode = None
+"""執行方式
+# 預設 json
+$ python args_practice/store_const.py
+匯出格式：json
+
+# 指定 csv
+$  python args_practice/store_const.py --csv
+匯出格式：csv
+
+# 兩個不能同時用（互斥）
+$ python export.py --json --csv
+error: argument --csv: not allowed with argument --json
+"""

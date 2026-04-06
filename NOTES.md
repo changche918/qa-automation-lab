@@ -393,3 +393,20 @@ TODO:
 
 ---
 ## 20260405
+1. find_high_gp.py :
+    - 爆的寫法邏輯有誤
+     - gp_text 包含 "爆"？
+        ├── YES → 爆文處理
+        │   ├── choice == "1"：加入 results，立刻停止迴圈（只取第一篇）
+        │   └── choice == "2"：加入 results，繼續找下一篇爆文
+        └── NO → 一般文章處理
+            └── 比較 GP 數值，更新當前頁面 GP 最高的樓層
+    - 置頂文寫法調整(之後再調)
+    - max 用法 ?
+        - max((20, best_art_elem), (35, title_elem))，比較第一個元素 20 vs 35，因為 35 大，所以回傳 (35, title_elem)
+        - max((50, best_art_elem), (35, title_elem))，比較第一個元素 50 vs 35，因為 50 大，所以回傳 (50, best_art_elem)，best_gp 和 best_art_elem 維持不變
+        ，第一個元素一樣，比第二個，因為 "A" vs "B"，"B" 比較大，所以回傳 (10, "B")
+    - best_gp, best_art_elem = max((best_gp, best_art_elem), (gp_value, title_elem))
+        - 
+2. 了解 git 指令用法
+3. 了解並實作 args 的用法

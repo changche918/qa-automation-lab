@@ -1,12 +1,20 @@
 import argparse
 
-# 20260405 直接把執行的 code 貼上
 parser = argparse.ArgumentParser()
-parser.add_argument("--url", action="append")
+parser.add_argument('--host', action='append', dest='hosts')
+parser.add_argument('--env', default='production')
+args = parser.parse_args()
 
-args = parser.parse_args()  # 解析 terminal 輸入的參數
-print(args)                 # 印出整個 Namespace
+print(f"部署環境：{args.env}")
+for h in args.hosts:
+    print(f"  → 部署到 {h}")
 
-# python main.py --url abc.com --url def.com
-# → args.url = ["abc.com", "def.com"]  每次出現都加進 list
-# append 最常用在「同一個參數需要傳多個值」的情境。
+"""執行方式
+# 同時部署到三台主機
+$ python args_practice/append.py  --host 10.0.0.1  --host 10.0.0.2  --host 10.0.0.3
+
+部署環境：production
+  → 部署到 10.0.0.1
+  → 部署到 10.0.0.2
+  → 部署到 10.0.0.3
+"""

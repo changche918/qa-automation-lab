@@ -1,13 +1,50 @@
 import argparse
 
-# 20260405 請 AI 提供範例
+# 設定 argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--v", action="count", default=0)
+parser.add_argument('-v', action='count', default=0)
+args = parser.parse_args()
 
-args = parser.parse_args()  # 解析 terminal 輸入的參數
-print(args)                 # 印出整個 Namespace
+# levels 對應 -v 的數量
+levels = ["WARNING", "INFO", "DEBUG"] # 0 1 2
+level = levels[min(args.v, len(levels) - 1)]
+print(f"目前等級：{level}（打了 {args.v} 個 -v）")
 
-# python main.py --v        # → args.v = 1
-# python main.py --v --v    # → args.v = 2
-# python main.py --v --v --v # → args.v = 3
-# 常用在控制 log 詳細程度 (20260405 為啥要這樣用? 範例是?)
+"""
+args.v = 1
+         ↓
+min(1, 2) = 1
+         ↓
+levels[1] = "INFO"
+         ↓
+level = "INFO"
+"""
+
+# 模擬不同等級的訊息
+messages = [
+    ("WARNING", "這是 WARNING"),
+    ("INFO",    "這是 INFO"),
+    ("DEBUG",   "這是 DEBUG"),
+]
+
+for msg_level, msg in messages:
+    if levels.index(msg_level) <= levels.index(level):
+        print(msg)
+
+        
+"""執行方式
+# 預設只看 WARNING
+$ python args_practice/count.py
+WARNING: 這是 WARNING
+
+# -v 看到 INFO
+$ python args_practice/count.py -v
+WARNING: 這是 WARNING
+INFO: 這是 INFO
+
+# -vv 全看
+$ python args_practice/count.py -vv
+WARNING: 這是 WARNING
+INFO: 這是 INFO
+DEBUG: 這是 DEBUG
+"""
