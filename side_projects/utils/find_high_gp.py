@@ -32,9 +32,6 @@ class FindHighGP():
 
                         if "爆" in gp_text:
                             gp_value = float("inf")
-
-                        elif "爆" in gp_text:
-                            titles.append(f"[{gp_text}] {title_elem.text}") # 20260405 跟下面>15的重複了
                         
                         elif gp_text == "" or gp_text == "0":
                             gp_value = 0
@@ -46,13 +43,17 @@ class FindHighGP():
                         if gp_value > 15:
                             titles.append(f"[{gp_value}] {title_elem.text}")
 
-                        # 比較目前的 (best_gp, best_art_elem) 與新的 (gp_value, title_elem)，取較大者同時更新兩個變數
-                        best_gp, best_art_elem = max(
-                            (best_gp, best_art_elem), (gp_value, title_elem))
+                        # # 比較目前的 (best_gp, best_art_elem) 與新的 (gp_value, title_elem)，取較大者同時更新兩個變數
+                        # best_gp, best_art_elem = max(
+                        #     (best_gp, best_art_elem), (gp_value, title_elem))
+                        
+                        if gp_value > best_gp:
+                            best_gp = gp_value
+                            best_art_elem = title_elem
 
                 except Exception as e:
                     print(f"這樓跳過了，原因：{e}")  # 印出錯誤原因，但依然繼續跑下一輪
-                    
+
         return titles, best_art_elem
     
 
@@ -73,7 +74,7 @@ class FindHighGP():
 
             gp_text = gp_elements[0].text.strip()
 
-            if "爆" in gp_text:
+            if "2" in gp_text:
                 # 爆文：直接取當前樓層內文
                 try:
                     content = post.find_element(By.CSS_SELECTOR, ".c-article__content").text
@@ -89,6 +90,12 @@ class FindHighGP():
 
             else:
                 # 一般文章：只更新 best，不 append
+                """
+                補充 : 
+                str.isdigit：這是一個判斷式，檢查字元是不是「數字」。
+                filter(str.isdigit, gp_text)：這會掃描 gp_text 裡的每一個字，如果是數字就留下來，不是（例如空白、括號、文字）就丟掉。
+                "".join(...)：把過濾剩下的數字字元「黏成一個完整的字串」，例如 "  25  " => "25"
+                """
                 clean_gp = "".join(filter(str.isdigit, gp_text))
                 gp_value = int(clean_gp) if clean_gp else 0
 
