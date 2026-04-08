@@ -1,7 +1,7 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-group = parser.add_mutually_exclusive_group()
+group = parser.add_mutually_exclusive_group() # 可以看一下 default 值是什麼意思 dest,action,const 的意思
 group.add_argument('--json', dest='fmt',
                    action='store_const', const='json')
 group.add_argument('--csv', dest='fmt',

@@ -1,13 +1,13 @@
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--h', default='127.0.0.1')
+parser.add_argument('--p', type=int, default=8080)
+parser.add_argument('--w', type=int, default=4)
+args = parser.parse_args()
 # parser.add_argument('--host', default='127.0.0.1')
 # parser.add_argument('--port', type=int, default=8080)
 # parser.add_argument('--workers', type=int, default=4)
-args = parser.parse_args()
-parser.add_argument('--host', default='127.0.0.1')
-parser.add_argument('--port', type=int, default=8080)
-parser.add_argument('--workers', type=int, default=4)
 
 print(f"啟動伺服器 {args.host}:{args.port}")
 print(f"Worker 數量：{args.workers}")

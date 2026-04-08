@@ -56,11 +56,11 @@ class FindHighGP():
 
         return titles, best_art_elem
     
-
+    # 20260407 TODO 新增一個 function 合併 find_high_gp 和 scan_high_gp_content 的 (不用改舊的)
     def scan_high_gp_content(self, choice): # 取出巴哈文章內回覆的 GP + 標題
         results = [] # 最終要回傳的內容清單
         page_best_gp = -1 # 記錄目前找到的最高 GP 數值（預設 -1）
-        page_best_content = "無內容" # 對應最高 GP 的文章內容
+        page_best_content = None # 對應最高 GP 的文章內容
 
         posts = self.wait.until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "section[id^='post_']")))
@@ -74,20 +74,34 @@ class FindHighGP():
 
             gp_text = gp_elements[0].text.strip()
 
-            if "2" in gp_text:
+            if "爆" in gp_text: 
+                """ 
+                20260407 TODO 如果以測資 (21,爆) 進 for 迴圈判斷，這時選擇 1,
+                並想像自己寫的 code 的 edge case 跑一遍程式看合不合理 (包含 else 情境) 
+                --> 可以看一下爆 + GP 合不合理
+                --> case : (21)、(爆)、(21,爆)、(爆,21)
+                --> 看一下選項 1 跟 2 的合理
+                --> ### 注意 : 正在寫，或寫完 function 後冷靜想一下合不合理 ###
+                """
                 # 爆文：直接取當前樓層內文
                 try:
                     content = post.find_element(By.CSS_SELECTOR, ".c-article__content").text
+                    
                 except:
                     content = "無法取得內文"
 
                 if choice == "1":
                     results.append(content)
                     break  # 第一筆爆文就停止
-
+                
                 elif choice == "2":
                     results.append(content)  # 繼續找下一篇爆文
 
+                """參考寫法:
+                results.append(content)
+                if choice == "1":
+                    break  # 第一筆爆文就停止
+                """
             else:
                 # 一般文章：只更新 best，不 append
                 """
@@ -96,8 +110,14 @@ class FindHighGP():
                 filter(str.isdigit, gp_text)：這會掃描 gp_text 裡的每一個字，如果是數字就留下來，不是（例如空白、括號、文字）就丟掉。
                 "".join(...)：把過濾剩下的數字字元「黏成一個完整的字串」，例如 "  25  " => "25"
                 """
-                clean_gp = "".join(filter(str.isdigit, gp_text))
-                gp_value = int(clean_gp) if clean_gp else 0
+                clean_gp = "".join(filter(str.isdigit, gp_text)) # 過濾成數字下面比較好比較
+
+                if clean_gp:
+                    # 如果 clean_gp 不是空字串，就轉換成整數
+                    gp_value = int(clean_gp)
+                else:
+                    # 如果 clean_gp 是空字串（代表沒抓到數字），就設為 0
+                    gp_value = 0
 
                 if gp_value > page_best_gp:
                     page_best_gp = gp_value
@@ -109,7 +129,7 @@ class FindHighGP():
                         page_best_content = "無法取得內文"
 
         # 迴圈結束後，把 GP 最高的一般文章加進去
-        if page_best_content != "無內容":
+        if page_best_content:
             results.append(page_best_content)
 
         return results # 結論 : ["爆文 A 的內容", "爆文 B 的內容", "GP 最高一般文的內容"])

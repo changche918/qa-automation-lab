@@ -49,7 +49,6 @@ driver_control.get_url("https://forum.gamer.com.tw/C.php?bsn=23805&snA=729963&tn
 
 # 1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題 (這行限定放在主程式)
 choice_content_type = input("\n請輸入編號選擇功能 (1:取出第一筆爆的回覆文標題 或 2:取出所有爆的回覆文標題): ").strip() 
-# 20260405 choice 可讀性偏差
 
 finder = FindHighGP(driver_control.driver)
 # titles, best_art_elem = finder.scan_high_gp_post()
@@ -80,8 +79,10 @@ while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
         print("換頁成功")
         best_text = finder.scan_high_gp_content(choice_content_type)
         log.save_txt(content_path, best_text)
+
     else:
         print("完全找不到下一頁按鈕，停止")
+        
         break
 
 driver_control.close_windows()

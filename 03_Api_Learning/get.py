@@ -40,7 +40,8 @@ import requests
 # ==================================================
 
 # 巴哈神魔版，自己帶 header，模擬瀏覽器行為
-url_gamer = "https://forum.gamer.com.tw/B.php?bsn=23805"
+# url_gamer = "https://forum.gamer.com.tw/B.php?bsn=23805"
+url_gamer_content = "https://forum.gamer.com.tw/C.php?bsn=23805&snA=730010&tnum=1"
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -50,41 +51,8 @@ headers = {
     # "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
 }
 
-response_gamer = requests.get(url_gamer, headers=headers)
+# response_gamer = requests.get(url_gamer, headers=headers)
+response_gamer_content = requests.get(url_gamer_content, headers=headers)
 
-print(f"狀態碼: {response_gamer.status_code}")
-print(response_gamer.text)
-
-
-# ===== AI 提供 =====
-# from bs4 import BeautifulSoup
-
-# url = "https://forum.gamer.com.tw/B.php?bsn=23805"
-
-# headers = {
-#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-#     "Referer": "https://forum.gamer.com.tw/",
-# }
-
-# response = requests.get(url, headers=headers)
-# soup = BeautifulSoup(response.text, "html.parser")
-
-# articles = []
-# links = soup.find_all("a")
-
-# for link in links:
-#     text = link.get_text(strip=True)
-#     href = link.get("href", "")
-    
-#     # 只要有 snA 參數的（文章主連結），排除純數字（頁碼）和日期格式
-#     if "C.php" in href and "snA" in href and "page" not in href and "last" not in href:
-#         if text and not text.isdigit():
-#             articles.append({
-#                 "title": text,
-#                 "url": "https://forum.gamer.com.tw/" + href
-#             })
-
-# for i, a in enumerate(articles, 1):
-#     print(f"{i}. {a['title']}")
-#     print(f"   {a['url']}")
-#     print()
+print(f"狀態碼: {response_gamer_content.status_code}")
+print(response_gamer_content.text)

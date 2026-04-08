@@ -407,6 +407,5 @@ TODO:
         - max((50, best_art_elem), (35, title_elem))，比較第一個元素 50 vs 35，因為 50 大，所以回傳 (50, best_art_elem)，best_gp 和 best_art_elem 維持不變
         ，第一個元素一樣，比第二個，因為 "A" vs "B"，"B" 比較大，所以回傳 (10, "B")
     - best_gp, best_art_elem = max((best_gp, best_art_elem), (gp_value, title_elem))
-        - 
 2. 了解 git 指令用法
 3. 了解並實作 args 的用法
