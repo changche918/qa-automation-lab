@@ -409,3 +409,41 @@ TODO:
     - best_gp, best_art_elem = max((best_gp, best_art_elem), (gp_value, title_elem))
 2. 了解 git 指令用法
 3. 了解並實作 args 的用法
+
+---
+## 20260407
+1. find_high_gp.py
+    - 如果以測資 (21,爆) 進 for 迴圈判斷，這時選擇 1，並想像自己寫的 code 的 edge case 跑一遍程式看合不合理 (包含 else 情境) 
+        --> 可以看一下爆 + GP 合不合理
+        --> case : (21)、(爆)、(21,爆)、(爆,21)
+        --> 看一下選項 1 跟 2 的合理
+        --> ### 注意 : 正在寫，或寫完 function 後冷靜想一下合不合理 ###
+    -  choice 參考寫法:
+        results.append(content)
+        if choice == "1":
+            break  # 第一筆爆文就停止
+    - [] 新增一個 function 合併 find_high_gp 和 scan_high_gp_content 的 (不用改舊的)
+    - 補充 :
+        str.isdigit：這是一個判斷式，檢查字元是不是「數字」。
+        filter(str.isdigit, gp_text)：這會掃描 gp_text 裡的每一個字，如果是數字就留下來，不是（例如空白、括號、文字）就丟掉。
+        "".join(...)：把過濾剩下的數字字元「黏成一個完整的字串」，例如 "  25  " => "25"
+
+        <<<合併 function 思考>>>
+        post 第一頁找到文章(排除置頂)，如果GP有爆，給無限大，然後比較GP，把所有GP大於15的文章標題都取出來
+        content 每一頁找到內文
+                    選項1:每一頁如果有爆的GP，只取出第一個爆文章的內容+一般文章中PK GP 最大的拿出來 
+                    選項2:每一頁如果有爆的GP，每個爆文章的各自內容+一般文章中PK GP 最大的拿出來  
+        方法1:
+        if 要的是比文章標題就跑 post
+        else 就跑 content
+
+        方法2:
+        post >>> 做原本要做的事除了GP
+        content >>> 做原本要做的事除了GP
+        gp >>> 只處理GP
+
+        方法3:
+        post >>> 做原本要做的事除了抓文章
+        content >>> 做原本要做的事除了抓文章
+        get >>> 只負責抓文章或內容
+
