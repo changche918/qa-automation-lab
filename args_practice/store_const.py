@@ -1,27 +1,14 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-group = parser.add_mutually_exclusive_group() # 可以看一下 default 值是什麼意思 dest,action,const 的意思
-group.add_argument('--json', dest='fmt',
-                   action='store_const', const='json')
-group.add_argument('--csv', dest='fmt',
-                   action='store_const', const='csv')
-parser.set_defaults(fmt='json')
+size = parser.add_mutually_exclusive_group() # parser.add_mutually_exclusive_group() 就是在解析器裡建立一個「只能選一個」的群組
+size.add_argument('--large', dest='size', action='store_const', const='大杯')
+size.add_argument('--small', dest='size', action='store_const', const='小杯')
+parser.set_defaults(size='中杯') # 也是可以寫成 size.add_argument('--small', dest='size', action='store_const', const='小杯', default='中杯')
+
 args = parser.parse_args()
-
-print(f"匯出格式：{args.fmt}")
-
+print(f"你點的是：{args.size}")
 
 """執行方式
-# 預設 json
-$ python args_practice/store_const.py
-匯出格式：json
-
-# 指定 csv
-$  python args_practice/store_const.py --csv
-匯出格式：csv
-
-# 兩個不能同時用（互斥）
-$ python export.py --json --csv
-error: argument --csv: not allowed with argument --json
+$ python args_practice/store_const.py --small
 """

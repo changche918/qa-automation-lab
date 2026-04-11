@@ -216,7 +216,7 @@ class FindHighGP:
             return None
 
     def _parse_gp_value(self, gp_text):
-        '''把 gp_text 轉成數值，爆文回傳 inf'''
+        '''把 gp_text 轉成數值，爆文回傳 inf
         if "爆" in gp_text:
             return float("inf")
         clean_gp = "".join(filter(str.isdigit, gp_text))
@@ -226,6 +226,9 @@ class FindHighGP:
 ########################### 全部合併 function ###########################
 
     def scan_high_gp_post_and_title(self, find_type, choice):  # 取出巴哈文章標題
+        """
+        find_type 1 = 爬文章標題，其他的爬回覆文
+        """
         high_gp_post_titles = []
         page_best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
         best_art_titles = None
