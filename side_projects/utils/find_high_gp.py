@@ -233,8 +233,8 @@ class FindHighGP:
         """
         high_gp_post_titles = []
         high_gp_content = []  # 最終要回傳的內容清單
-        page_best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
-        page_best_gp = -1  # 記錄目前找到的最高 GP 數值（預設 -1）
+        page_best_gp_art = -1  # 文章最少是 0，所以初始值給 -1 來比大小
+        page_best_gp_post = -1  # 記錄目前找到的最高 GP 數值（預設 -1）
         best_art_titles = None
         page_best_content = None  # 對應最高 GP 的文章內容
 
@@ -269,23 +269,21 @@ class FindHighGP:
                         else:
                             gp_value = int(gp_text)
 
-                            # 取文章 gp 大於 15 的文章，並把標題存到 titles 裡
-                            if gp_value > 15:
-                                high_gp_post_titles.append(f"[{gp_value}] {title_elem.text}")
+                        # 取文章 gp 大於 15 的文章，並把標題存到 titles 裡
+                        if gp_value > 15:
+                            high_gp_post_titles.append(f"[{gp_value}] {title_elem.text}")
                             
-                            if gp_value > page_best_gp:
-                                page_best_gp = gp_value
-                                best_art_titles = title_elem
+                        if gp_value > page_best_gp_art:
+                            page_best_gp_art = gp_value
+                            best_art_titles = title_elem.text
 
                     except Exception as e:
                         print(f"這樓跳過了，原因：{e}")  # 印出錯誤原因，但依然繼續跑下一輪
 
             if best_art_titles:
-                high_gp_post_titles.append(f"[{page_best_gp}] {best_art_titles}")
-            return (
-                high_gp_post_titles  # 結論 : ["爆文 A 的內容", "爆文 B 的內容", "GP 最高一般文的內容"])
-            )
-
+                high_gp_post_titles.append(f"[{page_best_gp_art}] {best_art_titles}")
+            return high_gp_post_titles  # 結論 : ["爆文 A 的內容", "爆文 B 的內容", "GP 最高一般文的內容"])
+        
         else:
             # 抓回覆文列表
             posts = self.wait.until(
@@ -304,11 +302,13 @@ class FindHighGP:
                     gp_text = gp_elements[0].text.strip()
 
                     if "爆" in gp_text:  # 爆文：直接取當前樓層內文
+                        content = post.find_element(By.CSS_SELECTOR, ".c-article__content").text
+
                         if choice == "1":
-                            high_gp_content.append(f"[{gp_text}] {page_best_content}")
+                            high_gp_content.append(f"[{gp_text}] {content}")
                             break  # 第一筆爆文就停止
                         elif choice == "2":
-                            high_gp_content.append(f"[{gp_text}] {page_best_content}")  # 繼續找下一篇爆文
+                            high_gp_content.append(f"[{gp_text}] {content}")  # 繼續找下一篇爆文
 
                     else:
                         # 一般文章：只更新 best，不 append
@@ -322,22 +322,19 @@ class FindHighGP:
                             # 如果 clean_gp 是空字串（代表沒抓到數字），就設為 0
                             gp_value = 0
 
-                        if gp_value > page_best_gp:
-                            page_best_gp = gp_value
-                            page_best_content = post.find_element(
-                        By.CSS_SELECTOR, ".c-article__content").text
+                        if gp_value > page_best_gp_post:
+                            page_best_gp_post = gp_value
+                            page_best_content = post.find_element(By.CSS_SELECTOR, ".c-article__content").text
                 
                 except Exception as e:
                     print(f"這樓跳過了，原因：{e}")  # 印出錯誤原因，但依然繼續跑下一輪
 
             # 迴圈結束後，把 GP 最高的一般文章加進去
             if page_best_content:
-                high_gp_content.append(f"[{page_best_gp}] {page_best_content}")
-            return (
-                high_gp_content  # 結論 : ["爆文 A 的內容", "爆文 B 的內容", "GP 最高一般文的內容"])
-            )
+                high_gp_content.append(f"[{ page_best_gp_post}] {page_best_content}")
+            return high_gp_content  # 結論 : ["爆文 A 的內容", "爆文 B 的內容", "GP 最高一般文的內容"])
 
-
+### 以下為未改前的版本 ###
     """
     未改前的版本，建議不要動
     def scan_high_gp_post(self):  # 取出巴哈文章標題
