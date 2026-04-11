@@ -18,7 +18,7 @@ for h in args.hosts:
 $ python args_practice/append.py  --host 10.0.0.1  --host 10.0.0.2  --host 10.0.0.3
 
 部屬到 lab 就是 python args_practice/append.py --env=lab 或是 --env lab 也可以
-部署環境：production，
+部署環境:production
   → 部署到 10.0.0.1
   → 部署到 10.0.0.2
   → 部署到 10.0.0.3

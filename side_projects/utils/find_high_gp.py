@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 # 20260324 新增 function PR #10
 # 20260326 調整程式寫法，將 log.save 移出去處理，並繼承 driver 寫法 PR #11
 # 20260402 增加 function，區分撈第一筆及所有爆文章 PR #12
+# 20260407 新增合併 function 練習 PR #12
 class FindHighGP:
     def __init__(self, driver):
         self.driver = driver
@@ -116,7 +117,7 @@ class FindHighGP:
 
 ########################### 嘗試合併 function ###########################
 
-    """
+    
     def scan_high_gp_post(self):
         high_gp_post_titles = []
         page_best_gp = -1
@@ -208,20 +209,21 @@ class FindHighGP:
             high_gp_content.append(f"[{page_best_gp}] {page_best_content}")
         return high_gp_content
     
-    def _parse_gp_text(self, elements):
+    
+    def _parse_gp_text(self, elements): # 解析並針對 GP 處理
         '''取出 GP 元素的文字並去除空白'''
         if elements:           # 有東西才進來
             return elements[0].text.strip()
         else:
             return None
 
-    def _parse_gp_value(self, gp_text):
-        '''把 gp_text 轉成數值，爆文回傳 inf
+    def _parse_gp_value(self, gp_text): # 解析並針對爆文 GP 處理 
+        '''把 gp_text 轉成數值，爆文回傳 inf'''
         if "爆" in gp_text:
             return float("inf")
         clean_gp = "".join(filter(str.isdigit, gp_text))
         return int(clean_gp) if clean_gp else 0
-    """
+    
     
 ########################### 全部合併 function ###########################
 
@@ -230,10 +232,10 @@ class FindHighGP:
         find_type 1 = 爬文章標題，其他的爬回覆文
         """
         high_gp_post_titles = []
-        page_best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
-        best_art_titles = None
         high_gp_content = []  # 最終要回傳的內容清單
+        page_best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
         page_best_gp = -1  # 記錄目前找到的最高 GP 數值（預設 -1）
+        best_art_titles = None
         page_best_content = None  # 對應最高 GP 的文章內容
 
         if find_type == 1:
@@ -336,13 +338,8 @@ class FindHighGP:
             )
 
 
-
-
-
-
-
-
-    """    
+    """
+    未改前的版本，建議不要動
     def scan_high_gp_post(self):  # 取出巴哈文章標題
             high_gp_post_titles = []
             page_best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
