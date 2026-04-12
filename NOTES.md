@@ -447,3 +447,13 @@ TODO:
         content >>> 做原本要做的事除了抓文章
         get >>> 只負責抓文章或內容
 
+---
+## 20260411
+1. claude.ai (要大概介紹說一下，有一個很明確的架構)
+    - slash commands 是什麼 ? 常用的
+    - plan mode 跟 ask mode 差異 ?
+    - 新創 claude ETC 在 teams 裡面
+    - 桌面板 / 網頁版 / ...  差異
+    - 模型差異 ?
+
+補充 : **保持好奇心**

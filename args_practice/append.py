@@ -13,8 +13,10 @@ print(f"部署環境：{args.env}")
 for h in args.hosts:
     print(f"  → 部署到 {h}")
 
+# 20260411 為什麼要用 append 的方式 ??? 那些場景需要用到這個 ?? >>> 對應到自動化或QA是怎樣實作
+
 """執行方式
-# 同時部署到三台主機
+# 同時部署到三台主機 >>> 如果對應到 stg 環境 lab ??
 $ python args_practice/append.py  --host 10.0.0.1  --host 10.0.0.2  --host 10.0.0.3
 
 部屬到 lab 就是 python args_practice/append.py --env=lab 或是 --env lab 也可以

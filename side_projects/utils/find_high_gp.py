@@ -12,7 +12,6 @@ class FindHighGP:
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 10)
 
-    """
     def scan_high_gp_post_原來(self):  # 取出巴哈文章標題
         titles = []
         best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
@@ -113,7 +112,7 @@ class FindHighGP:
         return (
             results  # 結論 : ["爆文 A 的內容", "爆文 B 的內容", "GP 最高一般文的內容"])
         )
-    """
+
 
 ########################### 嘗試合併 function ###########################
 
