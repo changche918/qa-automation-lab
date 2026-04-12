@@ -69,10 +69,7 @@ finder = FindHighGP(driver_control.driver)
 #     log.save_txt(file_path, [f"文章網址: {current_page_url}"])
 
 # finder.scan_high_gp_content()  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
-# best_text = finder.scan_high_gp_content(choice_content_type)
-
-# 使用合併的 function
-best_text = finder.scan_high_gp_post_and_title(2, choice_content_type)
+best_text = finder.scan_high_gp_content(choice_content_type)
 
 log.save_txt(content_path, best_text)
 
@@ -91,7 +88,7 @@ while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
         next_btn.click()
         time.sleep(5)
         print("換頁成功")
-        best_text = finder.scan_high_gp_post_and_title(2, choice_content_type)
+        best_text = finder.scan_high_gp_content(choice_content_type)
         log.save_txt(content_path, best_text)
 
     else:
