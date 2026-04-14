@@ -461,14 +461,10 @@ claude
     - allow 模式 >>> AI 每次執行時需要詢問
     - 網頁版適合日常對話和文書工作，桌面版是生產力最強的選擇（尤其搭配 Cowork 和 Code），手機版勝在語音互動和隨身攜帶的便利性。
     - mode 差異 :
-        - Ask permissions（問我）
-        ↓ 最安全，每個動作都問你
-        Auto accept edits（自動接受編輯）
-        ↓ 改檔不問，指令還是問
-        Plan mode（計劃模式）
-        ↓ 只分析規劃，不動程式碼
-        Auto（自動 + 分類器）
-        ↓ 全自動，背景安全審查
-        Bypass permissions（繞過所有檢查）
-    ↓ 僅限隔離環境！
+        - Ask permissions 最安全，每個動作都問你
+        - Auto accept edits（自動接受編輯）
+        - Plan mode 只分析規劃，不動程式碼
+        - Auto 全自動，背景安全審查
+        - Bypass permissions（繞過所有檢查）
+        ![alt text](image.png)
 補充 : **保持好奇心**

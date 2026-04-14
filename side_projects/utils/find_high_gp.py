@@ -223,12 +223,7 @@ class FindHighGP:
 #         return int(clean_gp) if clean_gp else 0
     
     
-########################### 全部合併 function ###########################
-
-
-
-
-### 以下為未改前的版本 ###
+########################### ### 以下為未改前的版本 ### ###########################
     def scan_high_gp_post(self):  # 取出巴哈文章標題
         high_gp_post_titles = []
         page_best_gp = -1  # 文章最少是 0，所以初始值給 -1 來比大小
