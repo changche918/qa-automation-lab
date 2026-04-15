@@ -468,3 +468,22 @@ claude
         - Bypass permissions（繞過所有檢查）
         ![alt text](image.png)
 補充 : **保持好奇心**
+
+---
+## 20260415
+1.claude ai :
+    - 中文化，有兩種
+    - 使用架構圖 (去查)
+2.專案整合 : 爬蟲結合 AI 的部分，可以先想 (web+claude)，
+    - 架構圖 : (補充:從哪到哪>用啥>從哪到哪) 
+    - 完整可以使用的程式
+
+- 問 AI 是屬於 CI/CD 哪個部分、有沒有缺少什麼、如何結合應用
+- AI agent ?
+- MCP Server ?
+
+3.以下每一種 API 方法都打一次 
+HTTP Methods / AUTH / bearer(一定要試) /basic-auth/{user}/{passwd}
+status code / response formats / dynamic data - base64 
+cookies / Redirects / Images
+
