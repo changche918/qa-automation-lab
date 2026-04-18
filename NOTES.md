@@ -472,7 +472,7 @@ claude
 ---
 ## 20260415
 1.claude ai :
-    - 中文化，有兩種
+    - 中文化，有兩種 (在User preferences加上提示詞，寫在CLAUDE.md加上規則)
     - 使用架構圖 (去查)
 2.專案整合 : 爬蟲結合 AI 的部分，可以先想 (web+claude)，
     - 架構圖 : (補充:從哪到哪>用啥>從哪到哪) 
@@ -480,7 +480,9 @@ claude
 
 - 問 AI 是屬於 CI/CD 哪個部分、有沒有缺少什麼、如何結合應用
 - AI agent ?
+    -  你給一個目標，它自己規劃步驟、執行、遇到問題自己調整，直到完成為止
 - MCP Server ?
+    - MCP（Model Context Protocol） 是 Anthropic 制定的開放標準，讓 Claude 可以連接外部工具、資料庫、服務。
 
 3.以下每一種 API 方法都打一次 
 HTTP Methods / AUTH / bearer(一定要試) /basic-auth/{user}/{passwd}

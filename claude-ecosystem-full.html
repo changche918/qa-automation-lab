@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Claude 生態系完整架構</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif TC', serif;
+    background: #0a0908;
+    color: #e8e4dc;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #2a2620;
+  }
+
+  .header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #d4a853;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .header h1 {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: #f5efe0;
+    line-height: 1.1;
+  }
+
+  .header .subtitle {
+    font-size: 15px;
+    color: #8a8376;
+    font-style: italic;
+  }
+
+  /* 主架構圖 */
+  svg.main-arch {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 60px;
+    background: #12100d;
+    border: 1px solid #2a2620;
+    border-radius: 4px;
+  }
+
+  /* 區塊標題 */
+  .block-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: #d4a853;
+    text-transform: uppercase;
+    margin: 48px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2a2620;
+  }
+
+  /* Claude Code 詳細架構 */
+  .cc-deep {
+    background: #12100d;
+    border: 1px solid #2a2620;
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+
+  .cc-deep h2 {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 6px;
+    color: #f5efe0;
+  }
+
+  .cc-deep .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #d4a853;
+    letter-spacing: 0.2em;
+    margin-bottom: 28px;
+  }
+
+  /* 四格概念卡 */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .concept-card {
+    background: #1a1714;
+    border: 1px solid #2a2620;
+    border-left: 3px solid #d4a853;
+    padding: 22px;
+    border-radius: 2px;
+  }
+
+  .concept-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #8a7d5a;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .concept-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #f5efe0;
+  }
+
+  .concept-card h3 code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    background: #0a0908;
+    color: #d4a853;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+
+  .concept-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c4bba8;
+    margin-bottom: 10px;
+  }
+
+  .concept-card .example {
+    background: #0a0908;
+    border-left: 2px solid #d4a853;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #e8e4dc;
+    line-height: 1.7;
+  }
+
+  .concept-card .example span.cmt { color: #6a6355; }
+
+  /* 對照表 */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #2a2620;
+    vertical-align: top;
+  }
+
+  .compare-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #d4a853;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: #0f0d0a;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .compare-table td.concept {
+    font-weight: 600;
+    color: #f5efe0;
+    width: 18%;
+  }
+
+  .compare-table td.chat,
+  .compare-table td.code {
+    color: #c4bba8;
+    line-height: 1.6;
+  }
+
+  .compare-table td code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: #0a0908;
+    color: #d4a853;
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  /* 使用流程 */
+  .flow-section {
+    background: #12100d;
+    border: 1px solid #2a2620;
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+
+  .flow-section h2 {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: #f5efe0;
+  }
+
+  .flow-steps {
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .flow-steps li {
+    counter-increment: step;
+    padding: 18px 0 18px 60px;
+    position: relative;
+    border-bottom: 1px dashed #2a2620;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c4bba8;
+  }
+
+  .flow-steps li:last-child { border-bottom: none; }
+
+  .flow-steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: #d4a853;
+    font-weight: 600;
+  }
+
+  .flow-steps li strong {
+    color: #f5efe0;
+    font-weight: 600;
+  }
+
+  .flow-steps li code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: #0a0908;
+    color: #d4a853;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  .footnote {
+    font-size: 12px;
+    color: #6a6355;
+    font-style: italic;
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #2a2620;
+  }
+
+  @media (max-width: 720px) {
+    .concept-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 32px; }
+    .compare-table { font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="tag">Claude Ecosystem · 2026</div>
+    <h1>Claude 完整生態系架構</h1>
+    <div class="subtitle">聊天 App × Claude Code × API · 一張圖看懂所有層次</div>
+  </div>
+
+  <!-- ======== 主架構圖 ======== -->
+  <svg class="main-arch" viewBox="0 0 1200 1050" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="shadow">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="0" dy="2"/>
+        <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+        <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#d4a853"/>
+        <stop offset="100%" stop-color="#8a6d2e"/>
+      </linearGradient>
+    </defs>
+
+    <!-- ========== 頂層: 模型引擎 ========== -->
+    <text x="40" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853" letter-spacing="2">CORE · 模型引擎</text>
+    <g filter="url(#shadow)">
+      <rect x="300" y="60" width="600" height="70" rx="2" fill="#1a1714" stroke="#d4a853" stroke-width="1.5"/>
+      <text x="600" y="92" text-anchor="middle" font-family="Noto Serif TC, serif" font-size="18" font-weight="900" fill="#f5efe0">Claude 模型 (Opus 4.7 / Sonnet 4.6 / Haiku 4.5)</text>
+      <text x="600" y="114" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">理解 · 推理 · 寫作 · 程式 · 工具調用</text>
+    </g>
+
+    <!-- ========== 中層: 三大產品 ========== -->
+    <text x="40" y="175" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853" letter-spacing="2">PRODUCTS · 三大產品入口</text>
+
+    <!-- 產品 A: Claude 聊天 App -->
+    <g>
+      <rect x="60" y="195" width="340" height="130" rx="2" fill="#1a1714" stroke="#d4a853" stroke-width="1"/>
+      <rect x="60" y="195" width="340" height="4" fill="#d4a853"/>
+      <text x="80" y="225" font-family="Noto Serif TC, serif" font-size="17" font-weight="700" fill="#f5efe0">Claude 聊天 App</text>
+      <text x="80" y="245" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">claude.ai · iOS · Android · Desktop</text>
+      <text x="80" y="272" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">一般使用者 · 對話介面</text>
+      <text x="80" y="292" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">Artifacts · 檔案生成 · 網路搜尋</text>
+      <text x="80" y="312" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">整合 Gmail / Calendar / Drive</text>
+    </g>
+
+    <!-- 產品 B: Claude Code -->
+    <g>
+      <rect x="430" y="195" width="340" height="130" rx="2" fill="#1a1714" stroke="#d4a853" stroke-width="2"/>
+      <rect x="430" y="195" width="340" height="4" fill="#d4a853"/>
+      <text x="450" y="225" font-family="Noto Serif TC, serif" font-size="17" font-weight="700" fill="#f5efe0">Claude Code</text>
+      <text x="450" y="245" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">CLI · VS Code · JetBrains · Web · iOS</text>
+      <text x="450" y="272" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">開發者 · 終端機代理工具</text>
+      <text x="450" y="292" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">直接操作檔案系統 · 執行指令</text>
+      <text x="450" y="312" font-family="Noto Serif TC, serif" font-size="12" fill="#d4a853" font-weight="600">↓ 本圖重點,下方展開</text>
+    </g>
+
+    <!-- 產品 C: Claude API -->
+    <g>
+      <rect x="800" y="195" width="340" height="130" rx="2" fill="#1a1714" stroke="#d4a853" stroke-width="1"/>
+      <rect x="800" y="195" width="340" height="4" fill="#d4a853"/>
+      <text x="820" y="225" font-family="Noto Serif TC, serif" font-size="17" font-weight="700" fill="#f5efe0">Claude API / SDK</text>
+      <text x="820" y="245" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">api.anthropic.com · Python / TS SDK</text>
+      <text x="820" y="272" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">工程師 · 把 Claude 嵌入自家應用</text>
+      <text x="820" y="292" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">Function Calling · Batch · Streaming</text>
+      <text x="820" y="312" font-family="Noto Serif TC, serif" font-size="12" fill="#c4bba8">Agent SDK 建自己的 Agent</text>
+    </g>
+
+    <!-- 連接線 -->
+    <g stroke="#3a362e" stroke-width="1" fill="none">
+      <line x1="600" y1="130" x2="230" y2="195"/>
+      <line x1="600" y1="130" x2="600" y2="195"/>
+      <line x1="600" y1="130" x2="970" y2="195"/>
+    </g>
+
+    <!-- ========== Claude Code 內部架構 ========== -->
+    <text x="40" y="375" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853" letter-spacing="2">CLAUDE CODE INTERNALS · 六大核心概念</text>
+
+    <!-- 虛線框 -->
+    <rect x="40" y="390" width="1120" height="440" rx="4" fill="none" stroke="#d4a853" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+
+    <!-- 1. CLAUDE.md (記憶基礎) -->
+    <g>
+      <rect x="70" y="420" width="250" height="180" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="70" y="420" width="4" height="180" fill="#d4a853"/>
+      <text x="90" y="450" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">① CLAUDE.md</text>
+      <text x="90" y="470" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">專案記憶檔</text>
+      <line x1="90" y1="482" x2="300" y2="482" stroke="#2a2620"/>
+      <text x="90" y="505" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">每次開啟專案自動載入</text>
+      <text x="90" y="524" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 專案架構、技術棧</text>
+      <text x="90" y="542" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 編碼規範、命名慣例</text>
+      <text x="90" y="560" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• build / test 指令</text>
+      <text x="90" y="578" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 禁用指令、安全規則</text>
+      <text x="90" y="596" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853">~/.claude/CLAUDE.md (全域)</text>
+    </g>
+
+    <!-- 2. Skills / Commands -->
+    <g>
+      <rect x="340" y="420" width="250" height="180" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="340" y="420" width="4" height="180" fill="#d4a853"/>
+      <text x="360" y="450" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">② Skills / Commands</text>
+      <text x="360" y="470" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">技能包 · 2026 已統一</text>
+      <line x1="360" y1="482" x2="570" y2="482" stroke="#2a2620"/>
+      <text x="360" y="505" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">可被自動或 / 手動觸發</text>
+      <text x="360" y="524" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• SKILL.md + 資源檔</text>
+      <text x="360" y="542" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• YAML frontmatter 控制</text>
+      <text x="360" y="560" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 內建:/debug /simplify</text>
+      <text x="360" y="578" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 可自訂 /deploy /review</text>
+      <text x="360" y="596" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853">.claude/skills/*/SKILL.md</text>
+    </g>
+
+    <!-- 3. Subagents -->
+    <g>
+      <rect x="610" y="420" width="250" height="180" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="610" y="420" width="4" height="180" fill="#d4a853"/>
+      <text x="630" y="450" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">③ Subagents</text>
+      <text x="630" y="470" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">子代理 · 隔離上下文</text>
+      <line x1="630" y1="482" x2="840" y2="482" stroke="#2a2620"/>
+      <text x="630" y="505" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">專職 AI 處理特定任務</text>
+      <text x="630" y="524" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• Explore:探索 codebase</text>
+      <text x="630" y="542" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• Plan:規劃實作策略</text>
+      <text x="630" y="560" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• code-reviewer / tester</text>
+      <text x="630" y="578" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 可並行 / 非同步執行</text>
+      <text x="630" y="596" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853">保護主線 context 不爆</text>
+    </g>
+
+    <!-- 4. MCP Servers -->
+    <g>
+      <rect x="880" y="420" width="250" height="180" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="880" y="420" width="4" height="180" fill="#d4a853"/>
+      <text x="900" y="450" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">④ MCP Servers</text>
+      <text x="900" y="470" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">外部工具整合協定</text>
+      <line x1="900" y1="482" x2="1110" y2="482" stroke="#2a2620"/>
+      <text x="900" y="505" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">標準化連接外部服務</text>
+      <text x="900" y="524" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• GitHub / GitLab</text>
+      <text x="900" y="542" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 資料庫 (Postgres 等)</text>
+      <text x="900" y="560" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• Playwright / 瀏覽器</text>
+      <text x="900" y="578" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 自建 MCP Server</text>
+      <text x="900" y="596" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853">Model Context Protocol</text>
+    </g>
+
+    <!-- 5. Hooks -->
+    <g>
+      <rect x="210" y="625" width="250" height="180" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="210" y="625" width="4" height="180" fill="#d4a853"/>
+      <text x="230" y="655" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">⑤ Hooks</text>
+      <text x="230" y="675" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">事件觸發腳本</text>
+      <line x1="230" y1="687" x2="440" y2="687" stroke="#2a2620"/>
+      <text x="230" y="710" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">在特定時機自動執行</text>
+      <text x="230" y="729" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 編輯後自動 lint</text>
+      <text x="230" y="747" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• commit 前跑測試</text>
+      <text x="230" y="765" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• 阻擋危險指令</text>
+      <text x="230" y="783" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">• session 開始記錄</text>
+      <text x="230" y="801" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853">deterministic 保證</text>
+    </g>
+
+    <!-- 6. 內建 Slash Commands -->
+    <g>
+      <rect x="480" y="625" width="470" height="180" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="480" y="625" width="4" height="180" fill="#d4a853"/>
+      <text x="500" y="655" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">⑥ 內建 Slash Commands</text>
+      <text x="500" y="675" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">核心管理指令</text>
+      <line x1="500" y1="687" x2="940" y2="687" stroke="#2a2620"/>
+
+      <text x="500" y="710" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">/compact</text>
+      <text x="580" y="710" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">壓縮對話歷史釋放 context</text>
+
+      <text x="500" y="730" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">/context</text>
+      <text x="580" y="730" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">顯示 context 使用狀況</text>
+
+      <text x="500" y="750" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">/clear</text>
+      <text x="580" y="750" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">清空對話 (會失去 prompt cache)</text>
+
+      <text x="500" y="770" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">/plan</text>
+      <text x="580" y="770" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">進入規劃模式 (不改檔案)</text>
+
+      <text x="500" y="790" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">/memory</text>
+      <text x="580" y="790" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">檢視/編輯專案記憶</text>
+    </g>
+
+    <!-- 編排流程箭頭 -->
+    <g stroke="#d4a853" stroke-width="1" fill="none" opacity="0.4">
+      <path d="M 195 510 Q 260 510 340 510" marker-end="url(#arrow)"/>
+      <path d="M 465 510 Q 530 510 610 510" marker-end="url(#arrow)"/>
+      <path d="M 735 510 Q 800 510 880 510" marker-end="url(#arrow)"/>
+    </g>
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#d4a853"/>
+      </marker>
+    </defs>
+
+    <!-- ========== 底層: 共享基礎 ========== -->
+    <text x="40" y="870" font-family="JetBrains Mono, monospace" font-size="10" fill="#d4a853" letter-spacing="2">FOUNDATION · 共享基礎設施</text>
+
+    <g>
+      <rect x="60" y="890" width="340" height="130" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <text x="80" y="920" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">工具調用層</text>
+      <text x="80" y="940" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">Tool Use</text>
+      <text x="80" y="965" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">檔案讀寫 · bash 執行</text>
+      <text x="80" y="983" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">網路搜尋 · 網頁擷取</text>
+      <text x="80" y="1001" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">所有產品共用同一套協議</text>
+    </g>
+
+    <g>
+      <rect x="430" y="890" width="340" height="130" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <text x="450" y="920" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">Skills 開放標準</text>
+      <text x="450" y="940" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">Agent Skills Standard</text>
+      <text x="450" y="965" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">SKILL.md 跨產品通用</text>
+      <text x="450" y="983" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">聊天 App / Code / API 都支援</text>
+      <text x="450" y="1001" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">可在不同工具間重用</text>
+    </g>
+
+    <g>
+      <rect x="800" y="890" width="340" height="130" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <text x="820" y="920" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">MCP 開放協定</text>
+      <text x="820" y="940" font-family="JetBrains Mono, monospace" font-size="10" fill="#8a7d5a">Model Context Protocol</text>
+      <text x="820" y="965" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">統一的外部工具接入標準</text>
+      <text x="820" y="983" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">聊天 App 的 Connectors</text>
+      <text x="820" y="1001" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">Claude Code 的 MCP Servers</text>
+    </g>
+
+  </svg>
+
+  <!-- ======== Claude Code 六大概念深入 ======== -->
+  <div class="block-title">Claude Code 六大概念 · 深入解說</div>
+
+  <div class="cc-deep">
+    <h2>① CLAUDE.md · 專案的「長期記憶」</h2>
+    <div class="sub">Project Memory File</div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="label">是什麼</div>
+        <h3>專案根目錄的 markdown 檔 <code>./CLAUDE.md</code></h3>
+        <p>每次在該目錄啟動 Claude Code 時,內容會自動載入為 system prompt 的一部分。寫一次,所有後續對話都記得。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">該寫什麼</div>
+        <h3>專案慣例與規則</h3>
+        <p>技術棧、資料夾結構、build/test 指令、命名規則、禁用行為、常用的 shell alias 等。<strong>精簡</strong>,不要塞文件全文。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">範例</div>
+        <h3>典型內容</h3>
+        <div class="example">
+<span class="cmt"># 專案: Bahamut 爬蟲</span><br>
+技術棧: Python 3.12, Selenium<br>
+建議用 uv 管理套件<br><br>
+<span class="cmt">## 測試</span><br>
+pytest tests/ -v<br><br>
+<span class="cmt">## 規則</span><br>
+- 禁止 rm -rf<br>
+- 新函式先寫 test<br>
+- 中文註解用繁中
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="label">層級</div>
+        <h3>兩層記憶</h3>
+        <p><strong>全域</strong> <code>~/.claude/CLAUDE.md</code> — 個人偏好,每個專案都適用 (例如「用繁中回答」)。</p>
+        <p><strong>專案</strong> <code>./CLAUDE.md</code> — 這個 repo 特有的規則,建議 commit 到 git 讓團隊共用。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-deep">
+    <h2>② Skills / Slash Commands · 可重用的「工作流」</h2>
+    <div class="sub">Unified in 2026 · 已統一為同一系統</div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="label">2026 重要更新</div>
+        <h3>Commands 與 Skills 合併</h3>
+        <p><code>.claude/commands/deploy.md</code> 和 <code>.claude/skills/deploy/SKILL.md</code> 現在都會產生同一個 <code>/deploy</code> 指令,運作方式相同。</p>
+        <p>建議改用 Skills 格式 — 支援資料夾、附屬檔案、YAML frontmatter 控制行為。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">兩種觸發方式</div>
+        <h3>手動 vs 自動</h3>
+        <p><strong>手動:</strong> 在終端打 <code>/deploy</code>,像指令一樣執行。</p>
+        <p><strong>自動:</strong> Claude 讀到你需求描述,判斷某個 skill 相關就自動呼叫。用 frontmatter 的 <code>disable-model-invocation</code> 可關閉自動觸發。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">內建 Skills</div>
+        <h3>開箱即用</h3>
+        <div class="example">
+/debug <span class="cmt">— 系統化除錯流程</span><br>
+/simplify <span class="cmt">— 簡化複雜程式碼</span><br>
+/review <span class="cmt">— 自動 code review</span><br>
+/batch <span class="cmt">— 批次重複任務</span><br>
+/loop 5m /x <span class="cmt">— 每 5 分跑一次</span><br>
+/claude-api <span class="cmt">— Claude API 查詢</span>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="label">自訂 Skill 範例</div>
+        <h3>Bahamut 爬蟲 skill</h3>
+        <div class="example">
+<span class="cmt"># .claude/skills/</span><br>
+<span class="cmt"># scrape-bahamut/SKILL.md</span><br>
+---<br>
+name: scrape-bahamut<br>
+description: 爬取巴哈<br>
+&nbsp;&nbsp;高 GP 文章並解析<br>
+context: fork<br>
+---<br>
+<span class="cmt"># 呼叫 _parse_gp_value()</span><br>
+<span class="cmt"># 然後 run() 入口...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-deep">
+    <h2>③ Subagents · 分身並行處理</h2>
+    <div class="sub">Isolated AI Personas</div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="label">核心價值</div>
+        <h3>保護主線對話不被污染</h3>
+        <p>Subagent 是<strong>獨立的 Claude 實例</strong>,有自己的 context window。主代理派任務給它,它獨自完成後<strong>只回傳結論</strong>,過程中的一堆讀檔、搜尋噪訊不會進入主對話。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">典型用途</div>
+        <h3>什麼情境該用</h3>
+        <p><strong>Explore:</strong> 掃描整個 codebase 找相關檔案 — 讀很多但只回傳地圖。</p>
+        <p><strong>文件查詢:</strong> 抓 Dexie / 某 library 的文件,讀 10 頁只回摘要。</p>
+        <p><strong>並行 review:</strong> 同時開多個 subagent 審查不同檔案。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">Plan Mode</div>
+        <h3>自動啟用 subagent</h3>
+        <p>進入 plan mode (Shift+Tab 或 <code>/plan</code>) 時,Claude Code <strong>預設</strong>會派 Explore-style subagent 去掃 repo,再把精華回傳給你規劃用。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">非同步</div>
+        <h3>Fire and forget</h3>
+        <p>可以派出 subagent 後繼續做其他事,它在背景跑完會回來通知你。適合重型重構、大量測試生成等耗時任務。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-deep">
+    <h2>④⑤⑥ 其他三個核心:MCP / Hooks / 內建指令</h2>
+    <div class="sub">External Integration · Automation · Management</div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="label">④ MCP Servers</div>
+        <h3>連外部工具</h3>
+        <p>Model Context Protocol — 讓 Claude 安全地使用外部服務。官方或社群已有 GitHub、Postgres、Playwright、Slack 等 server。</p>
+        <p><strong>vs Skills 差別:</strong> MCP 是「連線能力」,Skills 是「使用知識」。兩者互補。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">⑤ Hooks</div>
+        <h3>事件自動化</h3>
+        <p>在特定事件觸發腳本,不經過 AI 判斷 — <strong>確定性執行</strong>。</p>
+        <p>例如:每次編輯 <code>.py</code> 後自動 <code>ruff format</code>、commit 前跑 <code>pytest</code>、偵測到 <code>rm -rf</code> 立刻阻擋。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">⑥ 核心 Slash Commands</div>
+        <h3>對話管理工具</h3>
+        <p><code>/compact</code> — context 快滿時壓縮歷史。可加 focus:<code>/compact 保留爬蟲邏輯</code></p>
+        <p><code>/context</code> — 視覺化看 context 用了多少。</p>
+        <p><code>/diff</code> — 查看 Claude 所有修改。</p>
+      </div>
+      <div class="concept-card">
+        <div class="label">組合起來</div>
+        <h3>典型架構</h3>
+        <p>CLAUDE.md 定規範 → Skills 提供工作流 → Subagents 處理重活 → MCP 接外部 → Hooks 把關品質 → Slash commands 管 context。</p>
+        <p><strong>不用全部開。</strong>先一個 CLAUDE.md + 一個 skill 就夠用,再慢慢疊。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== 對照表 ======== -->
+  <div class="block-title">聊天 App vs Claude Code · 對照</div>
+
+  <div class="cc-deep">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>概念</th>
+          <th>Claude 聊天 App</th>
+          <th>Claude Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="concept">記憶</td>
+          <td class="chat">自動從過往對話抽取,你看不到檔案,透過「記住這個」口語指令更新</td>
+          <td class="code">明碼寫在 <code>CLAUDE.md</code>,可版控、可分享、可精準修改</td>
+        </tr>
+        <tr>
+          <td class="concept">Skills</td>
+          <td class="chat">Anthropic 預設 (docx / pptx / pdf / xlsx 等),使用者不能改</td>
+          <td class="code">自訂 <code>.claude/skills/</code>,frontmatter 控制觸發,可 fork 子代理</td>
+        </tr>
+        <tr>
+          <td class="concept">Slash 指令</td>
+          <td class="chat">沒有,全部用自然語言</td>
+          <td class="code">有,<code>/compact</code>、<code>/plan</code>、<code>/diff</code> 等,也可自訂</td>
+        </tr>
+        <tr>
+          <td class="concept">Subagents</td>
+          <td class="chat">沒有,單一 Agent 回應</td>
+          <td class="code">有,可派出獨立 Explore / Plan / 自訂代理</td>
+        </tr>
+        <tr>
+          <td class="concept">外部工具</td>
+          <td class="chat">Connectors:Gmail / Calendar / Drive / Slack (UI 點選)</td>
+          <td class="code">MCP Servers (設定檔定義),支援任何自建服務</td>
+        </tr>
+        <tr>
+          <td class="concept">檔案操作</td>
+          <td class="chat">上傳 / 下載,在 sandbox 中處理</td>
+          <td class="code">直接讀寫你本機 / repo,可執行任意 shell 指令</td>
+        </tr>
+        <tr>
+          <td class="concept">Artifacts</td>
+          <td class="chat">聊天旁邊渲染 HTML/React/SVG 互動元件</td>
+          <td class="code">直接把檔案寫到你的專案資料夾</td>
+        </tr>
+        <tr>
+          <td class="concept">自動化</td>
+          <td class="chat">Projects + 系統提示</td>
+          <td class="code">Hooks 確定性觸發 + Skills 條件式觸發</td>
+        </tr>
+        <tr>
+          <td class="concept">適合誰</td>
+          <td class="chat">一般對話、寫作、研究、Office 檔案生成</td>
+          <td class="code">軟體開發、重構、爬蟲、自動化工作流</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ======== 入門流程 ======== -->
+  <div class="flow-section">
+    <h2>Claude Code 建議入門流程</h2>
+    <ol class="flow-steps">
+      <li><strong>安裝:</strong> <code>npm i -g @anthropic-ai/claude-code</code>,然後在專案資料夾打 <code>claude</code> 啟動。</li>
+      <li><strong>寫第一個 CLAUDE.md:</strong> 在專案根目錄建立,列出技術棧、build/test 指令、3-5 條最重要的規則。保持精簡。</li>
+      <li><strong>先從小任務試水溫:</strong> 寫一個既有函式的測試、修已知的 bug。觀察 Claude Code 怎麼讀你的 codebase。</li>
+      <li><strong>加一個 MCP server:</strong> 挑你每天用的工具 (GitHub / 資料庫 / 搜尋引擎) 接起來。</li>
+      <li><strong>寫第一個 Skill:</strong> 從你常重複的工作流開始 — 例如 code review checklist、deploy 流程、Bahamut 爬蟲模板。</li>
+      <li><strong>加 Hooks 自動化善後:</strong> 最常見的是編輯後自動 lint、commit 前自動測試。</li>
+      <li><strong>熟了之後玩 Subagents:</strong> 跨多檔重構、大規模測試生成、並行 review — 讓 subagent 去做,主線保持乾淨。</li>
+      <li><strong>Context 管理:</strong> 對話長了就 <code>/compact</code>;快滿時看 <code>/context</code> 確認狀況;不想失去快取就<strong>不要隨便</strong> <code>/clear</code>。</li>
+    </ol>
+  </div>
+
+  <div class="footnote">
+    根據 2026 年 4 月的 Claude Code 文件與 Anthropic 官方資料整理 · Skills 2.0 · commands/skills 已統一
+  </div>
+
+</div>
+</body>
+</html>
