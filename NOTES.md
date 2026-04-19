@@ -489,3 +489,7 @@ HTTP Methods / AUTH / bearer(一定要試) /basic-auth/{user}/{passwd}
 status code / response formats / dynamic data - base64 
 cookies / Redirects / Images
 
+---
+## 20260419
+1. API，架構圖
+

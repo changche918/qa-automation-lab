@@ -46,6 +46,8 @@ print(f"回應內容:\n{response.text}")                    # 純文字格式的
 url = "https://httpbin.org/post"
 
 # 常見寫法：加上 json= 或 data= 傳送資料
+# 20260419 data 跟 json 的差異 ??? content-type 要寫在哪，這邊寫法跟 get 應該要一致，response 裡面有多少種，畫 API 流程圖
+# 20260419  "data": "", 為什麼是空的 ???
 # requests.post(url, json={"name": "Ryan"})  ← 傳 JSON，Content-Type 自動設為 application/json
 # requests.post(url, data={"name": "Ryan"})  ← 傳表單，Content-Type 為 application/x-www-form-urlencoded
 response = requests.post(url)  # 這裡沒帶 body，只是示範方法本身

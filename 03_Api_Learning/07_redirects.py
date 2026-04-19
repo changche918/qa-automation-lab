@@ -26,7 +26,10 @@ response = requests.get(url)
 
 print(f"狀態碼: {response.status_code}")  # 最終會是 200（跳轉完的結果）
 print(f"經過了幾次跳轉: {len(response.history)}")  # response.history 儲存每一次跳轉的 Response
+# 20260419 記錄他跳轉的明細 (第一、第二...)
 print(f"回應內容: {response.text}")
+
+
 
 # ============================================================
 # 進階用法：控制跳轉行為
