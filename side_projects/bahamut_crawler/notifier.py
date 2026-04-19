@@ -93,84 +93,63 @@ class DiscordNotifier(Notifier):
 
 
 class LINENotifier(Notifier):
-    """透過 LINE Messaging API 發訊息。
+    """Adapter：把 side_projects/utils/line_notifier.py 的 LineNotifier
+    包裝成符合 Notifier 介面的物件。
 
-    ⚠️ 注意：LINE Notify 已於 2025-04-01 停止服務，本類別使用新的 Messaging API。
+    這就是 Adapter Pattern 的經典應用：
+        - 舊版 LineNotifier 只會 send_text(str) → 不符 Notifier 介面
+        - 我們不改舊版（OCP 原則），寫一個薄轉接層
+        - 爬蟲 code 用 Notifier 抽象介面，不知道底下是誰實作
 
-    設定步驟：
-        1. 到 https://developers.line.biz/console/ 登入並建立 Provider
-        2. 建立 "Messaging API" channel
-        3. 到 Basic settings → 取得 Channel secret
-        4. 到 Messaging API → Issue 一組 Channel access token
-        5. 手機開啟 LINE，掃 QR code 加 bot 為好友
-        6. 到 Messaging API 頁面底部 → 取得 Your user ID
-        7. 設定環境變數：
-               export LINE_CHANNEL_TOKEN="xxx"
-               export LINE_USER_ID="Uxxx..."   (或用 broadcast 發給所有好友)
-
-    費用：免費方案每月 200 則 push message；broadcast 不計數。
+    需要的環境變數（由底層 LineNotifier 讀取）：
+        LINE_CHANNEL_ACCESS_TOKEN
+        LINE_USER_ID
     """
-
-    PUSH_URL = "https://api.line.me/v2/bot/message/push"
-    BROADCAST_URL = "https://api.line.me/v2/bot/message/broadcast"
 
     def __init__(
         self,
-        channel_token: str,
-        user_id: str | None = None,  # None = broadcast 給所有加過好友的人
-        timeout: int = 10,
+        channel_access_token: str | None = None,
+        user_id: str | None = None,
     ):
-        if not channel_token:
-            raise ValueError("LINE channel token 不能為空")
-        self.channel_token = channel_token
-        self.user_id = user_id
-        self.timeout = timeout
+        # 延遲 import：避免 side_projects.utils 不可用時整個 package 掛掉
+        from side_projects.utils.line_notifier import LineNotifier as _LineImpl
+
+        self._impl = _LineImpl(
+            channel_access_token=channel_access_token,
+            user_id=user_id,
+        )
 
     def notify(self, post: Post, new_replies: list[Reply]) -> None:
         if not new_replies:
             return
 
-        # LINE 一則 push 最多 5 個 message 物件，所以截斷
-        messages = [self._build_header_message(post, len(new_replies))]
-        for r in new_replies[:4]:
-            messages.append(self._build_reply_message(post, r))
-
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.channel_token}",
-        }
-
-        # 有指定 user_id 用 push（點對點），否則用 broadcast（全部好友）
-        if self.user_id:
-            url = self.PUSH_URL
-            payload = {"to": self.user_id, "messages": messages}
-        else:
-            url = self.BROADCAST_URL
-            payload = {"messages": messages}
-
+        text = self._format_message(post, new_replies)
         try:
-            resp = requests.post(url, json=payload, headers=headers, timeout=self.timeout)
-            resp.raise_for_status()
+            self._impl.send_text(text)
             logger.info("LINE 通知送出：%d 則爆文", len(new_replies))
-        except requests.RequestException as e:
-            # LINE 回 400 通常是訊息格式錯；回 401 是 token 錯；回 429 是額度用完
-            logger.error("LINE 通知失敗：%s (response: %s)",
-                         e, getattr(e.response, "text", "N/A"))
+        except Exception as e:
+            # 通知失敗不該讓整個爬蟲爆炸
+            logger.error("LINE 通知失敗：%s", e)
 
-    def _build_header_message(self, post: Post, count: int) -> dict:
-        return {
-            "type": "text",
-            "text": f"🔥 {post.title}\n發現 {count} 則新爆文！\n{post.url}",
-        }
+    def _format_message(self, post: Post, new_replies: list[Reply]) -> str:
+        """組出純文字訊息。LINE 單則最多 5000 字，底層會自動截斷。"""
+        lines = [
+            f"🔥 {post.title}",
+            f"發現 {len(new_replies)} 則新爆文：",
+            "",
+        ]
+        for r in new_replies[:5]:  # 只列前 5 則，避免訊息太長
+            preview = r.content[:80].replace("\n", " ")
+            gp_label = "爆" if r.is_exploded else str(r.gp)
+            lines.append(f"[{gp_label}] B{r.floor} {r.author}")
+            lines.append(f"  {preview}...")
+            lines.append("")
 
-    def _build_reply_message(self, post: Post, reply: Reply) -> dict:
-        """用 Flex Message 讓訊息有樣式（進階寫法，展示能力）。"""
-        preview = reply.content[:200] + ("..." if len(reply.content) > 200 else "")
-        gp_label = "爆" if reply.is_exploded else str(reply.gp)
-        return {
-            "type": "text",
-            "text": f"[{gp_label}] B{reply.floor} {reply.author}\n{preview}",
-        }
+        if len(new_replies) > 5:
+            lines.append(f"...還有 {len(new_replies) - 5} 則未列出")
+
+        lines.append(f"\n原文：{post.url}")
+        return "\n".join(lines)
 
 
 class NotificationTracker:

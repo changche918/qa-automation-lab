@@ -14,6 +14,11 @@
     # 偵測到新爆文時發送 Discord 通知（需先設 DISCORD_WEBHOOK_URL 環境變數）
     export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/xxx/yyy"
     python -m side_projects.bahamut_crawler.cli --bsn 23805 --sna 729963 --notify discord
+
+    # 用 LINE 通知（需先設 LINE_CHANNEL_ACCESS_TOKEN + LINE_USER_ID）
+    export LINE_CHANNEL_ACCESS_TOKEN="..."
+    export LINE_USER_ID="Uxxx..."
+    python -m side_projects.bahamut_crawler --bsn 23805 --sna 729963 --notify line
 """
 from __future__ import annotations
 
@@ -21,6 +26,14 @@ import argparse
 import logging
 import os
 import sys
+
+# 自動載入專案根目錄的 .env（裡面放 LINE token、Discord webhook 等敏感資訊）
+# 若沒裝 python-dotenv 就跳過，不強制要求，保持向下相容
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 from .notifier import (
     ConsoleNotifier, DiscordNotifier, LINENotifier, NotificationTracker, Notifier,
@@ -89,12 +102,13 @@ def build_notifier(args: argparse.Namespace) -> Notifier | None:
             sys.exit(2)
         return DiscordNotifier(webhook)
     if args.notify == "line":
-        token = os.environ.get("LINE_CHANNEL_TOKEN")
-        if not token:
-            logging.error("請先設定環境變數 LINE_CHANNEL_TOKEN")
+        # LINENotifier 是 Adapter，底層會自動從 LINE_CHANNEL_ACCESS_TOKEN / LINE_USER_ID
+        # 讀環境變數並驗證，我們不需要重複檢查
+        try:
+            return LINENotifier()
+        except RuntimeError as e:
+            logging.error(str(e))
             sys.exit(2)
-        user_id = os.environ.get("LINE_USER_ID")  # 沒設就改用 broadcast
-        return LINENotifier(token, user_id=user_id)
     return None
 
 

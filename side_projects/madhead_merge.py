@@ -3,7 +3,7 @@ import time
 import sys
 
 from pathlib import Path
-from utils.find_high_gp_merge import FindHighGP
+from utils.find_high_gp import FindHighGP
 import argparse
 
 project_root = Path(__file__).resolve().parent.parent
