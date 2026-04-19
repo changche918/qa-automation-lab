@@ -491,5 +491,7 @@ cookies / Redirects / Images
 
 ---
 ## 20260419
-1. API，架構圖
+1. API，架構圖，可以幫助自己記憶
+2. data 跟 json 的差異 ??? content-type 要寫在哪，這邊寫法跟 get 應該要一致，response 裡面有多少種，畫 API 流程圖
+3. 查一下 "data": "", 為什麼是空的 ???
 
