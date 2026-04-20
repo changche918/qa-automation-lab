@@ -3,76 +3,103 @@ import requests
 # ============================================================
 #  Status Code（HTTP 狀態碼）
 # ============================================================
-# 每個 API 回應都會帶一個 3 位數的狀態碼，告訴你「這次請求結果如何」。
-# 分類規則：
-#   1xx → 資訊性（很少用到）
-#   2xx → 成功  ✅
-#   3xx → 重新導向（瀏覽器會自動跟著跳轉）
-#   4xx → 客戶端錯誤（你的請求有問題）❌
-#   5xx → 伺服器錯誤（對方的系統出問題）❌
+# 3 位數狀態碼，告訴你請求結果：
+#   2xx → 成功
+#   3xx → 重新導向
+#   4xx → 客戶端錯誤（你的請求有問題）
+#   5xx → 伺服器錯誤
 #
-# 常見狀態碼速查：
-#   200 OK             → 請求成功，有回應內容
-#   201 Created        → 新增資料成功（POST 後常見）
-#   204 No Content     → 成功但無回應內容（DELETE 後常見）
-#   400 Bad Request    → 請求格式錯誤（少帶參數、格式不對）
-#   401 Unauthorized   → 未帶驗證資訊或驗證失敗
-#   403 Forbidden      → 有驗證但沒有權限
-#   404 Not Found      → 找不到該資源
-#   500 Internal Error → 伺服器內部錯誤
+# 常見狀態碼：
+#   200 OK             → 成功
+#   201 Created        → 新增成功（POST 後常見）
+#   204 No Content     → 成功但無內容（DELETE 後常見）
+#   400 Bad Request    → 請求格式錯誤
+#   401 Unauthorized   → 未驗證或驗證失敗
+#   403 Forbidden      → 已驗證但沒權限
+#   404 Not Found      → 資源不存在
+#   500 Internal Error → 伺服器出問題
 #
-# 端點格式：https://httpbin.org/status/{codes}
-# 支援方法：GET, POST, PUT, DELETE, PATCH
-# codes 可以填單一狀態碼，也可以填多個（用逗號分隔），多個時會隨機回傳其中一個
+# 測試端點：https://httpbin.org/status/{codes}
+# codes 填多個用逗號分隔時，伺服器會隨機回一個。
 
 # ============================================================
 # --- GET 200：讀取成功 ---
 # ============================================================
-url = "https://httpbin.org/status/200"
-response = requests.get(url)
-print(f"[GET] 狀態碼: {response.status_code}")  # 期望: 200
+get_url = "https://httpbin.org/status/200"
+
+get_response = requests.get(
+    get_url,
+    json={"name": "Ryan", "email": "ryan@xxx.xxx.xxx"},
+    timeout=5
+)
+
+print(f"[GET] 狀態碼: {get_response.status_code}")
 
 # ============================================================
 # --- POST 201：新增成功 ---
 # ============================================================
-# 201 比 200 更精確地表達「資源已建立」
-# 良好設計的 API 在 POST 成功後應回 201，而非 200
-url = "https://httpbin.org/status/201"
-response = requests.post(url)
-print(f"[POST] 狀態碼: {response.status_code}")  # 期望: 201
+# 201 比 200 更精確，表達「資源已建立」，設計良好的 API POST 後會這樣回
+post_url = "https://httpbin.org/status/201"
+
+post_response = requests.post(
+    post_url,
+    json={"name": "Ryan", "email": "ryan@xxx.xxx.xxx"},
+    timeout=5
+)
+
+print(f"[POST] 狀態碼: {post_response.status_code}")
 
 # ============================================================
 # --- PUT 200：更新成功 ---
 # ============================================================
-# PUT 成功通常回 200（附上更新後的資料）或 204（不附內容）
-url = "https://httpbin.org/status/200"
-response = requests.put(url)
-print(f"[PUT] 狀態碼: {response.status_code}")  # 期望: 200
+put_url = "https://httpbin.org/status/200"
+
+put_response = requests.put(
+    put_url,
+    json={"name": "Ryan", "email": "ryan@xxx.xxx.xxx"},
+    timeout=5
+)
+
+print(f"[PUT] 狀態碼: {put_response.status_code}")
 
 # ============================================================
 # --- PATCH 200：部分更新成功 ---
 # ============================================================
-url = "https://httpbin.org/status/200"
-response = requests.patch(url)
-print(f"[PATCH] 狀態碼: {response.status_code}")  # 期望: 200
+patch_url = "https://httpbin.org/status/200"
+
+patch_response = requests.patch(
+    patch_url,
+    json={"email": "ryan@xxx.xxx.xxx"},
+    timeout=5
+)
+
+print(f"[PATCH] 狀態碼: {patch_response.status_code}")
 
 # ============================================================
 # --- DELETE 204：刪除成功但無內容 ---
 # ============================================================
-# 刪除後資源不存在了，所以沒有內容可回，用 204 表達「成功但無回應」
-url = "https://httpbin.org/status/204"
-response = requests.delete(url)
-print(f"[DELETE] 狀態碼: {response.status_code}")  # 期望: 204
+# 204 規定不能帶 body，所以 .text 會是空字串、不能呼叫 .json()
+delete_url = "https://httpbin.org/status/204"
+
+delete_response = requests.delete(
+    delete_url,
+    timeout=5
+)
+
+print(f"[DELETE] 狀態碼: {delete_response.status_code}")
 
 # ============================================================
 # --- 多個狀態碼（隨機回傳）---
 # ============================================================
-# 傳入多個狀態碼用逗號分隔，伺服器每次隨機選一個回傳。
-# 這在測試「你的程式能否正確處理不同狀態碼」時很有用。
-# 實務上，寫程式時應該針對不同狀態碼做不同處理：
+# 用來測試「程式能否處理不同狀態碼」。實務上要依狀態碼分流：
 #   if response.status_code == 200: ...
 #   elif response.status_code == 404: ...
-#   elif response.status_code >= 500: ...（伺服器錯誤，可重試）
-url = "https://httpbin.org/status/200,404,500"
-response = requests.get(url)
-print(f"[GET 隨機] 狀態碼: {response.status_code}")  # 可能是 200、404 或 500
+#   elif response.status_code >= 500: ...（可考慮重試）
+random_url = "https://httpbin.org/status/200,404,500"
+
+random_response = requests.get(
+    random_url,
+    timeout=5
+)
+
+print(f"[GET 隨機] 狀態碼: {random_response.status_code}")

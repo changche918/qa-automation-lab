@@ -1,55 +1,75 @@
 import requests
+# from requests.auth import HTTPBasicAuth  # ← 若要用下面「等價寫法」才需要 import
 
 # ============================================================
 #  Auth（身分驗證）
 # ============================================================
-# API 通常需要驗證「你是誰」才能存取資料，常見有兩種方式：
-#
-#   1. Basic Auth（基本驗證）：帳號 + 密碼，最簡單，安全性較低
-#      → 帳密會被 Base64 編碼後放進 Authorization header 傳送
-#      → 一定要搭配 HTTPS，否則帳密幾乎等於明文
-#
-#   2. Bearer Token（令牌驗證）：用一組 token 代替帳密，主流做法
-#      → 通常先用帳密換取 token（如 OAuth 登入流程），之後每次用 token 驗證
-#      → token 可以設定期限、權限範圍，比帳密更安全、更靈活
+# 常見兩種方式：
+#   1. Basic Auth：帳密會被 Base64 編碼放進 Authorization header
+#                  → Base64 不是加密，一定要搭配 HTTPS
+#   2. Bearer Token：用 token 代替帳密，主流做法，可設期限與權限範圍
 
 # ============================================================
-# --- Basic Auth 範例 ---
+# --- Basic Auth 範例（成功） ---
 # ============================================================
-# URL 裡直接帶了帳號（myuser）和密碼（mypassword），這是 httpbin 的測試端點設計。
-# 實際 API 不會把帳密放在 URL，而是用 auth 參數傳遞。
-url = "https://httpbin.org/basic-auth/myuser/mypassword"
+# /basic-auth/{user}/{pass} 端點會比對你送來的帳密是否跟 URL 裡相同
+basic_url = "https://httpbin.org/basic-auth/myuser/mypassword"
 
-# auth=("帳號", "密碼") 是 requests 的快捷語法
-# requests 會自動幫你把帳密轉成 Base64 並放進 Authorization header：
-#   Authorization: Basic bXl1c2VyOm15cGFzc3dvcmQ=
-response = requests.get(url, auth=("myuser", "mypassword"))
+# auth=("帳號", "密碼") 是快捷語法，requests 會自動組 Authorization header
+basic_response = requests.get(
+    basic_url,
+    auth=("myuser", "mypassword"),
+    timeout=5
+)
 
-print(f"狀態碼: {response.status_code}")  # 200 = 驗證成功；401 = 驗證失敗
-print(f"回應內容: {response.json()}")     # .json() 把 JSON 字串轉成 Python dict，方便取值
+print("--- Basic Auth 成功 ---")
+print(f"狀態碼: {basic_response.status_code}")
+print(f"送出的 Authorization: {basic_response.request.headers['Authorization']}")
+# ↑ Basic bXl1c2VyOm15cGFzc3dvcmQ= ← Base64 編碼後的帳密
+print(f"回應內容: {basic_response.json()}")
+
+# 等價寫法（語意完全相同）：
+# basic_response = requests.get(basic_url, auth=HTTPBasicAuth("myuser", "mypassword"), timeout=5)
 
 # ============================================================
-# --- Bearer Token 範例 ---
+# --- Basic Auth 範例（失敗） ---
 # ============================================================
-# Bearer Token 是現代 API 最常見的驗證方式（例如 GitHub API、OpenAI API）。
-# token 通常從「登入 API」或「API 金鑰管理頁面」取得，要妥善保管不要洩漏。
-url = "https://httpbin.org/bearer"
+basic_fail_response = requests.get(
+    basic_url,
+    auth=("myuser", "wrongpassword"),
+    timeout=5
+)
+
+print("\n--- Basic Auth 失敗 ---")
+print(f"狀態碼: {basic_fail_response.status_code}")  # 401 Unauthorized
+print(f"回應內容: {basic_fail_response.text!r}")     # 失敗 body 是空字串，用 !r 才看得出
+
+# ============================================================
+# --- Bearer Token 範例（成功） ---
+# ============================================================
+# 沒有快捷語法，要自己組 Authorization header，格式固定為 "Bearer <token>"
+bearer_url = "https://httpbin.org/bearer"
 token = "my-secret-token"
 
-# 手動把 token 放進 Authorization header，格式固定為 "Bearer <token>"
-# 沒有快捷語法，必須自己組 headers dict 傳入
-response = requests.get(url, headers={"Authorization": f"Bearer {token}"})
+bearer_response = requests.get(
+    bearer_url,
+    headers={"Authorization": f"Bearer {token}"},
+    timeout=5
+)
 
-print(f"狀態碼: {response.status_code}")  # 200 = token 有效；401 = token 無效或過期
-print(f"回應內容: {response.json()}")
+print("\n--- Bearer Token 成功 ---")
+print(f"狀態碼: {bearer_response.status_code}")
+print(f"回應內容: {bearer_response.json()}")
 
 # ============================================================
-# 小結：兩種驗證方式比較
+# --- Bearer Token 範例（失敗） ---
 # ============================================================
-# Basic Auth：
-#   優點 → 設定簡單，一行搞定
-#   缺點 → 每次都傳帳密，一旦洩漏就很危險；無法設定權限範圍或有效期限
-#
-# Bearer Token：
-#   優點 → 可設有效期限、可依需求給予不同權限、可隨時撤銷單一 token
-#   缺點 → 需要先有取得 token 的流程（登入 or 申請 API key）
+# 不帶 Authorization header，模擬沒登入或 token 過期
+bearer_fail_response = requests.get(
+    bearer_url,
+    timeout=5
+)
+
+print("\n--- Bearer Token 失敗 ---")
+print(f"狀態碼: {bearer_fail_response.status_code}")  # 401
+print(f"回應內容: {bearer_fail_response.text!r}")

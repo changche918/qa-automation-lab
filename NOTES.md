@@ -492,6 +492,20 @@ cookies / Redirects / Images
 ---
 ## 20260419
 1. API，架構圖，可以幫助自己記憶
-2. data 跟 json 的差異 ??? content-type 要寫在哪，這邊寫法跟 get 應該要一致，response 裡面有多少種，畫 API 流程圖
-3. 查一下 "data": "", 為什麼是空的 ???
+2. data 跟 json 的差異 ?
+    - 表單格式 → 實際送出: name=Alice&age=30
+        requests.post(url, data={"name": "Alice", "age": 30})
+    - JSON 格式 → 實際送出: {"name": "Alice", "age": 30}
+        requests.post(url, json={"name": "Alice", "age": 30})
+3. Content-type 是什麼 ?
+    - Content-Type 是 HTTP 標頭（Header）的一個欄位，告訴伺服器「我送給你的資料是什麼格式」，讓伺服器知道怎麼解析它。
+        常見的 Content-Type 值：
+        - application/json — JSON 格式，現代 API 最常用
+        - application/x-www-form-urlencoded — 表單格式，HTML <form> 預設用這個
+        - multipart/form-data — 上傳檔案時使用（例如上傳圖片）
+        - text/html — HTML 網頁內容
+        - text/plain — 純文字
+        - application/xml — XML 格式（較舊的 API 會用）
+        - application/octet-stream — 二進位資料（不指定類型的原始檔案）
+4. 查一下 "data": "", 為什麼是空的 ???
 
