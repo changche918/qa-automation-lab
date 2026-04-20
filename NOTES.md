@@ -507,5 +507,6 @@ cookies / Redirects / Images
         - text/plain — 純文字
         - application/xml — XML 格式（較舊的 API 會用）
         - application/octet-stream — 二進位資料（不指定類型的原始檔案）
-4. 查一下 "data": "", 為什麼是空的 ???
+4. 查一下 "data": "", 為什麼是空的 ?
+    - 因為是 DELETE
 
