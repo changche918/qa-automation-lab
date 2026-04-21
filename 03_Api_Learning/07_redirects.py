@@ -30,21 +30,27 @@ print(f"經過了幾次跳轉: {len(response.history)}")
 hitory 是一個 list，裡面是每次跳轉的 response 物件
 裡面有 status,headers,url,text
 """
-for row in response.history:
+for row in response.history: # 20260420 用自己方式解釋物件(for迴圈)，相似的情境 ?
     print(f"{row.status_code} → {row.headers.get('Location')}")  # 每次跳轉的狀態碼 + 下一個 URL
-print(f"回應內容: {response.text}")
 
+row status 200 herders , 
+row status 200 herders ,
+
+print(f"回應內容: {response.text}")
+# 20260420 get vs ['Location'] 差異 ? 優缺點
+# 為什麼可以這樣寫 ["Location"] 20260420
 # ============================================================
 # 進階用法
 # ============================================================
 # 不自動跳轉，只看第一層：
 # response = requests.get(url, allow_redirects=False)
-# print(response.status_code, response.headers["Location"])  # 302 + 下一個 URL
-#
+print(response.status_code, response.headers["Location"])  # 302 + 下一個 URL # 20260420 為什麼可以這樣寫 ["Location"]
+data[0,1,2,3]
+
 # 限制跳轉次數：
 # session = requests.Session()
 # session.max_redirects = 5
 #
 # 查看完整跳轉路徑：
 # for r in response.history:
-#     print(f"  {r.status_code} → {r.headers.get('Location')}")
+#     print(f"  {r.status_code} → {r.headers.get( 'Location')}")

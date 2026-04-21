@@ -15,11 +15,14 @@ import requests
 # ============================================================
 # --- GET ---
 # ============================================================
+print("=== GET ===")
 get_url = "https://httpbin.org/get"
 
 # 兩種寫法等價：
 #   requests.get(get_url)                ← 簡潔（最常用）
-#   requests.request("GET", get_url)     ← 通用（適合動態決定方法）
+#   requests.request("GET", get_url)     ← 通用（適合動態決定方法)
+
+# 20260420 有空抽 function 看看
 get_response = requests.request(
     "GET",
     get_url,
@@ -38,6 +41,7 @@ print(f"回應內容:\n{get_response.text}")
 # 傳資料的兩種參數：
 #   json={...}  → Content-Type = application/json（現代 API）
 #   data={...}  → Content-Type = application/x-www-form-urlencoded（表單）
+print("=== POST ===")
 post_url = "https://httpbin.org/post"
 
 post_response = requests.post(
