@@ -5,43 +5,52 @@ import requests
     python xxxx --mode api/web --?? > 執行 API/執行爬蟲 (4/27之前) + AI schedule 掛起來
 """
 
-# ============================================================
-#  巴哈姆特神魔之塔版 → 爬取討論版文章
-# ============================================================
-# 「非官方爬蟲」範例：對一般網站（非 REST API）發請求。
-# 很多網站會看 User-Agent，不像瀏覽器就擋掉，所以必須自訂 header 模擬瀏覽器。
-
-# ============================================================
-# --- 目標 URL ---
-# ============================================================
 # bsn=23805 是版代，snA=730010 是文章代號
-url_gamer_content = "https://forum.gamer.com.tw/C.php?bsn=23805&snA=730010&tnum=1"
+# url_gamer_content = "https://forum.gamer.com.tw/C.php?bsn=23805&snA=730010&tnum=1"
+url_gamer_board = "https://forum.gamer.com.tw/B.php?bsn=23805"
 
-# ============================================================
-# --- 自訂 Headers（關鍵步驟）---
-# ============================================================
-# User-Agent 是擋爬蟲最常見的判斷，一定要設；其他 header 看網站實際需求
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    # 視需求可選：
-    # "Referer": "https://www.gamer.com.tw/"             ← 模擬從首頁點進來
-    # "Accept-Language": "zh-TW,zh;q=0.9"                ← 多語系網站會看這個
+    "Referer": "https://www.gamer.com.tw/", # ← 模擬從首頁點進來
+    "Accept-Language": "zh-TW,zh;q=0.9" # ← 多語系網站會看這個
 }
 
-# ============================================================
-# --- 發送請求 ---
-# ============================================================
-response_gamer_content = requests.get(url_gamer_content, headers=headers)
+response_gamer_content = requests.get(
+    url_gamer_board,
+    headers=headers
+)
 
-print(f"狀態碼: {response_gamer_content.status_code}")
-# 200 成功 / 403 被擋 / 429 爬太快被限速
+# print(f"狀態碼: {response_gamer_content.status_code}")
+# print(response_gamer_content.text)
 
-# .text = HTML 原始碼，後續要用 BeautifulSoup 解析
-print(response_gamer_content.text)
+html_text = response_gamer_content.text
+results = []
 
-# ============================================================
-# 爬蟲倫理
-# ============================================================
-# 1. 遵守目標網站的 robots.txt
-# 2. 控制請求頻率，避免造成伺服器負擔
-# 3. 有官方 API 優先用 API
+rows = html_text.split('class="b-list__row')[1:]   # 每塊是一篇文章
+
+for row in rows:
+    if 'b-list__row--sticky' in row[:200]:    # 只看開頭一小段判斷
+        continue
+    i = row.find('class="b-list__main__title"')
+    if i == -1:
+        continue
+    start = row.find(">", i) + 1
+    end = row.find("</p>", start)
+    results.append(row[start:end].strip())
+
+
+# 想要的資料長這樣 : class="b-list__main__title">【閒聊】All max自選剩七天求建議</p>
+# 要排除的資料 : class="b-list__row b-list__row--sticky b-list-item b-imglist-item"
+# chunks = html_text.split('class="b-list__main__title"')
+
+# mode = "post"
+# for chunk in chunks[1:]:
+#     start = chunk.find(">") + 1 # 找到 > 和 </p> 之間的文字就是標題
+#     end = chunk.find("</p>")
+#     title = chunk[start:end]
+#     results.append(title)
+
+    count = 1
+for post_title in results:
+    print(f"{count}.{post_title}")
+    count += 1
