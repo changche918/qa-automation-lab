@@ -97,22 +97,3 @@ response_gamer_content_a = requests.get(
 with open("gamer_content.txt", "w", encoding="utf-8") as f:
     f.write(response_gamer_content_a.text)
 
-# page = 1
-# all_results = []
-
-# while True:
-#     params = {**base_params, "page": page}
-#     resp = requests.get(BASE_URL, params=params, headers=HEADERS)
-#     resp.raise_for_status()                   # 非 200 直接報錯
-
-#     posts = parse_page(resp.text)             # 假設你的解析函式回傳 list
-#     if not posts:                             # 空的 → 已經超過最後一頁
-#         print(f"第 {page} 頁沒資料，結束")
-#         break
-
-#     print(f"✔ 第 {page} 頁：{len(posts)} 篇")
-#     all_results.extend(posts)
-
-#     page += 1
-#     time.sleep(1)
-

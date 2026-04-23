@@ -49,7 +49,8 @@ driver_control = WebController(
 # 20260404 調整 log 路徑寫法，args 可讀性調整、依照使用者選擇模式執行 PR #12
 
 # 真實專案要爬的頁面
-driver_control.get_url("https://forum.gamer.com.tw/C.php?bsn=23805&snA=729963&tnum=31")
+# driver_control.get_url("https://forum.gamer.com.tw/C.php?bsn=23805&snA=729963&tnum=31")
+driver_control.get_url("https://forum.gamer.com.tw/B.php?bsn=23805")
 
 # 1:取出第一筆爆的文章標題 或 2:取出所有爆的文章標題 (這行限定放在主程式)
 choice_content_type = input(
@@ -57,18 +58,18 @@ choice_content_type = input(
 ).strip()
 
 finder = FindHighGP(driver_control.driver)
-# titles, best_art_elem = finder.scan_high_gp_post()
-# log.save_txt(file_path, titles)
+titles, best_art_elem = finder.scan_high_gp_post()
+log.save_txt(file_path, titles)
 
-# if best_art_elem:
-#     best_art_elem.click()
+if best_art_elem:
+    best_art_elem.click()
 
-#     time.sleep(3)
+    time.sleep(3)
 
-#     current_page_url = driver_control.get_current_url()
-#     log.save_txt(file_path, [f"文章網址: {current_page_url}"])
+    current_page_url = driver_control.get_current_url()
+    log.save_txt(file_path, [f"文章網址: {current_page_url}"])
 
-# finder.scan_high_gp_content()  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
+finder.scan_high_gp_content()  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
 best_text = finder.scan_high_gp('content', choice_content_type)
 
 log.save_txt(content_path, best_text)
