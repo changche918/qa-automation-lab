@@ -47,16 +47,13 @@ while True:
     else:
         url = f"https://forum.gamer.com.tw/C.php?page={page}&bsn=23805&snA=729963&tnum=31"
 
-    # 抓 HTML（只抓一次，後續判斷下一頁也用這份）
-    html_text = finder.fetch_html(url)
-
-    # 解析本頁高 GP 回覆
-    best_text = finder._parse_content(html_text, choice_content_type)
+    # 掃本頁的高 GP 回覆；回傳 (清單, 是否還有下一頁)
+    best_text, has_next = finder.scan_high_gp_content_api(url, choice_content_type)
     print(f"第 {page} 頁結果：{best_text}")
     log.save_txt(content_path, best_text)
 
     # 判斷是否還有下一頁；沒有就結束
-    if not finder.has_next_page(html_text):
+    if not has_next:
         print("已經是最後一頁，停止")
         break
 

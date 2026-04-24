@@ -1,9 +1,11 @@
 import time
 import sys
 import argparse
+from selenium.webdriver.common.by import By
 
 from pathlib import Path
-from utils.find_high_gp_with_api import FindHighGP
+from utils.find_high_gp_with_api import FindHighGP as FindHighGPApi
+from utils.find_high_gp import FindHighGP as FindHighGPWeb
 
 project_root = Path(__file__).resolve().parent.parent
 if str(project_root) not in sys.path:
@@ -20,7 +22,6 @@ file_path = f"{log_dir}post_{file_extension}"
 content_path = f"{log_dir}content_{file_extension}"
 
 log = FileHandler()
-driver_control = WebController()
 
 # 1. 建立參數解析器
 parser = argparse.ArgumentParser(description="爬蟲與 API 執行工具")
@@ -39,13 +40,15 @@ if args.mode == 'api':
         "\n請輸入編號選擇功能 (1:取出第一筆爆的回覆文標題 或 2:取出所有爆的回覆文標題): "
     ).strip()
 
-    finder = FindHighGP()
+    finder = FindHighGPApi()
 
     # ── 1. 掃「版面列表頁」→ 用 BOARD_URL，同時拿到本頁 GP 最高文章的網址 ──
     titles, best_art_url = finder.scan_high_gp_post_api(BOARD_URL)
     log.save_txt(file_path, titles)
 
     print(best_art_url)
+    # https://forum.gamer.com.tw/C.php?bsn=23805&snA=610529&tnum=23154
+    # https://forum.gamer.com.tw/C.php?page=2&bsn=23805&snA=610529&tnum=23154
 
     if best_art_url:
         # 記錄「點進去」的文章網址，對應原本 Selenium 版 get_current_url() 的寫法
@@ -53,7 +56,7 @@ if args.mode == 'api':
 
         # ── 2. 掃「本頁 GP 最高那篇文章」的回覆 ──
         best_text, has_next = finder.scan_high_gp_content_api(best_art_url, choice_content_type)
-        print(best_text)
+
         log.save_txt(content_path, best_text)
 
         # 以下是換頁後 + 找到那頁 GP 最高的回覆文
@@ -72,6 +75,8 @@ if args.mode == 'api':
                 break
 
 elif args.mode == 'web':
+    driver_control = WebController()
+
     # 真實專案要爬的頁面
     # driver_control.get_url("https://forum.gamer.com.tw/C.php?bsn=23805&snA=729963&tnum=31")
     driver_control.get_url("https://forum.gamer.com.tw/B.php?bsn=23805")
@@ -81,7 +86,7 @@ elif args.mode == 'web':
         "\n請輸入編號選擇功能 (1:取出第一筆爆的回覆文標題 或 2:取出所有爆的回覆文標題): "
     ).strip()
 
-    finder = FindHighGP(driver_control.driver)
+    finder = FindHighGPWeb(driver_control.driver)
     titles, best_art_elem = finder.scan_high_gp_post()
     log.save_txt(file_path, titles)
 
@@ -93,8 +98,8 @@ elif args.mode == 'web':
         current_page_url = driver_control.get_current_url()
         log.save_txt(file_path, [f"文章網址: {current_page_url}"])
 
-    finder.scan_high_gp_content()  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
-    best_text = finder.scan_high_gp('content', choice_content_type)
+    finder.scan_high_gp_content(choice_content_type)  # 進到巴哈人氣最高文章後的第一頁，爬取人氣最高回覆
+    best_text = finder.scan_high_gp_content(choice_content_type)
 
     log.save_txt(content_path, best_text)
 
@@ -113,7 +118,7 @@ elif args.mode == 'web':
             next_btn.click()
             time.sleep(5)
             print("換頁成功")
-            best_text = finder.scan_high_gp('content', choice_content_type)
+            best_text = finder.scan_high_gp_content(choice_content_type)
             log.save_txt(content_path, best_text)
 
         else:

@@ -113,11 +113,14 @@ class FindHighGP:
         """
         # 1. 抓網頁 HTML
         resp = requests.get(url, headers=HEADERS)
-        resp.raise_for_status()
         html_text = resp.text
 
-        # 2. 判斷是否還有下一頁：有 class="next" 且不是停用狀態 class="next no"
-        has_next = 'class="next"' in html_text and 'class="next no"' not in html_text
+        # 2. 判斷是否還有下一頁：
+        #    巴哈 HTML 的引號會混用 —— 啟用按鈕是 class='next'（單引號），停用是 class="next no"（雙引號）
+        #    所以兩種引號都要檢查
+        next_enabled = 'class="next"' in html_text or "class='next'" in html_text
+        next_disabled = 'class="next no"' in html_text or "class='next no'" in html_text
+        has_next = next_enabled and not next_disabled
 
         high_gp_content = []
         page_best_gp = -1
@@ -138,13 +141,32 @@ class FindHighGP:
             g_end = post.find("</", g_start)
             gp_text = post[g_start:g_end].strip()
 
-            # 4-2. 抓內文：從 class="c-article__content" 後的 > 到最近的 </div>
-            # 注意：若內文含巢狀 <div>（少見，如引用、特殊排版），會抓到第一個 </div>，內容可能不完整
+            # 4-2. 抓內文：從 class="c-article__content" 後的 > 開始
+            #      內文會有多個巢狀 <div>（巴哈把每一段包在 <div> 裡），不能只抓第一個 </div>
+            #      要用「深度計數」找出 c-article__content 這個外層 div 的配對結束標籤：
+            #      每碰到一個 <div 深度 +1；每碰到一個 </div> 深度 -1；歸零時就是配對位置
             c = post.find('class="c-article__content')
             if c == -1:
                 continue
             c_start = post.find(">", c) + 1
-            c_end = post.find("</div>", c_start)
+
+            depth = 1
+            pos = c_start
+            c_end = c_start
+            while depth > 0:
+                next_open = post.find("<div", pos)
+                next_close = post.find("</div>", pos)
+                if next_close == -1:
+                    c_end = len(post)
+                    break
+                if next_open != -1 and next_open < next_close:
+                    depth += 1
+                    pos = next_open + len("<div")
+                else:
+                    depth -= 1
+                    if depth == 0:
+                        c_end = next_close
+                    pos = next_close + len("</div>")
             raw_content = post[c_start:c_end]
 
             # 4-3. 把 HTML 標籤拿掉，只留下純文字
