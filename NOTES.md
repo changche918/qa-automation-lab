@@ -515,3 +515,5 @@ cookies / Redirects / Images
 # 20260420
 python 原生的套件 VS 需要自己裝的套件差異是 ?
 selenium 的 workflow API 模式 / web 模式 (主程式的工作流)
+
+架構圖執行方式 : start c:/Users/chang/Desktop/python_project/side_projects/architecture.html

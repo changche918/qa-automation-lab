@@ -47,20 +47,20 @@ class FindHighGP:
                 continue
 
             # 3-2. 抓標題：從 class="b-list__main__title" 後的 > 到 </p>
-            i = row.find('class="b-list__main__title"')
-            if i == -1:
+            post_title = row.find('class="b-list__main__title"')
+            if post_title == -1:
                 continue
-            t_start = row.find(">", i) + 1
-            t_end = row.find("</p>", t_start)
-            title = row[t_start:t_end].strip()
+            post_title_start = row.find(">", post_title) + 1
+            post_title_end = row.find("</p>", post_title_start)
+            title = row[post_title_start:post_title_end].strip()
 
             # 3-3. 抓 GP 文字：class 可能是 --good / --bad / --zero，只比對前綴
-            g = row.find('class="b-list__summary__gp')
-            if g == -1:
+            post_gp = row.find('class="b-list__summary__gp')
+            if post_gp == -1:
                 continue
-            g_start = row.find(">", g) + 1
-            g_end = row.find("</", g_start)
-            gp_text = row[g_start:g_end].strip()
+            post_gp_start = row.find(">", post_gp) + 1
+            post_gp_end = row.find("</", post_gp_start)
+            gp_text = row[post_gp_start:post_gp_end].strip()
 
             # 3-4. 把 GP 文字換算成可以比較大小的數值
             if "爆" in gp_text:
@@ -78,11 +78,11 @@ class FindHighGP:
             if gp_value > page_best_gp:
                 page_best_gp = gp_value
                 page_best_title = title
-                h = row.rfind('href="', 0, i)
-                if h != -1:
-                    h_start = h + len('href="')
-                    h_end = row.find('"', h_start)
-                    page_best_href = row[h_start:h_end]
+                post_href = row.rfind('href="', 0, post_title)
+                if post_href != -1:
+                    post_href_start = post_href + len('href="')
+                    post_href_end = row.find('"', post_href_start)
+                    page_best_href = row[post_href_start:post_href_end]
 
         # 4. 迴圈跑完後，把本頁最高 GP 的文章補進清單
         if page_best_title:
@@ -133,31 +133,31 @@ class FindHighGP:
         # 4. 逐樓處理
         for post in posts:
             # 4-1. 抓 GP 文字
-            g = post.find('class="postgp"')
-            if g == -1:
+            content_gp = post.find('class="postgp"')
+            if content_gp == -1:
                 print("此樓層找不到 GP 標籤，跳過")
                 continue
-            g_start = post.find(">", g) + 1
-            g_end = post.find("</", g_start)
-            gp_text = post[g_start:g_end].strip()
+            content_gp_start = post.find(">", content_gp) + 1
+            content_gp_end = post.find("</", content_gp_start)
+            gp_text = post[content_gp_start:content_gp_end].strip()
 
             # 4-2. 抓內文：從 class="c-article__content" 後的 > 開始
             #      內文會有多個巢狀 <div>（巴哈把每一段包在 <div> 裡），不能只抓第一個 </div>
             #      要用「深度計數」找出 c-article__content 這個外層 div 的配對結束標籤：
             #      每碰到一個 <div 深度 +1；每碰到一個 </div> 深度 -1；歸零時就是配對位置
-            c = post.find('class="c-article__content')
-            if c == -1:
+            post_content = post.find('class="c-article__content')
+            if post_content == -1:
                 continue
-            c_start = post.find(">", c) + 1
+            post_content_start = post.find(">", post_content) + 1
 
             depth = 1
-            pos = c_start
-            c_end = c_start
+            pos = post_content_start
+            post_content_end = post_content_start
             while depth > 0:
                 next_open = post.find("<div", pos)
                 next_close = post.find("</div>", pos)
                 if next_close == -1:
-                    c_end = len(post)
+                    post_content_end = len(post)
                     break
                 if next_open != -1 and next_open < next_close:
                     depth += 1
@@ -165,9 +165,9 @@ class FindHighGP:
                 else:
                     depth -= 1
                     if depth == 0:
-                        c_end = next_close
+                        post_content_end = next_close
                     pos = next_close + len("</div>")
-            raw_content = post[c_start:c_end]
+            raw_content = post[post_content_start:post_content_end]
 
             # 4-3. 把 HTML 標籤拿掉，只留下純文字
             content = ""

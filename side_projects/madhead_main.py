@@ -104,7 +104,13 @@ elif args.mode == 'web':
     log.save_txt(content_path, best_text)
 
     # 以下是換頁後 + 找到那頁 GP 最高的回覆文
+    page_count = 1  # 第一頁已爬完
+    MAX_PAGES = 5
     while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
+        if page_count >= MAX_PAGES:
+            print(f"已達最大頁數限制（{MAX_PAGES} 頁），停止")
+            break
+
         btns = driver_control.find_elements(
             By.CSS_SELECTOR, ".next"
         )  # 下一頁的按鈕元素 (是 list)
@@ -117,7 +123,8 @@ elif args.mode == 'web':
             next_btn = btns[0]
             next_btn.click()
             time.sleep(5)
-            print("換頁成功")
+            page_count += 1
+            print(f"換頁成功（第 {page_count} 頁）")
             best_text = finder.scan_high_gp_content(choice_content_type)
             log.save_txt(content_path, best_text)
 
