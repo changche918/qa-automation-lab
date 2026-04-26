@@ -30,7 +30,7 @@ args = parser.parse_args()
 
 # 2. 根據 mode 參數直接執行邏輯
 if args.mode == 'api':
-    print("🚀 正在執行 API 模式...")
+    print("執行 API 模式")
 
     # 版面列表頁（給 scan_high_gp_post_api 用）
     BOARD_URL = "https://forum.gamer.com.tw/B.php?bsn=23805"
@@ -75,6 +75,7 @@ if args.mode == 'api':
                 break
 
 elif args.mode == 'web':
+    print("執行 Web 模式")
     driver_control = WebController()
 
     # 真實專案要爬的頁面
@@ -199,6 +200,6 @@ while True:
         break
 
     page += 1
-    time.sleep(1)  # 禮貌延遲，避免被擋
+    time.sleep(1)  # 禮貌延遲
 
 """
