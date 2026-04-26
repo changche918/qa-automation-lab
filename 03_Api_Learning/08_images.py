@@ -12,6 +12,7 @@ import requests
 # --- 請求圖片並儲存到本機 ---
 # ============================================================
 # Accept: image/png 告訴伺服器要 PNG 格式；不指定 httpbin 可能回 webp
+
 url = "https://httpbin.org/image"
 
 response = requests.get(

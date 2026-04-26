@@ -74,6 +74,7 @@ print(f"讀取結果: {data}")
 # ============================================================
 # 「壓縮編碼」(Content-Encoding) 和「資料格式」(Content-Type) 是兩件事。
 # Brotli 壓縮率比 gzip 高，需 pip install brotli 才能讓 requests 自動解壓縮。
+
 brotli_url = "https://httpbin.org/brotli"
 
 brotli_response = requests.get(

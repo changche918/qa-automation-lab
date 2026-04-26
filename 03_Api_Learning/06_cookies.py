@@ -11,6 +11,7 @@ import requests
 # ============================================================
 # cookies=dict → requests 會把它組進 Cookie header 送出
 # httpbin /cookies 會把收到的 cookie 原樣回傳，方便觀察
+
 url = "https://httpbin.org/cookies"
 
 response = requests.get(

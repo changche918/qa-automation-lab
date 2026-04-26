@@ -13,6 +13,7 @@ import requests
 # --- Basic Auth 範例（成功） ---
 # ============================================================
 # /basic-auth/{user}/{pass} 端點會比對你送來的帳密是否跟 URL 裡相同
+
 basic_url = "https://httpbin.org/basic-auth/myuser/mypassword"
 
 # auth=("帳號", "密碼") 是快捷語法，requests 會自動組 Authorization header
@@ -34,6 +35,7 @@ print(f"回應內容: {basic_response.json()}")
 # ============================================================
 # --- Basic Auth 範例（失敗） ---
 # ============================================================
+
 basic_fail_response = requests.get(
     basic_url,
     auth=("myuser", "wrongpassword"),

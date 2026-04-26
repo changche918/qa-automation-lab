@@ -27,9 +27,16 @@ class FindHighGP:
           - str|None: 本頁 GP 最高文章的完整網址，若沒有文章則為 None
         """
         # 1. 抓網頁 HTML
-        resp = requests.get(url, headers=HEADERS)
-        resp.raise_for_status()
-        html_text = resp.text
+        response = requests.get(url, headers=HEADERS)
+        response.raise_for_status() # 這個是檢查狀態碼，如果不是 200 就會丟出例外，直接中斷，200 就繼續往下
+        
+        """
+        等於 31 行
+        if response.status_code >= 400:
+            raise requests.HTTPError(f"HTTP {response.status_code}")
+        """
+        
+        html_text = response.text # 這一行內容是這個網址回傳的整份 HTML 原始碼
 
         high_gp_post_titles = []
         page_best_gp = -1
@@ -37,28 +44,38 @@ class FindHighGP:
         page_best_href = None
 
         # 2. 以每個文章 row 的 class 開頭當切點，把 HTML 切成一篇一篇
-        rows = html_text.split('class="b-list__row')[1:]
+        rows = html_text.split('class="b-list__row')[1:] # 第 0 個位置通常會是 head 之類的，所以不取第一個，從第 1 個開始才是文章列表的內容
 
         # 3. 逐篇處理
         for row in rows:
             # 3-1. 只在 row 的開頭 <div ...> 標籤內檢查，有 --sticky 代表置頂文，跳過
-            tag_end = row.find(">")
-            if 'b-list__row--sticky' in row[:tag_end]:
+            # 置頂 (b-list__row b-list__row--sticky b-list-item b-imglist-item)
+            # 非置頂 (b-list__row b-list-item b-imglist-item)
+            tag_end = row.find(">") # tag_end 中第幾個出現 > 的位置
+            if 'b-list__row--sticky' in row[:tag_end]: # 然後在這個位置找置頂 class，有就跳過
                 continue
 
             # 3-2. 抓標題：從 class="b-list__main__title" 後的 > 到 </p>
             post_title = row.find('class="b-list__main__title"')
-            if post_title == -1:
+            if post_title == -1: # 因為 find 語法關係，找不到會回傳 -1
                 continue
             post_title_start = row.find(">", post_title) + 1
-            post_title_end = row.find("</p>", post_title_start)
+            """
+            ...class="b-list__main__title">深淵之巔開新關卡了！</p>...
+                ↑                          ↑↑                   ↑
+                post_title                  ││                  post_title_end
+                (找到 class= 的位置)         ││
+                                            │└─ post_title_start（要從這裡開始抓文字）
+                                            └── row.find(">", post_title)（> 本身的位置）
+            """
+            post_title_end = row.find("</p>", post_title_start) # 切片不取最後一個位置，所以剛好是文字的結尾
             title = row[post_title_start:post_title_end].strip()
 
             # 3-3. 抓 GP 文字：class 可能是 --good / --bad / --zero，只比對前綴
             post_gp = row.find('class="b-list__summary__gp')
             if post_gp == -1:
                 continue
-            post_gp_start = row.find(">", post_gp) + 1
+            post_gp_start = row.find(">", post_gp) + 1 # 在 row 字串裡，從索引 post_gp 這個位置開始往後找，找到第一個 > 的位置，再 +1
             post_gp_end = row.find("</", post_gp_start)
             gp_text = row[post_gp_start:post_gp_end].strip()
 
@@ -78,11 +95,30 @@ class FindHighGP:
             if gp_value > page_best_gp:
                 page_best_gp = gp_value
                 page_best_title = title
-                post_href = row.rfind('href="', 0, post_title)
-                if post_href != -1:
+                post_href = row.rfind('href="', 0, post_title) 
+                
+                """
+                find = 從前往後找，回傳第一個匹配位置
+                rfind = 從後往前找，回傳最後一個匹配位置
+                row = '...<a href="C.php?bsn=23805">...<p ...>'
+                索引:        45                ↑
+                            ↑                51
+                        post_href = 45      post_href_start = 45 + 6
+                        (h 的位置)          (跳過 href=" 後，網址 C 的位置)
+                """
+                
+                if post_href != -1: # 找不到就跳過 (-1等於找不到)
                     post_href_start = post_href + len('href="')
                     post_href_end = row.find('"', post_href_start)
                     page_best_href = row[post_href_start:post_href_end]
+
+            """
+            row = '...<a href="C.php?bsn=23805&snA=730010">...<p class="b-list__main__title">標題</p>...'
+                        ↑          ↑                                ↑
+                    post_href      post_href_start                post_title
+                    (找到 href=")  (跳過 href=" 後的位置)         (標題位置，搜尋邊界)
+                                    └──→ 找下一個 " 就是 post_href_end
+            """
 
         # 4. 迴圈跑完後，把本頁最高 GP 的文章補進清單
         if page_best_title:
@@ -112,8 +148,9 @@ class FindHighGP:
           第二個值代表「是否還有下一頁」，給主程式決定要不要繼續換頁
         """
         # 1. 抓網頁 HTML
-        resp = requests.get(url, headers=HEADERS)
-        html_text = resp.text
+        response = requests.get(url, headers=HEADERS)
+        response.raise_for_status() # 這個是檢查狀態碼，如果不是 200 就會丟出例外，直接中斷，200 就繼續往下
+        html_text = response.text
 
         # 2. 判斷是否還有下一頁：
         #    巴哈 HTML 的引號會混用 —— 啟用按鈕是 class='next'（單引號），停用是 class="next no"（雙引號）
@@ -150,35 +187,91 @@ class FindHighGP:
                 continue
             post_content_start = post.find(">", post_content) + 1
 
-            depth = 1
-            pos = post_content_start
+            open_div_count = 1
+            scan_pos = post_content_start
             post_content_end = post_content_start
-            while depth > 0:
-                next_open = post.find("<div", pos)
-                next_close = post.find("</div>", pos)
+
+            """
+            初始狀態：
+            scan_pos = 100         ← 指針在 100，準備出發
+            post_content_end = 100 ← 暫時用 100 當預設
+
+            迴圈第 1 輪：
+            找到下一個 <div 在位置 105
+            scan_pos = 110         ← 指針往後挪
+            post_content_end = 100 ← 還沒更新（還沒找到配對）
+
+            迴圈第 2 輪：
+            找到下一個 </div> 在位置 130，open_div_count 從 2 降到 1
+            scan_pos = 136
+            post_content_end = 100 ← 還沒更新（open_div_count 還沒歸零）
+
+            迴圈第 3 輪：
+            找到下一個 </div> 在位置 150，open_div_count 從 1 降到 0
+            scan_pos = 156
+            post_content_end = 150 ← ★ 終於更新成正確答案
+            迴圈結束
+            """
+
+            while open_div_count > 0:
+                next_open = post.find("<div", scan_pos)
+                next_close = post.find("</div>", scan_pos)
                 if next_close == -1:
                     post_content_end = len(post)
                     break
                 if next_open != -1 and next_open < next_close:
-                    depth += 1
-                    pos = next_open + len("<div")
+                    open_div_count += 1
+                    scan_pos = next_open + len("<div")
                 else:
-                    depth -= 1
-                    if depth == 0:
+                    open_div_count -= 1
+                    if open_div_count == 0:
                         post_content_end = next_close
-                    pos = next_close + len("</div>")
-            raw_content = post[post_content_start:post_content_end]
+                    scan_pos = next_close + len("</div>")
+            raw_html = post[post_content_start:post_content_end]
+
+            """
+                            ┌─────────────────────────┐
+                │ 從 scan_pos 找下一個      │
+                │ <div 和 </div>           │
+                └────────────┬────────────┘
+                                │
+                ┌────────────▼─────────────────────┐
+                │ next_close == -1 ?              │
+                │ （找不到任何 </div>）             │
+                └─────┬────────────────────┬──────┘
+                        是                    否
+                        │                    │
+                        ▼                    ▼
+            ┌──────────────────┐   ┌──────────────────────┐
+            │ HTML 殘缺！       │   │ next_open 比較近？    │
+            │ 切到字串尾端      │   │ （= 先遇到 <div）     │
+            │ break 跳出迴圈    │   └─┬──────────────┬─────┘
+            └──────────────────┘    是              否
+                                        │              │
+                                        ▼              ▼
+                            ┌──────────────┐  ┌──────────────┐
+                            │ 進門          │  │ 出門          │
+                            │ count +1     │  │ count -1     │
+                            │ 挪過 <div    │  │ 挪過 </div>   │
+                            └──────────────┘  │              │
+                                                │ count == 0?  │
+                                                │ 是 → 記錄 end │
+                                                └──────────────┘
+                                                        │
+                                                        ▼
+                                                回迴圈頂端
+            """
 
             # 4-3. 把 HTML 標籤拿掉，只留下純文字
             content = ""
             in_tag = False
-            for ch in raw_content:
-                if ch == "<":
+            for char in raw_html:
+                if char == "<":
                     in_tag = True
-                elif ch == ">":
+                elif char == ">":
                     in_tag = False
                 elif not in_tag:
-                    content += ch
+                    content += char
             content = " ".join(content.split())  # 壓縮連續空白
 
             # 4-4. 爆文：直接加入清單

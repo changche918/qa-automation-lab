@@ -95,6 +95,7 @@ print(f"[DELETE] 狀態碼: {delete_response.status_code}")
 #   if response.status_code == 200: ...
 #   elif response.status_code == 404: ...
 #   elif response.status_code >= 500: ...（可考慮重試）
+
 random_url = "https://httpbin.org/status/200,404,500"
 
 random_response = requests.get(

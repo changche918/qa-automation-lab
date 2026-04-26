@@ -16,6 +16,7 @@ import requests
 # --- 自動跟著跳轉（預設行為）---
 # ============================================================
 # /absolute-redirect/10 會連續跳轉 10 次才到終點
+
 url = "https://httpbin.org/absolute-redirect/10"
 
 # allow_redirects 預設 True，requests 會自動跟完所有跳轉
@@ -26,9 +27,11 @@ response = requests.get(
 
 print(f"狀態碼: {response.status_code}")
 print(f"經過了幾次跳轉: {len(response.history)}") 
+
 """
 hitory 是一個 list，裡面是每次跳轉的 response 物件
 裡面有 status,headers,url,text
+
 """
 # --- 備註 ---
 # requests 會把所有跳轉自動跟完，最後給你的 response 就是 /get 那個 200。
