@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://forum.gamer.com.tw/C.php?bsn=23805&snA=730010&tnum=1\" -o c:/Users/chang/Desktop/python_project/_debug_article.html)",
-      "Bash(python side_projects/madhead_main.py --mode web)"
-    ]
-  }
-}
