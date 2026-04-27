@@ -7,15 +7,15 @@
 # - 常用方法: append(), remove(), pop(), insert(), extend(), clear()
 # - 常用屬性: len(list)
 
-# print("2. LISTS 列表")
-# fruits = ["apple", "banana", "cherry"]
-# numbers = [1, 2, 3, 4, 5]
-# mixed = [1, "hello", 3.14, True]
+print("2. LISTS 列表")
+fruits = ["apple", "banana", "cherry"]
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True]
 
-# print(fruits)
-# print(fruits[0])        # 索引訪問
-# print(fruits[-1])       # 反向索引 (最後一個)
-# print(fruits[0:2])      # 切片
+print(fruits)
+print(fruits[0])        # 索引訪問
+print(fruits[-1])       # 反向索引 (最後一個)
+print(fruits[0:2])      # 切片
 
 # # fruits.get(0)          # 錯誤示範，列表無get方法, 只有字典(dict)有
 # # print(fruits['apple'])  # 錯誤示範，列表索引必須是整數
@@ -33,6 +33,10 @@
 # print(f"列表長度: {len(fruits)}")
 # print(f"apple在列表中: {'apple' in fruits}")
 # print(f"Apple在列表中: {'Apple' in fruits}")
+
+a =       ['P', 'Y', 'T', 'H', 'O', 'N']
+# 索引：    0    1    2    3    4    5
+# 倒數：   -6   -5   -4   -3   -2   -1
 
 
 """
@@ -64,12 +68,12 @@ print(name[1:4])
 a = []
 b = list(a)
 """
-print('範例看這')
-a = ['ryan', 'lisa', 'mike']
-b = list(a)
-print(b)
-print(a)
-list('123')
-print(list('123')) 
-print(list((1,2,3)))
-print(list([[1,2,3]]))
+# print('範例看這')
+# a = ['ryan', 'lisa', 'mike']
+# b = list(a)
+# print(b)
+# print(a)
+# list('123')
+# print(list('123')) 
+# print(list((1,2,3)))
+# print(list([[1,2,3]]))

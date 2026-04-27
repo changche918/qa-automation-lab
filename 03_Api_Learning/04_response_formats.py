@@ -19,12 +19,18 @@ json_response = requests.get(
     timeout=5
 )
 
+print(json_response.headers)  # 觀察所有 header
 print(f"Content-Type: {json_response.headers.get('Content-Type')}")
+print(f"Content-Type: {json_response.headers.get('Date')}")
 print(f"解析後: {json_response.json()}")
+
+
+
 
 # ============================================================
 # --- HTML / 純文字 ---
 # ============================================================
+"""
 html_url = "https://httpbin.org/html"
 
 html_response = requests.get(
@@ -85,3 +91,5 @@ brotli_response = requests.get(
 
 print(f"Content-Encoding: {brotli_response.headers.get('Content-Encoding')}")
 print(f"解壓後內容: {brotli_response.json()}")
+
+"""

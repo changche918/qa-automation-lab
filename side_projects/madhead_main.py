@@ -106,9 +106,9 @@ elif args.mode == 'web':
 
     # 以下是換頁後 + 找到那頁 GP 最高的回覆文
     page_count = 1  # 第一頁已爬完
-    MAX_PAGES = 5
+    MAX_PAGES = 5 
     while True:  # 使用無窮迴圈判斷切換分頁，滿足條件就跳出
-        if page_count >= MAX_PAGES:
+        if page_count >= MAX_PAGES: # 這個是放在 AI 上跑，怕跑太多頁，所以先設定 5
             print(f"已達最大頁數限制（{MAX_PAGES} 頁），停止")
             break
 

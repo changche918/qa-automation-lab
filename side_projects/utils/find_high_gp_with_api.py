@@ -170,6 +170,7 @@ class FindHighGP:
         # 4. 逐樓處理
         for post in posts:
             # 4-1. 抓 GP 文字
+            # 在指定條件內，第一次找到指定單字在哪個位置，所以會回傳數字
             content_gp = post.find('class="postgp"')
             if content_gp == -1:
                 print("此樓層找不到 GP 標籤，跳過")
@@ -186,6 +187,7 @@ class FindHighGP:
             if post_content == -1:
                 continue
             post_content_start = post.find(">", post_content) + 1
+            # 從 post_content 這個位置開始，往後找第一個 > 在哪，找到後再往後找一格
 
             open_div_count = 1
             scan_pos = post_content_start
