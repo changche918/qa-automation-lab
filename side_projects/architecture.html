@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light only">
+    <title>神魔之塔爬蟲 - 系統架構圖</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root { color-scheme: light only; }
+        html, body {
+            background-color: #ffffff !important;
+            color: #111 !important;
+        }
+        body {
+            font-family: -apple-system, "Microsoft JhengHei", sans-serif;
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            font-weight: 500;
+        }
+        h1 { border-bottom: 3px solid #0277bd; padding-bottom: 10px; font-weight: 700; }
+        h2 { color: #0277bd; margin-top: 36px; font-weight: 700; }
+        .diagram {
+            background: #ffffff;
+            padding: 30px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            overflow-x: auto;
+        }
+        /* 放大圖內節點與文字、加粗、把線條顏色改深 */
+        .mermaid svg { font-size: 20px !important; }
+        .mermaid svg .nodeLabel,
+        .mermaid svg .edgeLabel,
+        .mermaid svg .label,
+        .mermaid svg foreignObject div {
+            font-weight: 700 !important;
+            color: #111 !important;
+        }
+        .mermaid svg .edgePath path,
+        .mermaid svg .flowchart-link {
+            stroke: #333 !important;
+            stroke-width: 2.5px !important;
+        }
+        .mermaid svg .arrowheadPath {
+            fill: #333 !important;
+            stroke: #333 !important;
+        }
+        .mermaid svg .edgeLabel {
+            background-color: #fff !important;
+        }
+        .mermaid svg .edgeLabel rect {
+            fill: #fff !important;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+            font-weight: 500;
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th { background: #0277bd; color: white; font-weight: 700; }
+        tr:hover { background: #f5f9fc; }
+        code {
+            background: #eaeaea;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f0f0f0;
+            padding: 14px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>神魔之塔爬蟲 - 系統架構圖</h1>
+
+    <h2>整體架構</h2>
+    <div class="diagram">
+        <div class="mermaid">
+flowchart TD
+    User([使用者]) -->|"python madhead_main.py --mode api/web"| Main[madhead_main.py 程式入口]
+
+    Main -->|"args.mode == 'api'"| APIMode{API 模式}
+    Main -->|"args.mode == 'web'"| WebMode{Web 模式}
+
+    APIMode --> Finder1[FindHighGPApi<br>find_high_gp_with_api.py]
+    Finder1 -->|"requests.get BOARD_URL"| ScanPostAPI[scan_high_gp_post_api]
+    ScanPostAPI -->|"return titles, best_art_url"| LogPost1[file_path<br>madhead_post_log.txt]
+    ScanPostAPI -->|"best_art_url"| ScanContentAPI[scan_high_gp_content_api]
+    ScanContentAPI -->|"requests.get 每頁"| ScanContentAPI
+    ScanContentAPI -->|"return content, has_next"| LogContent1[content_path<br>madhead_content_log.txt]
+
+    WebMode --> Driver[WebController<br>drivers.py]
+    Driver -->|"開啟 Chrome 載入 BOARD_URL"| Finder2[FindHighGPWeb<br>find_high_gp.py]
+    Finder2 --> ScanPostWeb[scan_high_gp_post]
+    ScanPostWeb -->|"return titles, best_art_elem"| LogPost2[file_path<br>madhead_post_log.txt]
+    ScanPostWeb -->|"click 跳轉文章"| ScanContentWeb[scan_high_gp_content]
+    ScanContentWeb -->|"找 next 按鈕後 click 翻頁"| ScanContentWeb
+    ScanContentWeb -->|"return content"| LogContent2[content_path<br>madhead_content_log.txt]
+
+    LogPost1 -.使用.-> FileMgr[FileHandler<br>file_manager.py]
+    LogPost2 -.使用.-> FileMgr
+    LogContent1 -.使用.-> FileMgr
+    LogContent2 -.使用.-> FileMgr
+
+    classDef apiStyle fill:#e1f5ff,stroke:#0277bd,stroke-width:2px
+    classDef webStyle fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    classDef sharedStyle fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    classDef logStyle fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+
+    class APIMode,Finder1,ScanPostAPI,ScanContentAPI apiStyle
+    class WebMode,Driver,Finder2,ScanPostWeb,ScanContentWeb webStyle
+    class Main,FileMgr sharedStyle
+    class LogPost1,LogPost2,LogContent1,LogContent2 logStyle
+        </div>
+    </div>
+
+    <h2>模組職責</h2>
+    <table>
+        <thead>
+            <tr><th>模組</th><th>職責</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>madhead_main.py</code></td><td>程式入口；根據 <code>--mode</code> 參數切換 API / Web 模式</td></tr>
+            <tr><td><code>utils/find_high_gp_with_api.py</code></td><td>API 模式：用 requests 抓 HTML，純字串解析</td></tr>
+            <tr><td><code>utils/find_high_gp.py</code></td><td>Web 模式：用 Selenium 開瀏覽器互動</td></tr>
+            <tr><td><code>side_projects/utils/drivers.py</code></td><td>Web 模式專用的 Chrome WebDriver 包裝</td></tr>
+            <tr><td><code>utils/file_manager.py</code></td><td>共用 log 寫入工具</td></tr>
+        </tbody>
+    </table>
+
+    <h2>API 模式 vs Web 模式對照</h2>
+    <table>
+        <thead>
+            <tr><th>項目</th><th>API 模式</th><th>Web 模式</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>HTTP 請求</td><td><code>requests.get(url)</code></td><td>Selenium 開 Chrome 載入</td></tr>
+            <tr><td>解析 HTML</td><td>純字串 split / find</td><td>CSS selector + WebElement</td></tr>
+            <tr><td>「點進文章」</td><td>拿 href → 換 URL 再 GET</td><td><code>elem.click()</code> 真的點</td></tr>
+            <tr><td>翻頁</td><td>組 <code>&amp;page={n}</code> URL 重新 GET</td><td>找 <code>.next</code> 按鈕 click</td></tr>
+            <tr><td>「下一頁」偵測</td><td>字串比對 <code>class="next"</code></td><td><code>find_elements(.next.no)</code> 數量</td></tr>
+            <tr><td>依賴</td><td>只需 <code>requests</code></td><td><code>selenium</code> + Chrome + driver</td></tr>
+            <tr><td>執行成本</td><td>快、輕、可平行</td><td>慢、吃資源、會看到視窗</td></tr>
+            <tr><td>JS 動態內容</td><td>抓不到</td><td>抓得到</td></tr>
+        </tbody>
+    </table>
+
+    <h2>執行方式</h2>
+    <pre># API 模式（純 requests，不開瀏覽器）
+python side_projects/madhead_main.py --mode api
+
+# Web 模式（Selenium，會開 Chrome）
+python side_projects/madhead_main.py --mode web</pre>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                fontSize: '20px',
+                fontFamily: '"Microsoft JhengHei", -apple-system, sans-serif',
+                background: '#ffffff',
+                primaryColor: '#ffffff',
+                primaryTextColor: '#111111',
+                primaryBorderColor: '#333333',
+                secondaryColor: '#ffffff',
+                tertiaryColor: '#ffffff',
+                lineColor: '#333333',
+                textColor: '#111111',
+                mainBkg: '#ffffff',
+                edgeLabelBackground: '#ffffff'
+            },
+            flowchart: {
+                nodeSpacing: 70,
+                rankSpacing: 90,
+                padding: 25,
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,19 +1,32 @@
 ## 📂 資料夾架構 ##
 ```
-python_project
-├─01_Basic_Learning   >>> 這是 python 課程 + 基礎練習的資料夾
+C:.
+├─.claude
+│  ├─skills
+│  │  └─add-created-date
+│  └─worktrees
+│      └─inspiring-sinoussi
+├─.vscode
+├─01_Basic_Learning
 │  ├─Course
 │  └─Practice
-├─02_Selenium_Learning   >>> 這是存放練習 selenium 的資料夾
+├─02_Selenium_Learning
 │  └─Practice
 │      ├─my_104_hw
-│      │  └─logs
+│      │  ├─logs
+│      │  └─__pycache__
 │      └─Spring_Festival_hw
 │          ├─basic_practice
 │          └─combination_practice
 │              ├─logs
 │              ├─screenshots
 │              └─__pycache__
-├─utils
-│ └─drivers  >>> 放所有資料夾可共用的 function
-└─tests >>> 這是用來做一些小測試用的資料夾 ( 可忽略不看 )
+├─03_Api_Learning
+├─args_practice
+├─side_projects
+│  ├─logs
+│  ├─utils
+│  │  └─__pycache__
+│  └─__pycache__
+└─utils
+    └─__pycache__

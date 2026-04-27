@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>AI Coding Rules 完整對照</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif TC', serif;
+    background: #0a0908;
+    color: #e8e4dc;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #2a2620;
+  }
+
+  .header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #d4a853;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .header h1 {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: #f5efe0;
+    line-height: 1.15;
+  }
+
+  .header .subtitle {
+    font-size: 14px;
+    color: #8a8376;
+    font-style: italic;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 48px;
+    background: #12100d;
+    border: 1px solid #2a2620;
+    border-radius: 4px;
+  }
+
+  .section {
+    background: #12100d;
+    border: 1px solid #2a2620;
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+
+  .section h2 {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: #f5efe0;
+  }
+
+  .section .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #d4a853;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+
+  .section p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #c4bba8;
+    margin-bottom: 16px;
+  }
+
+  .section code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: #0a0908;
+    color: #d4a853;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+
+  th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #2a2620;
+    vertical-align: top;
+  }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #d4a853;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: #0f0d0a;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td.tool {
+    font-weight: 600;
+    color: #f5efe0;
+    width: 18%;
+  }
+
+  td.file { width: 28%; }
+  td.file code { display: inline-block; margin: 0; }
+
+  td.desc { color: #c4bba8; line-height: 1.6; }
+
+  .example-box {
+    background: #0a0908;
+    border-left: 3px solid #d4a853;
+    padding: 18px 20px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #e8e4dc;
+    border-radius: 0 2px 2px 0;
+    overflow-x: auto;
+  }
+
+  .example-box .cmt { color: #6a6355; font-style: italic; }
+  .example-box .hash { color: #d4a853; font-weight: 600; }
+  .example-box .key { color: #e8a853; }
+
+  .qa-list {
+    list-style: none;
+  }
+
+  .qa-list li {
+    padding: 16px 0;
+    border-bottom: 1px dashed #2a2620;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .qa-list li:last-child { border-bottom: none; }
+
+  .qa-list .q {
+    color: #d4a853;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .qa-list .a {
+    color: #c4bba8;
+  }
+
+  .qa-list strong { color: #f5efe0; }
+
+  @media (max-width: 720px) {
+    .header h1 { font-size: 30px; }
+    table { font-size: 12px; }
+    th, td { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="tag">AI Coding Rules · 2026</div>
+    <h1>「Rules」到底是什麼?</h1>
+    <div class="subtitle">同一個概念,不同工具的稱呼</div>
+  </div>
+
+  <!-- ======== 核心概念圖 ======== -->
+  <svg viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="shadow">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="0" dy="2"/>
+        <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+        <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- 中央核心: Rules 概念 -->
+    <g filter="url(#shadow)">
+      <circle cx="550" cy="360" r="110" fill="#1a1714" stroke="#d4a853" stroke-width="2"/>
+      <text x="550" y="340" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853" letter-spacing="2">CORE CONCEPT</text>
+      <text x="550" y="370" text-anchor="middle" font-family="Noto Serif TC, serif" font-size="24" font-weight="900" fill="#f5efe0">Rules</text>
+      <text x="550" y="395" text-anchor="middle" font-family="Noto Serif TC, serif" font-size="13" fill="#c4bba8">專案規範 / 指示</text>
+    </g>
+
+    <!-- 放射狀標題 -->
+    <text x="50" y="50" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853" letter-spacing="2">TOOL-SPECIFIC · 各工具原生格式</text>
+
+    <!-- 左上: Cursor -->
+    <g>
+      <rect x="70" y="100" width="220" height="90" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="70" y="100" width="4" height="90" fill="#d4a853"/>
+      <text x="90" y="125" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">Cursor</text>
+      <text x="90" y="148" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">.cursorrules</text>
+      <text x="90" y="167" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">.cursor/rules/*.mdc</text>
+      <text x="90" y="183" font-family="Noto Serif TC, serif" font-size="10" fill="#8a7d5a">最早用「rules」這詞的工具</text>
+    </g>
+
+    <!-- 右上: Claude Code (重點) -->
+    <g filter="url(#shadow)">
+      <rect x="810" y="100" width="220" height="90" rx="2" fill="#1a1714" stroke="#d4a853" stroke-width="2"/>
+      <rect x="810" y="100" width="4" height="90" fill="#d4a853"/>
+      <text x="830" y="125" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">Claude Code</text>
+      <text x="830" y="148" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">CLAUDE.md</text>
+      <text x="830" y="167" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">~/.claude/CLAUDE.md</text>
+      <text x="830" y="183" font-family="Noto Serif TC, serif" font-size="10" fill="#d4a853">← 你問的就是這個</text>
+    </g>
+
+    <!-- 左中: Windsurf -->
+    <g>
+      <rect x="70" y="230" width="220" height="80" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="70" y="230" width="4" height="80" fill="#7a6a4a"/>
+      <text x="90" y="255" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">Windsurf</text>
+      <text x="90" y="278" font-family="JetBrains Mono, monospace" font-size="11" fill="#c4bba8">.windsurf/rules</text>
+      <text x="90" y="298" font-family="Noto Serif TC, serif" font-size="10" fill="#8a7d5a">Always / Manual / Model Decision</text>
+    </g>
+
+    <!-- 右中: GitHub Copilot -->
+    <g>
+      <rect x="810" y="230" width="220" height="80" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="810" y="230" width="4" height="80" fill="#7a6a4a"/>
+      <text x="830" y="255" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">GitHub Copilot</text>
+      <text x="830" y="278" font-family="JetBrains Mono, monospace" font-size="10" fill="#c4bba8">.github/copilot-instructions.md</text>
+      <text x="830" y="298" font-family="Noto Serif TC, serif" font-size="10" fill="#8a7d5a">可用 glob 限定檔案類型</text>
+    </g>
+
+    <!-- 左下: Gemini -->
+    <g>
+      <rect x="70" y="350" width="220" height="80" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="70" y="350" width="4" height="80" fill="#7a6a4a"/>
+      <text x="90" y="375" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">Gemini CLI / Jules</text>
+      <text x="90" y="398" font-family="JetBrains Mono, monospace" font-size="11" fill="#c4bba8">GEMINI.md / JULES.md</text>
+      <text x="90" y="418" font-family="Noto Serif TC, serif" font-size="10" fill="#8a7d5a">Google 家的工具</text>
+    </g>
+
+    <!-- 右下: Aider, Zed, Warp -->
+    <g>
+      <rect x="810" y="350" width="220" height="80" rx="2" fill="#1a1714" stroke="#2a2620"/>
+      <rect x="810" y="350" width="4" height="80" fill="#7a6a4a"/>
+      <text x="830" y="375" font-family="Noto Serif TC, serif" font-size="15" font-weight="700" fill="#f5efe0">其他工具</text>
+      <text x="830" y="395" font-family="Noto Serif TC, serif" font-size="11" fill="#c4bba8">Aider · Zed · Warp · RooCode</text>
+      <text x="830" y="415" font-family="Noto Serif TC, serif" font-size="10" fill="#8a7d5a">大多直接採用 AGENTS.md</text>
+    </g>
+
+    <!-- 連線到核心 -->
+    <g stroke="#3a362e" stroke-width="1" fill="none" opacity="0.5">
+      <line x1="290" y1="145" x2="445" y2="310"/>
+      <line x1="810" y1="145" x2="655" y2="310"/>
+      <line x1="290" y1="270" x2="445" y2="345"/>
+      <line x1="810" y1="270" x2="655" y2="345"/>
+      <line x1="290" y1="390" x2="445" y2="390"/>
+      <line x1="810" y1="390" x2="655" y2="390"/>
+    </g>
+
+    <!-- AGENTS.md 標籤 -->
+    <text x="50" y="520" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853" letter-spacing="2">CROSS-TOOL STANDARD · 跨工具統一標準</text>
+
+    <g filter="url(#shadow)">
+      <rect x="70" y="550" width="960" height="140" rx="2" fill="#1a1714" stroke="#d4a853" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <rect x="70" y="550" width="4" height="140" fill="#d4a853"/>
+      <text x="90" y="582" font-family="Noto Serif TC, serif" font-size="20" font-weight="900" fill="#f5efe0">AGENTS.md</text>
+      <text x="240" y="582" font-family="JetBrains Mono, monospace" font-size="12" fill="#d4a853">Universal · 跨工具通用</text>
+
+      <text x="90" y="610" font-family="Noto Serif TC, serif" font-size="13" fill="#c4bba8">Linux Foundation 旗下 Agentic AI Foundation 維護,2025 年中由 Sourcegraph / OpenAI / Google / Cursor 聯合推出</text>
+      <text x="90" y="632" font-family="Noto Serif TC, serif" font-size="13" fill="#c4bba8">目標:一個檔案,所有 AI 工具都讀得懂。現已支援 Claude Code / Cursor / Copilot / Gemini CLI / Windsurf / Aider</text>
+      <text x="90" y="654" font-family="Noto Serif TC, serif" font-size="13" fill="#c4bba8">類似 README.md 的地位 — 如果你專案會有多人、多工具,就放這個</text>
+
+      <text x="90" y="680" font-family="JetBrains Mono, monospace" font-size="11" fill="#d4a853">→ Claude Code 也會自動讀 AGENTS.md,可以搭配 CLAUDE.md 用「See @AGENTS.md」引用</text>
+    </g>
+
+    <!-- 箭頭指向 AGENTS.md -->
+    <g stroke="#d4a853" stroke-width="1.5" fill="none" opacity="0.6">
+      <path d="M 550 470 L 550 540" stroke-dasharray="4,3"/>
+      <polygon points="550,550 545,540 555,540" fill="#d4a853"/>
+    </g>
+    <text x="570" y="510" font-family="Noto Serif TC, serif" font-size="11" fill="#8a7d5a" font-style="italic">碎片化 → 統一</text>
+
+  </svg>
+
+  <!-- ======== 對照表 ======== -->
+  <div class="section">
+    <h2>完整對照表</h2>
+    <div class="sub">Tool-Specific Formats in 2026</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>工具</th>
+          <th>Rules 檔案位置</th>
+          <th>特點</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tool">Claude Code</td>
+          <td class="file"><code>CLAUDE.md</code> (專案根目錄)<br><code>~/.claude/CLAUDE.md</code> (全域)</td>
+          <td class="desc">階層式 (可分子目錄)、支援 <code>@import</code> 引用、可分個人/團隊層</td>
+        </tr>
+        <tr>
+          <td class="tool">Cursor</td>
+          <td class="file"><code>.cursorrules</code> (舊)<br><code>.cursor/rules/*.mdc</code> (新)</td>
+          <td class="desc">新版可用 frontmatter 加 glob 規則,對不同檔案類型套不同規則</td>
+        </tr>
+        <tr>
+          <td class="tool">Windsurf</td>
+          <td class="file"><code>.windsurf/rules</code></td>
+          <td class="desc">三種觸發模式:Always On / Manual / Model Decision。每檔 6000 字元上限</td>
+        </tr>
+        <tr>
+          <td class="tool">GitHub Copilot</td>
+          <td class="file"><code>.github/copilot-instructions.md</code><br><code>.github/instructions/*.instructions.md</code></td>
+          <td class="desc">2025/7 後支援 scoped instructions,用 frontmatter 的 <code>applyTo</code> 限定檔案</td>
+        </tr>
+        <tr>
+          <td class="tool">Gemini CLI</td>
+          <td class="file"><code>GEMINI.md</code></td>
+          <td class="desc">Google 家格式,跟 CLAUDE.md 結構雷同</td>
+        </tr>
+        <tr>
+          <td class="tool">Codex CLI</td>
+          <td class="file"><code>AGENTS.md</code></td>
+          <td class="desc">OpenAI 的 CLI,直接採用 AGENTS.md 標準</td>
+        </tr>
+        <tr>
+          <td class="tool">跨工具標準</td>
+          <td class="file"><code>AGENTS.md</code></td>
+          <td class="desc">Linux Foundation 維護,現已成 2026 主流方向</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ======== CLAUDE.md 作為 rules 的實例 ======== -->
+  <div class="section">
+    <h2>Claude Code 的「rules」長什麼樣?</h2>
+    <div class="sub">CLAUDE.md 實例 · 套用到你的爬蟲專案</div>
+
+    <p>如果套用到你之前做的 <strong>Bahamut / PTT 爬蟲專案</strong>,CLAUDE.md 大概會長這樣:</p>
+
+    <div class="example-box">
+<span class="hash"># 巴哈 / PTT 論壇爬蟲</span><br>
+<br>
+<span class="hash">## 專案概述</span><br>
+Python + Selenium 爬蟲,抓取巴哈姆特與 PTT 的高 GP 文章。<br>
+<span class="cmt"># GP = 論壇的「站內貨幣」,代表熱度</span><br>
+<br>
+<span class="hash">## 技術棧</span><br>
+- Python 3.12<br>
+- Selenium 4.x (Chrome headless)<br>
+- 套件管理用 uv,不用 pip<br>
+<br>
+<span class="hash">## 指令</span><br>
+- <span class="key">uv run python main.py</span>  — 執行爬蟲<br>
+- <span class="key">pytest tests/ -v</span>       — 跑測試<br>
+- <span class="key">ruff format .</span>          — 格式化<br>
+<br>
+<span class="hash">## 編碼慣例</span><br>
+- 繁體中文註解<br>
+- 函式名用 snake_case<br>
+- 新函式必須先寫 test 再實作<br>
+- GP 解析邏輯統一走 <span class="key">_parse_gp_value()</span>,不要重複造輪子<br>
+- 爬到的資料存 dict,不要存格式化字串<br>
+<br>
+<span class="hash">## 資料結構</span><br>
+scraped item 必須長這樣:<br>
+<span class="key">{"gp": int, "title": str, "url": str}</span><br>
+<br>
+<span class="hash">## 安全規則</span><br>
+- 禁止 <span class="key">rm -rf</span> 與 <span class="key">git push --force</span><br>
+- 爬蟲請求間隔 ≥ 2 秒,避免被 ban<br>
+- 不要硬編碼 cookie / session token<br>
+<br>
+<span class="hash">## 已知問題</span><br>
+- SSL handshake 偶爾 <span class="key">net_error -101</span>,需要 retry 邏輯<br>
+- 巴哈舊版 HTML 結構不同,parse 前先判斷版本
+    </div>
+
+    <p><strong>這份檔案</strong>放在專案根目錄,每次 <code>claude</code> 啟動就自動讀入,相當於每次對話前自動幫你打了一段詳細的 system prompt。</p>
+  </div>
+
+  <!-- ======== 常見疑問 ======== -->
+  <div class="section">
+    <h2>常見疑問</h2>
+    <div class="sub">FAQ</div>
+
+    <ul class="qa-list">
+      <li>
+        <div class="q">Q1. 所以「rules」不是 Claude Code 的正式術語?</div>
+        <div class="a">對。<strong>Anthropic 官方叫它 "memory file" 或 "instructions"</strong>,不是 rules。「rules」是 Cursor 先用起來的說法,後來大家混著講。<br>你聽到「Claude Code 的 rules」時,指的就是 <strong>CLAUDE.md</strong>。</div>
+      </li>
+      <li>
+        <div class="q">Q2. CLAUDE.md 和 AGENTS.md 要擇一用嗎?</div>
+        <div class="a"><strong>不用。可以並存。</strong>建議策略:<br>• <strong>團隊共用的內容</strong> (技術棧、指令、慣例) 放 AGENTS.md,其他 AI 工具也讀得到<br>• <strong>Claude 專屬</strong> 的內容 (subagent 編排、Claude 特有功能) 放 CLAUDE.md<br>• CLAUDE.md 開頭寫 <code>See @AGENTS.md</code> 引用即可</div>
+      </li>
+      <li>
+        <div class="q">Q3. rules 和 Skills 有什麼差別?</div>
+        <div class="a"><strong>Rules (CLAUDE.md) 是「永遠套用的背景知識」</strong> — 每次對話開頭就載入,不用觸發。<br><strong>Skills 是「按需觸發的工作流」</strong> — 有名字、有描述,Claude 判斷需要時才載入。<br>類比:rules 是釘在牆上的團隊公約,skills 是書架上的工具書。</div>
+      </li>
+      <li>
+        <div class="q">Q4. rules 可以強制執行嗎?</div>
+        <div class="a"><strong>CLAUDE.md 本身不是強制</strong> — 它是給 LLM 看的提示,Claude 通常會遵守但不保證。<br>要<strong>硬性強制</strong>的規則 (例如「禁止跑 rm -rf」) 要用 <strong>Hooks</strong>,由程式邏輯攔截,不經過 AI。</div>
+      </li>
+      <li>
+        <div class="q">Q5. 寫 rules 的常見錯誤?</div>
+        <div class="a">• <strong>太長</strong> — 200 行不如 50 行精準。超過 500 行 Claude 會開始忽略末端<br>• <strong>寫 linter 會做的事</strong> — 「用兩格縮排」是 Prettier 的工作,別寫進去<br>• <strong>跨工具重複</strong> — 不要 CLAUDE.md 和 .cursorrules 各寫一份,用 AGENTS.md 當單一來源<br>• <strong>用 /init 自動產生</strong> — 產出通常又臭又長又不準,手寫的每行都有意義</div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
