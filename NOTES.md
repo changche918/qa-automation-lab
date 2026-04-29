@@ -511,9 +511,19 @@ cookies / Redirects / Images
 4. 查一下 "data": "", 為什麼是空的 ?
     - 因為是 DELETE
 
-
-# 20260420
+---
+## 20260420
 python 原生的套件 VS 需要自己裝的套件差異是 ?
 selenium 的 workflow API 模式 / web 模式 (主程式的工作流)
 
 架構圖執行方式 : start c:/Users/chang/Desktop/python_project/side_projects/architecture.html
+
+---
+## 20260428
+1. 將任務拆成階段性，模擬用戶狀態 (貼近使用者) 內外網差異 / 如何確認可正常值形式基本，例如 run now 和掛上去不一定是同一件事
+2. 自動授權怎麼寫
+3. 個性 : 腦袋先想過，再回答問題
+4. log 檔優化 (太多檔案分資料夾-用年或日月)、寄 LINE 到手機+Email (可以直接用 AI 整理的結果)
+5. 跑 web 或 api 掛在 AI claude runtines
+6. 一定要跟別人對焦再執行避免大改
+7. 用 bs4 去試試看
