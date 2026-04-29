@@ -253,11 +253,277 @@ TODO:
 ---
 ## 20260327
 
-1. 清掉 github 舊的 (不要的) branch，請查出幾種方式
-2. 可以考慮用 copilt
-3. webcontroller 有寫了共用 function 但是外面沒有用到，需要優化 (主程式寫了很多重複的東西 line 19 - 31 )
-4. 看 path 能不能不要重複寫路徑 file_path、content_path 
-5. 查一下 404 跟網址的意思
+1. [X] 清掉 github 舊的 (不要的) branch，請查出幾種方式
+2. [X] 可以考慮用 copilt
+3. [X] webcontroller 有寫了共用 function 但是外面沒有用到，需要優化 (主程式寫了很多重複的東西 line 19 - 31 )
+4. [X] 看 path 能不能不要重複寫路徑 file_path、content_path 
+5. [X] 查一下 404 跟網址的意思
     - 404 錯誤的核心訊息就是**「路徑對不上」**。不論是人為輸入錯誤、系統架構更動，還是程式邏輯漏洞，只要伺服器無法在預期位置找到對應的內容，就會回傳 404。
-6. 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
-7. madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫
+6. [X] 查一下 API GET、PATCH、DELETE、PUT、HEAD、OPTIONS、POST
+7. [X] madhead_post_crawler_pro 的 if gp_text == "爆": gp_value = 100 改寫
+
+---
+## 20260329
+
+1. madhead_post_crawler.py 
+    - [X] 主程式，wait = WebDriverWait(driver_control, 10) 應該不需要
+    - [X] 執行 python -XXX 兩種模式，執行 "爆" 的方式 :
+        - 發一個爆
+        - 全發爆
+        - headless 執行
+2. [?] github setting 可以看一下怎麼加入私人的權限
+3. [X] github 看一下指令有哪些，可以畫圖，指出功能
+        - ![alt text](image-1.png)
+4. [?] 可以結合 gemini 問答方式
+5. API
+    - [X] headers 可以查一下
+    - [?] Beautifulsoup 可以玩一下，結合 API (requests)
+    - [X] API User-Agent 一定要帶
+    - [X] 打一下 get API 練習網址 (https://httpbin.org/)
+
+---
+## 20260402
+
+1. [X] 查一下 git 二級指令 restore、rebase、merge 等 ...
+    - git restore file.txt (還原最後一次 file.txt 檔案的 commit)
+        - 怎麼使用
+    - git merge : 把分支合併 git checkout main、git merge feature
+        - 怎麼使用
+    - git rebase : 把你的 commit「接到別的分支後面」，git checkout feature、git rebase main
+        - 怎麼使用
+    - git reset : 回到某個版本 
+        - 怎麼使用 (情境)
+    - git revert <commit_id> : 清掉上一個 commit 點
+        - 怎麼使用
+2. madhead_post_crawler_pro.py 主程式 :
+    - [X] 整理一下 code + 註解
+    - [X] 用 f'string 處理 log 檔名，舉例 : print(f"side_projects/logs/{file_path}log.txt")
+    - [?] 查一下 argparse.ArgumentParser 有沒有相似的套件 ?
+        - click
+        - typer
+        - Fire
+    - [?] parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用 (查一下怎麼使用，可以的話常用的加在程式碼中，自行判斷)
+        - store_true 帶參數時設為 true
+        - store_false 帶參數時設為 False
+        - store 預設儲存傳入的值
+        - store_const 帶參數時設為指定常數
+            - parser.add_argument("--mode", action="store_const", const="debug")
+            - python script.py --mode → args.mode = "debug"
+        - append 多次使用時，值加入 list
+            - parser.add_argument("--tag", action="append")
+            - python script.py --tag a --tag b → args.tag = ["a", "b"]
+        - count 計算參數出現次數
+            - parser.add_argument("-v", action="count", default=0)
+            - python script.py -vvv → args.v = 3
+    - [?] args 加上可以帶參數、可縮寫的彈性用法，當需帶入的參數變多時，如何增加可讀性，driver_control = WebController(headless=args.headless) 
+3. find_high_gp.py :
+    - [X] 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
+        - [X] 一併調整主程式的，修正 if 判斷式(結合find_high_gp.py 檔的function)
+4. [?] get API 查一下怎麼爬巴哈網站
+
+---
+## 20260404
+1. 查一下 git 二級指令的實際用法
+    - [] git restore file.txt (還原最後一次 file.txt 檔案的 commit)
+        - 怎麼使用
+    - [] git merge : 把分支合併 git checkout main、git merge feature
+        - 怎麼使用
+    - [] git rebase : 把你的 commit「接到別的分支後面」，git checkout feature、git rebase main
+        - 怎麼使用
+    - [] git reset : 回到某個版本 
+        - 怎麼使用 (情境)
+    - [] git revert <commit_id> : 清掉上一個 commit 點
+        - 怎麼使用
+2. madhead_post_crawler_pro.py
+    - [X] log 路徑寫法不用拆太細
+    - [?] parser.add_argument("--headless", action="store_true")，action="store_true" 要怎麼使用，有沒有其他 action 可以用 (查一下怎麼使用，可以的話常用的加在程式碼中，自行判斷)
+        - store_true 帶參數時設為 true
+        - store_false 帶參數時設為 False
+        - store 預設儲存傳入的值
+        - store_const 帶參數時設為指定常數
+            - parser.add_argument("--mode", action="store_const", const="debug")
+            - python script.py --mode → args.mode = "debug"
+        - append 多次使用時，值加入 list
+            - parser.add_argument("--tag", action="append")
+            - python script.py --tag a --tag b → args.tag = ["a", "b"]
+        - count 計算參數出現次數
+            - parser.add_argument("-v", action="count", default=0)
+            - python script.py -vvv → args.v = 3
+    - [X] args 加上可以帶參數、可縮寫的彈性用法，當需帶入的參數變多時，如何增加可讀性，driver_control = WebController(headless=args.headless) 
+        - 方法 1 : 參數多適合，可讀性高
+            ``` 主程式寫法
+            driver_control = WebController(**vars(args))
+                '''補充
+                ** => 把 args dict 拆開
+                vars(args) => 把 args 轉成 dict 
+                '''
+            # function 內寫法
+                def __init__(self, headless, timeout, proxy, **kwargs): 
+                '''補充 : **kwargs 多傳的參數就丟垃圾桶
+                    def my_function(a, b, **kwargs):
+                    print(a, b, kwargs)  # 印出真正的參數值
+                    ---
+                    my_function(a='AAA', b='BBB', c='CCC') # 印出：AAA BBB {'c': 'CCC'}
+                '''
+                self.headless = headless
+                self.timeout  = timeout
+                self.proxy    = proxy
+            ```
+        - 方法 2 : 使用字典方法，缺點行數會變多一點，但一樣可讀性高
+            ``` 主程式寫法
+            controller_config = {
+                "headless": args.headless,
+                "timeout":  args.timeout,
+                }
+            driver_control = WebController(**controller_config) 
+                ```
+                補充 : ** => 把 dict 的每一個 key-value pair，展開成 key=value 的形式
+                ```
+            ```
+        - 方法 3 : 直接換行，最簡單，且直覺，缺點就是一樣多行
+            ``` 主程式寫法
+            driver_control = WebController(
+                headless=args.headless,
+                timeout=args.timeout,
+                )
+            ```
+3. find_high_gp.py :
+    - [X] 不要寫成兩個 function，用使用者傳入的值處理 (跑a邏輯或b邏輯)
+4. [?] get API 查一下怎麼爬巴哈網站
+
+---
+## 20260405
+1. find_high_gp.py :
+    - 爆的寫法邏輯有誤
+     - gp_text 包含 "爆"？
+        ├── YES → 爆文處理
+        │   ├── choice == "1"：加入 results，立刻停止迴圈（只取第一篇）
+        │   └── choice == "2"：加入 results，繼續找下一篇爆文
+        └── NO → 一般文章處理
+            └── 比較 GP 數值，更新當前頁面 GP 最高的樓層
+    - 置頂文寫法調整(之後再調)
+    - max 用法 ?
+        - max((20, best_art_elem), (35, title_elem))，比較第一個元素 20 vs 35，因為 35 大，所以回傳 (35, title_elem)
+        - max((50, best_art_elem), (35, title_elem))，比較第一個元素 50 vs 35，因為 50 大，所以回傳 (50, best_art_elem)，best_gp 和 best_art_elem 維持不變
+        ，第一個元素一樣，比第二個，因為 "A" vs "B"，"B" 比較大，所以回傳 (10, "B")
+    - best_gp, best_art_elem = max((best_gp, best_art_elem), (gp_value, title_elem))
+2. 了解 git 指令用法
+3. 了解並實作 args 的用法
+
+---
+## 20260407
+1. find_high_gp.py
+    - 如果以測資 (21,爆) 進 for 迴圈判斷，這時選擇 1，並想像自己寫的 code 的 edge case 跑一遍程式看合不合理 (包含 else 情境) 
+        --> 可以看一下爆 + GP 合不合理
+        --> case : (21)、(爆)、(21,爆)、(爆,21)
+        --> 看一下選項 1 跟 2 的合理
+        --> ### 注意 : 正在寫，或寫完 function 後冷靜想一下合不合理 ###
+    -  choice 參考寫法:
+        results.append(content)
+        if choice == "1":
+            break  # 第一筆爆文就停止
+    - [] 新增一個 function 合併 find_high_gp 和 scan_high_gp_content 的 (不用改舊的)
+    - 補充 :
+        str.isdigit：這是一個判斷式，檢查字元是不是「數字」。
+        filter(str.isdigit, gp_text)：這會掃描 gp_text 裡的每一個字，如果是數字就留下來，不是（例如空白、括號、文字）就丟掉。
+        "".join(...)：把過濾剩下的數字字元「黏成一個完整的字串」，例如 "  25  " => "25"
+
+        <<< 合併 function 思考 >>>
+        post 第一頁找到文章(排除置頂)，如果GP有爆，給無限大，然後比較GP，把所有GP大於15的文章標題都取出來
+        content 每一頁找到內文
+                    選項1:每一頁如果有爆的GP，只取出第一個爆文章的內容+一般文章中 PK GP 最大的拿出來 
+                    選項2:每一頁如果有爆的GP，每個爆文章的各自內容+一般文章中 PK GP 最大的拿出來  
+        方法1:
+        if 要的是比文章標題就跑 post
+        else 就跑 content
+
+        方法2:
+        post >>> 做原本要做的事除了GP
+        content >>> 做原本要做的事除了GP
+        gp >>> 只處理GP
+
+        方法3:
+        post >>> 做原本要做的事除了抓文章
+        content >>> 做原本要做的事除了抓文章
+        get >>> 只負責抓文章或內容
+
+---
+## 20260411
+1. claude.ai (要大概介紹說一下，有一個很明確的架構)
+    - slash commands 是什麼 ? 常用的
+    - plan mode 跟 ask mode 差異 ?
+    - 新創 claude ETC 在 teams 裡面
+    - 桌面板 / 網頁版 / ...  差異
+    - 模型差異 ?
+claude
+    - 新增 CLAUDE.md 檔，讓 AI 每次執行前先讀取 (備忘錄、該遵守的事情)
+    - 反白段落，AI 直接讀取該段落
+    - allow 模式 >>> AI 每次執行時需要詢問
+    - 網頁版適合日常對話和文書工作，桌面版是生產力最強的選擇（尤其搭配 Cowork 和 Code），手機版勝在語音互動和隨身攜帶的便利性。
+    - mode 差異 :
+        - Ask permissions 最安全，每個動作都問你
+        - Auto accept edits（自動接受編輯）
+        - Plan mode 只分析規劃，不動程式碼
+        - Auto 全自動，背景安全審查
+        - Bypass permissions（繞過所有檢查）
+        ![alt text](image.png)
+補充 : **保持好奇心**
+
+---
+## 20260415
+1.claude ai :
+    - 中文化，有兩種 (在User preferences加上提示詞，寫在CLAUDE.md加上規則)
+    - 使用架構圖 (去查)
+2.專案整合 : 爬蟲結合 AI 的部分，可以先想 (web+claude)，
+    - 架構圖 : (補充:從哪到哪>用啥>從哪到哪) 
+    - 完整可以使用的程式
+
+- 問 AI 是屬於 CI/CD 哪個部分、有沒有缺少什麼、如何結合應用
+- AI agent ?
+    -  你給一個目標，它自己規劃步驟、執行、遇到問題自己調整，直到完成為止
+- MCP Server ?
+    - MCP（Model Context Protocol） 是 Anthropic 制定的開放標準，讓 Claude 可以連接外部工具、資料庫、服務。
+
+3.以下每一種 API 方法都打一次 
+HTTP Methods / AUTH / bearer(一定要試) /basic-auth/{user}/{passwd}
+status code / response formats / dynamic data - base64 
+cookies / Redirects / Images
+
+---
+## 20260419
+1. API，架構圖，可以幫助自己記憶
+2. data 跟 json 的差異 ?
+    - 表單格式 → 實際送出: name=Alice&age=30
+        requests.post(url, data={"name": "Alice", "age": 30})
+    - JSON 格式 → 實際送出: {"name": "Alice", "age": 30}
+        requests.post(url, json={"name": "Alice", "age": 30})
+3. Content-type 是什麼 ?
+    - Content-Type 是 HTTP 標頭（Header）的一個欄位，告訴伺服器「我送給你的資料是什麼格式」，讓伺服器知道怎麼解析它。
+        常見的 Content-Type 值：
+        - application/json — JSON 格式，現代 API 最常用
+        - application/x-www-form-urlencoded — 表單格式，HTML <form> 預設用這個
+        - multipart/form-data — 上傳檔案時使用（例如上傳圖片）
+        - text/html — HTML 網頁內容
+        - text/plain — 純文字
+        - application/xml — XML 格式（較舊的 API 會用）
+        - application/octet-stream — 二進位資料（不指定類型的原始檔案）
+        原理 ? 為什麼會被擋 ? 畫個圖記憶 (content-type > 資料合法/不合法 > 通過/exception ...)
+4. 查一下 "data": "", 為什麼是空的 ?
+    - 因為是 DELETE
+
+---
+## 20260420
+python 原生的套件 VS 需要自己裝的套件差異是 ?
+selenium 的 workflow API 模式 / web 模式 (主程式的工作流)
+
+架構圖執行方式 : start c:/Users/chang/Desktop/python_project/side_projects/architecture.html
+
+---
+## 20260428
+1. 將任務拆成階段性，模擬用戶狀態 (貼近使用者) 內外網差異 / 如何確認可正常值形式基本，例如 run now 和掛上去不一定是同一件事
+2. 自動授權怎麼寫
+3. 個性 : 腦袋先想過，再回答問題
+4. log 檔優化 (太多檔案分資料夾-用年或日月)、寄 LINE 到手機+Email (可以直接用 AI 整理的結果)
+5. 跑 web 或 api 掛在 AI claude runtines
+6. 一定要跟別人對焦再執行避免大改
+7. 用 bs4 去試試看
