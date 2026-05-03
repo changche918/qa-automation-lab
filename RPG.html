@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>天下第一劍</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "STKaiti", "DFKai-SB", "BiauKai", "Kaiti TC", serif;
+    background: #1a0e0a;
+    background-image: 
+      radial-gradient(ellipse at top, #3a1f15 0%, #1a0e0a 60%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><text x='10' y='30' font-family='serif' font-size='40' fill='%23000' opacity='0.05'>武</text><text x='50' y='80' font-family='serif' font-size='40' fill='%23000' opacity='0.05'>俠</text></svg>");
+    color: #e8d4a0;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #2a1810 0%, #1f1108 100%);
+    border: 3px double #c9a961;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 40px rgba(201, 169, 97, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .container::before {
+    content: "❀";
+    position: absolute;
+    top: 10px; left: 15px;
+    color: #c9a961; font-size: 20px;
+  }
+  .container::after {
+    content: "❀";
+    position: absolute;
+    bottom: 10px; right: 15px;
+    color: #c9a961; font-size: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 48px;
+    color: #d4af37;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 2px 2px 4px #000;
+    margin-bottom: 10px;
+    letter-spacing: 8px;
+    font-weight: bold;
+  }
+  .subtitle {
+    text-align: center;
+    color: #a89060;
+    font-style: italic;
+    margin-bottom: 25px;
+    font-size: 16px;
+    letter-spacing: 3px;
+  }
+  .stats-panel {
+    background: linear-gradient(to right, #1f1108, #2a1810, #1f1108);
+    border: 2px solid #8b6914;
+    border-radius: 5px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-label {
+    color: #c9a961;
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+  .stat-value {
+    color: #f0e0b0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .bar {
+    height: 8px;
+    background: #1a0a05;
+    border: 1px solid #8b6914;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .bar-fill {
+    height: 100%;
+    transition: width 0.5s;
+  }
+  .hp-bar { background: linear-gradient(to right, #8b0000, #ff3030); }
+  .mp-bar { background: linear-gradient(to right, #1e3a8a, #3b82f6); }
+  .exp-bar { background: linear-gradient(to right, #d4af37, #ffd700); }
+  
+  .scene {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #8b6914;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .scene::-webkit-scrollbar { width: 8px; }
+  .scene::-webkit-scrollbar-track { background: #1a0a05; }
+  .scene::-webkit-scrollbar-thumb { background: #8b6914; border-radius: 4px; }
+  
+  .narration {
+    color: #d4c090;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    text-indent: 2em;
+  }
+  .dialogue {
+    color: #f0d878;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    padding-left: 1em;
+    border-left: 3px solid #c9a961;
+  }
+  .system-msg {
+    color: #5fb85f;
+    font-style: italic;
+    margin: 8px 0;
+    text-align: center;
+  }
+  .battle-msg {
+    color: #ff6b6b;
+    margin: 6px 0;
+  }
+  .reward-msg {
+    color: #ffd700;
+    margin: 6px 0;
+    text-align: center;
+    font-weight: bold;
+  }
+  .level-up {
+    color: #ffd700;
+    text-align: center;
+    font-size: 22px;
+    margin: 10px 0;
+    text-shadow: 0 0 10px #ffd700;
+    animation: pulse 1s ease;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  .choices {
+    display: grid;
+    gap: 10px;
+  }
+  .choice-btn {
+    background: linear-gradient(to bottom, #3a2418, #2a1810);
+    color: #e8d4a0;
+    border: 2px solid #8b6914;
+    padding: 12px 20px;
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-align: left;
+    letter-spacing: 1px;
+  }
+  .choice-btn:hover {
+    background: linear-gradient(to bottom, #5a3828, #3a2418);
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    transform: translateX(5px);
+  }
+  .choice-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .battle-panel {
+    background: rgba(80, 0, 0, 0.2);
+    border: 2px solid #8b0000;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .enemy-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .enemy-name {
+    color: #ff6b6b;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* ========== 戰鬥畫面 ========== */
+  .battle-stage {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: 
+      linear-gradient(to bottom, 
+        rgba(20,10,5,0.9) 0%, 
+        rgba(60,30,15,0.7) 60%, 
+        rgba(40,20,10,0.9) 100%);
+    border: 2px solid #8b6914;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  /* 山水背景 */
+  .battle-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(ellipse 200px 60px at 20% 75%, rgba(80,50,30,0.6), transparent),
+      radial-gradient(ellipse 250px 80px at 70% 80%, rgba(60,40,25,0.7), transparent),
+      radial-gradient(circle 40px at 80% 25%, rgba(255,220,150,0.3), transparent);
+    pointer-events: none;
+  }
+  /* 地面 */
+  .battle-stage::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(60,35,20,0.8), rgba(30,15,8,1));
+    border-top: 1px solid #5a3d20;
+  }
+  
+  .fighter {
+    position: absolute;
+    bottom: 15px;
+    width: 100px;
+    height: 160px;
+    transition: transform 0.3s ease;
+  }
+  .fighter-player { left: 15%; }
+  .fighter-enemy { right: 15%; }
+  
+  .fighter svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+  }
+  
+  /* 戰鬥動畫 */
+  @keyframes attack-right {
+    0% { transform: translateX(0); }
+    40% { transform: translateX(120px) scale(1.1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes attack-left {
+    0% { transform: translateX(0); }
+    40% { transform: translateX(-120px) scale(1.1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes hit-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-3deg); filter: brightness(2) sepia(1) hue-rotate(-50deg); }
+    40% { transform: translateX(8px) rotate(3deg); filter: brightness(2) sepia(1) hue-rotate(-50deg); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+  @keyframes defeat {
+    0% { transform: rotate(0); opacity: 1; }
+    100% { transform: rotate(90deg) translateY(40px); opacity: 0.2; }
+  }
+  .attacking-right { animation: attack-right 0.6s ease; }
+  .attacking-left { animation: attack-left 0.6s ease; }
+  .hit { animation: hit-shake 0.5s ease; }
+  .defeated { animation: defeat 1s ease forwards; }
+  
+  /* 招式特效 */
+  .effect {
+    position: absolute;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  @keyframes slash {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-30deg); opacity: 0; }
+    30% { transform: translate(-50%, -50%) scale(1.2) rotate(-30deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2) rotate(30deg); opacity: 0; }
+  }
+  @keyframes burst {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+  }
+  @keyframes float-text {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, -60px); opacity: 0; }
+  }
+  .slash-effect { animation: slash 0.5s ease; }
+  .burst-effect { animation: burst 0.6s ease; }
+  
+  .damage-text {
+    position: absolute;
+    color: #ff3030;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000, 0 0 10px #ff0000;
+    animation: float-text 1s ease forwards;
+    z-index: 20;
+    pointer-events: none;
+  }
+  .damage-text.heal { color: #5fff5f; text-shadow: 2px 2px 4px #000, 0 0 10px #00ff00; }
+  
+  .skill-name-banner {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffd700;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    text-shadow: 0 0 10px #ff8800, 2px 2px 4px #000;
+    animation: float-text 1.2s ease forwards;
+    z-index: 30;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  
+  .fighter-label {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: #f0d878;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+    border: 1px solid #8b6914;
+  }
+  
+  .mini-hp-bar {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 6px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid #8b6914;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .mini-hp-fill {
+    height: 100%;
+    background: linear-gradient(to right, #8b0000, #ff3030);
+    transition: width 0.5s;
+  }
+  
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .skill-btn {
+    background: linear-gradient(to bottom, #2a1a3a, #1a0a25);
+    border: 2px solid #6b4f8b;
+    color: #d8c8f0;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+  .skill-btn:hover:not(:disabled) {
+    border-color: #b89cd6;
+    background: linear-gradient(to bottom, #4a2a5a, #2a1a3a);
+    box-shadow: 0 0 10px rgba(184, 156, 214, 0.4);
+  }
+  .skill-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .skill-cost {
+    color: #b89cd6;
+    font-size: 12px;
+    display: block;
+    margin-top: 2px;
+  }
+  
+  .item-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .item-tag {
+    background: rgba(139, 105, 20, 0.3);
+    border: 1px solid #c9a961;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .item-tag:hover {
+    background: rgba(212, 175, 55, 0.4);
+  }
+  
+  .gold {
+    color: #ffd700;
+  }
+  
+  @media (max-width: 600px) {
+    h1 { font-size: 32px; letter-spacing: 4px; }
+    .container { padding: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>天下第一劍</h1>
+  <div class="subtitle">— 江湖路漫漫，劍指九重天 —</div>
+  
+  <div class="stats-panel" id="statsPanel"></div>
+  
+  <div class="scene" id="scene"></div>
+  
+  <div id="actions"></div>
+</div>
+
+<script>
+// ============ 遊戲狀態 ============
+const player = {
+  name: "少俠",
+  level: 1,
+  exp: 0,
+  expNext: 30,
+  hp: 100, hpMax: 100,
+  mp: 30, mpMax: 30,
+  atk: 15,
+  def: 5,
+  gold: 20,
+  skills: ["basic"],
+  items: { "金創藥": 2, "凝神丹": 1 },
+  flags: {}
+};
+
+const skillData = {
+  basic: { name: "平凡一劍", cost: 0, dmg: [12, 18], desc: "基礎劍招" },
+  jiyun: { name: "急雲斬", cost: 8, dmg: [22, 32], desc: "迅捷一劍，威力倍增" },
+  qixing: { name: "七星貫日", cost: 15, dmg: [35, 50], desc: "連刺七劍，氣貫長虹" },
+  jianqi: { name: "御劍千里", cost: 25, dmg: [55, 80], desc: "劍氣縱橫，無堅不摧" },
+  jianghu: { name: "笑傲江湖", cost: 40, dmg: [90, 130], desc: "絕學奧義，天下無雙" }
+};
+
+const enemies = {
+  bandit: { name: "山賊嘍囉", hp: 40, atk: 8, def: 2, exp: 15, gold: 8, 
+    intro: "一名手持鋼刀的山賊嘍囉攔住去路，獰笑道：「此山是我開，留下買路財！」" },
+  banditLeader: { name: "黑風寨主", hp: 90, atk: 14, def: 5, exp: 40, gold: 30,
+    intro: "黑風寨主面目猙獰，手中大刀寒光閃閃：「敢闖我黑風寨？納命來！」" },
+  swordsman: { name: "落魄劍客", hp: 130, atk: 18, def: 8, exp: 65, gold: 50,
+    intro: "一位滿身酒氣的劍客踉蹌而立，嘶啞道：「來得好！讓我看看你的劍，配不配與我一戰！」" },
+  monk: { name: "瘋癲老僧", hp: 200, atk: 25, def: 12, exp: 120, gold: 80,
+    intro: "破廟中走出一名瘋癲老僧，雙目精光暴射：「阿彌陀佛，老衲已三十年未曾出手，今日就拿你開刀！」" },
+  demon: { name: "魔教護法", hp: 320, atk: 35, def: 18, exp: 250, gold: 150,
+    intro: "黑衣魔教護法緩緩拔出血色長劍，冷笑道：「黃口小兒也敢攖我鋒芒？讓你嚐嚐魔教武學！」" },
+  boss: { name: "魔教教主・血天尊", hp: 600, atk: 50, def: 25, exp: 500, gold: 500,
+    intro: "血天尊一襲血袍，立於高臺之上，俯視道：「江湖小輩，竟能闖到此處……可惜，今日便是你的死期！」" }
+};
+
+let currentEnemy = null;
+let inBattle = false;
+let sceneText = [];
+
+// ============ UI 更新 ============
+function updateStats() {
+  const panel = document.getElementById('statsPanel');
+  panel.innerHTML = `
+    <div class="stat">
+      <span class="stat-label">姓名</span>
+      <span class="stat-value">${player.name}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">境界 Lv.${player.level}</span>
+      <span class="stat-value">經驗 ${player.exp}/${player.expNext}</span>
+      <div class="bar"><div class="bar-fill exp-bar" style="width:${100*player.exp/player.expNext}%"></div></div>
+    </div>
+    <div class="stat">
+      <span class="stat-label">氣血</span>
+      <span class="stat-value">${player.hp}/${player.hpMax}</span>
+      <div class="bar"><div class="bar-fill hp-bar" style="width:${100*player.hp/player.hpMax}%"></div></div>
+    </div>
+    <div class="stat">
+      <span class="stat-label">內力</span>
+      <span class="stat-value">${player.mp}/${player.mpMax}</span>
+      <div class="bar"><div class="bar-fill mp-bar" style="width:${100*player.mp/player.mpMax}%"></div></div>
+    </div>
+    <div class="stat">
+      <span class="stat-label">攻 / 防</span>
+      <span class="stat-value">${player.atk} / ${player.def}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">紋銀</span>
+      <span class="stat-value gold">${player.gold} 兩</span>
+    </div>
+  `;
+}
+
+function addScene(text, cls = 'narration') {
+  sceneText.push({ text, cls });
+  if (sceneText.length > 30) sceneText.shift();
+  renderScene();
+}
+
+function renderScene() {
+  const scene = document.getElementById('scene');
+  scene.innerHTML = sceneText.map(s => `<div class="${s.cls}">${s.text}</div>`).join('');
+  scene.scrollTop = scene.scrollHeight;
+}
+
+function setActions(html) {
+  document.getElementById('actions').innerHTML = html;
+}
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// ============ 戰鬥系統 ============
+function startBattle(enemyKey, onWin) {
+  currentEnemy = { ...enemies[enemyKey], hpMax: enemies[enemyKey].hp, onWin };
+  inBattle = true;
+  addScene(currentEnemy.intro, 'dialogue');
+  showBattleUI();
+}
+
+function showBattleUI() {
+  const e = currentEnemy;
+  let skillsHtml = player.skills.map(s => {
+    const sk = skillData[s];
+    const disabled = player.mp < sk.cost ? 'disabled' : '';
+    return `<button class="skill-btn" ${disabled} onclick="useSkill('${s}')">
+      ${sk.name}<span class="skill-cost">內力 ${sk.cost} | ${sk.desc}</span>
+    </button>`;
+  }).join('');
+  
+  const itemsHtml = Object.keys(player.items).filter(k => player.items[k] > 0).map(k =>
+    `<span class="item-tag" onclick="useItem('${k}')">${k} ×${player.items[k]}</span>`
+  ).join('');
+  
+  setActions(`
+    <div class="battle-stage" id="battleStage">
+      <div class="fighter fighter-player" id="fighterPlayer">
+        <div class="fighter-label">${player.name} Lv.${player.level}</div>
+        <div class="mini-hp-bar"><div class="mini-hp-fill" id="playerMiniHp" style="width:${100*player.hp/player.hpMax}%"></div></div>
+        ${getPlayerSVG()}
+      </div>
+      <div class="fighter fighter-enemy" id="fighterEnemy">
+        <div class="fighter-label">${e.name}</div>
+        <div class="mini-hp-bar"><div class="mini-hp-fill" id="enemyMiniHp" style="width:${100*e.hp/e.hpMax}%"></div></div>
+        ${getEnemySVG(e.name)}
+      </div>
+    </div>
+    <div class="battle-panel">
+      <div class="enemy-info">
+        <span class="enemy-name">⚔ ${e.name}</span>
+        <span style="color:#ff8888">氣血 ${e.hp}/${e.hpMax}</span>
+      </div>
+      <div class="bar"><div class="bar-fill hp-bar" style="width:${100*e.hp/e.hpMax}%"></div></div>
+    </div>
+    <div style="margin-bottom:10px;color:#c9a961;letter-spacing:2px;">▼ 出招 ▼</div>
+    <div class="skills-grid">${skillsHtml}</div>
+    ${itemsHtml ? `<div style="margin-top:12px;color:#c9a961;letter-spacing:2px;">▼ 行囊 ▼</div><div class="item-list">${itemsHtml}</div>` : ''}
+    <button class="choice-btn" style="margin-top:12px;" onclick="flee()">🏃 拔腿就跑</button>
+  `);
+}
+
+// ============ SVG 角色 ============
+function getPlayerSVG() {
+  return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- 劍 (背後) -->
+    <line x1="75" y1="20" x2="95" y2="80" stroke="#c0c0c0" stroke-width="3"/>
+    <line x1="75" y1="20" x2="95" y2="80" stroke="#ffffff" stroke-width="1"/>
+    <rect x="72" y="18" width="6" height="10" fill="#8b6914"/>
+    <!-- 頭 -->
+    <circle cx="50" cy="25" r="14" fill="#f5d4a0"/>
+    <!-- 頭髮 -->
+    <path d="M 36 22 Q 50 8 64 22 L 64 28 Q 50 18 36 28 Z" fill="#1a1a1a"/>
+    <!-- 髮帶 -->
+    <rect x="36" y="20" width="28" height="3" fill="#c41818"/>
+    <!-- 眼睛 -->
+    <ellipse cx="44" cy="26" rx="1.5" ry="2" fill="#000"/>
+    <ellipse cx="56" cy="26" rx="1.5" ry="2" fill="#000"/>
+    <!-- 身體/長袍 -->
+    <path d="M 35 38 Q 30 45 30 80 L 30 120 Q 35 130 50 130 Q 65 130 70 120 L 70 80 Q 70 45 65 38 Z" fill="#2a4d8f"/>
+    <!-- 衣領 -->
+    <path d="M 38 38 L 50 50 L 62 38 L 60 35 L 50 45 L 40 35 Z" fill="#ffffff"/>
+    <!-- 腰帶 -->
+    <rect x="30" y="85" width="40" height="6" fill="#c41818"/>
+    <rect x="30" y="85" width="40" height="2" fill="#ff6060"/>
+    <!-- 手臂 -->
+    <path d="M 30 50 Q 22 70 25 95 L 32 95 Q 32 70 38 55 Z" fill="#2a4d8f"/>
+    <path d="M 70 50 Q 78 70 75 95 L 68 95 Q 68 70 62 55 Z" fill="#2a4d8f"/>
+    <!-- 手 -->
+    <circle cx="28" cy="95" r="5" fill="#f5d4a0"/>
+    <circle cx="72" cy="95" r="5" fill="#f5d4a0"/>
+    <!-- 腿 -->
+    <rect x="36" y="125" width="10" height="30" fill="#1a3060"/>
+    <rect x="54" y="125" width="10" height="30" fill="#1a3060"/>
+    <!-- 鞋 -->
+    <ellipse cx="41" cy="156" rx="8" ry="3" fill="#000"/>
+    <ellipse cx="59" cy="156" rx="8" ry="3" fill="#000"/>
+  </svg>`;
+}
+
+function getEnemySVG(enemyName) {
+  // 不同敵人不同造型
+  if (enemyName.includes("山賊嘍囉")) {
+    return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <!-- 大刀 -->
+      <rect x="20" y="40" width="4" height="50" fill="#8b6914"/>
+      <path d="M 18 40 L 28 40 L 30 25 L 16 25 Z" fill="#a0a0a0"/>
+      <!-- 頭巾 -->
+      <path d="M 35 22 Q 50 10 65 22 L 65 32 L 35 32 Z" fill="#3a3a3a"/>
+      <!-- 頭 -->
+      <circle cx="50" cy="30" r="13" fill="#d4a574"/>
+      <!-- 兇眼 -->
+      <path d="M 42 28 L 47 30 M 53 30 L 58 28" stroke="#000" stroke-width="2" fill="none"/>
+      <!-- 鬍 -->
+      <path d="M 45 36 Q 50 38 55 36" stroke="#000" stroke-width="1.5" fill="none"/>
+      <!-- 身體 -->
+      <path d="M 35 42 L 30 80 L 30 120 Q 35 128 50 128 Q 65 128 70 120 L 70 80 L 65 42 Z" fill="#5a3020"/>
+      <!-- 護甲 -->
+      <rect x="38" y="50" width="24" height="20" fill="#3a1810" stroke="#1a0805" stroke-width="1"/>
+      <circle cx="44" cy="60" r="2" fill="#8b6914"/>
+      <circle cx="56" cy="60" r="2" fill="#8b6914"/>
+      <!-- 腰帶 -->
+      <rect x="30" y="80" width="40" height="5" fill="#1a0805"/>
+      <!-- 手臂 -->
+      <path d="M 30 50 Q 20 70 22 95 L 28 95 Q 30 75 35 55 Z" fill="#5a3020"/>
+      <path d="M 70 50 Q 80 70 78 95 L 72 95 Q 70 75 65 55 Z" fill="#5a3020"/>
+      <circle cx="25" cy="95" r="5" fill="#d4a574"/>
+      <circle cx="75" cy="95" r="5" fill="#d4a574"/>
+      <!-- 腿 -->
+      <rect x="36" y="125" width="10" height="30" fill="#3a2010"/>
+      <rect x="54" y="125" width="10" height="30" fill="#3a2010"/>
+      <ellipse cx="41" cy="156" rx="8" ry="3" fill="#1a0805"/>
+      <ellipse cx="59" cy="156" rx="8" ry="3" fill="#1a0805"/>
+    </svg>`;
+  }
+  if (enemyName.includes("黑風寨主")) {
+    return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <!-- 大刀 (更大) -->
+      <rect x="15" y="35" width="5" height="60" fill="#5a3020"/>
+      <path d="M 12 35 L 25 35 L 28 15 L 9 15 Z" fill="#c0c0c0"/>
+      <path d="M 12 35 L 25 35 L 28 15 L 9 15 Z" fill="#a0a0a0" opacity="0.5"/>
+      <!-- 頭 -->
+      <circle cx="50" cy="28" r="15" fill="#c89060"/>
+      <!-- 散髮 -->
+      <path d="M 32 22 Q 50 5 68 22 L 70 32 Q 60 25 50 25 Q 40 25 30 32 Z" fill="#1a1a1a"/>
+      <!-- 兇眼+疤 -->
+      <path d="M 38 24 L 48 30" stroke="#8b0000" stroke-width="1.5"/>
+      <ellipse cx="43" cy="28" rx="2" ry="2.5" fill="#8b0000"/>
+      <ellipse cx="57" cy="28" rx="2" ry="2.5" fill="#000"/>
+      <!-- 落腮鬍 -->
+      <path d="M 40 38 Q 50 45 60 38 Q 58 42 50 43 Q 42 42 40 38 Z" fill="#1a1a1a"/>
+      <!-- 身體 (壯) -->
+      <path d="M 30 45 L 25 80 L 28 125 Q 35 132 50 132 Q 65 132 72 125 L 75 80 L 70 45 Z" fill="#1a0805"/>
+      <!-- 鎧甲 -->
+      <rect x="35" y="48" width="30" height="35" fill="#3a1810" stroke="#000" stroke-width="1"/>
+      <circle cx="42" cy="60" r="3" fill="#8b6914"/>
+      <circle cx="50" cy="60" r="3" fill="#8b6914"/>
+      <circle cx="58" cy="60" r="3" fill="#8b6914"/>
+      <circle cx="42" cy="72" r="3" fill="#8b6914"/>
+      <circle cx="50" cy="72" r="3" fill="#8b6914"/>
+      <circle cx="58" cy="72" r="3" fill="#8b6914"/>
+      <!-- 紅披風 -->
+      <path d="M 25 45 Q 15 80 18 130 L 25 80 Z" fill="#8b0000"/>
+      <path d="M 75 45 Q 85 80 82 130 L 75 80 Z" fill="#8b0000"/>
+      <!-- 手臂 -->
+      <path d="M 25 52 Q 15 75 18 100 L 25 100 Q 28 75 32 58 Z" fill="#1a0805"/>
+      <path d="M 75 52 Q 85 75 82 100 L 75 100 Q 72 75 68 58 Z" fill="#1a0805"/>
+      <circle cx="22" cy="100" r="6" fill="#c89060"/>
+      <circle cx="78" cy="100" r="6" fill="#c89060"/>
+      <!-- 腿 -->
+      <rect x="34" y="128" width="12" height="28" fill="#0a0302"/>
+      <rect x="54" y="128" width="12" height="28" fill="#0a0302"/>
+      <ellipse cx="40" cy="156" rx="9" ry="3" fill="#000"/>
+      <ellipse cx="60" cy="156" rx="9" ry="3" fill="#000"/>
+    </svg>`;
+  }
+  if (enemyName.includes("劍客")) {
+    return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <!-- 酒葫蘆 -->
+      <ellipse cx="22" cy="90" rx="6" ry="9" fill="#8b4513"/>
+      <rect x="20" y="78" width="4" height="6" fill="#5a3020"/>
+      <!-- 長劍 -->
+      <line x1="80" y1="40" x2="95" y2="100" stroke="#e0e0e0" stroke-width="3"/>
+      <rect x="78" y="38" width="6" height="8" fill="#8b6914"/>
+      <!-- 頭 -->
+      <circle cx="50" cy="28" r="13" fill="#e8c098"/>
+      <!-- 散亂頭髮 -->
+      <path d="M 35 22 Q 50 8 65 22 L 67 35 Q 60 28 50 30 Q 40 28 33 35 Z" fill="#3a3020"/>
+      <!-- 醉眼 -->
+      <path d="M 41 27 Q 44 28 47 27" stroke="#000" stroke-width="1.5" fill="none"/>
+      <path d="M 53 27 Q 56 28 59 27" stroke="#000" stroke-width="1.5" fill="none"/>
+      <!-- 紅鼻 -->
+      <ellipse cx="50" cy="32" rx="2" ry="1.5" fill="#c41818"/>
+      <!-- 鬍鬚 -->
+      <path d="M 45 38 Q 50 42 55 38" stroke="#3a3020" stroke-width="1" fill="none"/>
+      <!-- 灰白長袍 -->
+      <path d="M 35 40 Q 28 48 28 90 L 30 125 Q 35 132 50 132 Q 65 132 70 125 L 72 90 Q 72 48 65 40 Z" fill="#6a6a6a"/>
+      <!-- 衣領 -->
+      <path d="M 40 40 L 50 52 L 60 40 L 58 38 L 50 48 L 42 38 Z" fill="#3a3a3a"/>
+      <!-- 腰帶 -->
+      <rect x="28" y="88" width="44" height="5" fill="#3a2010"/>
+      <!-- 手臂 -->
+      <path d="M 28 50 Q 18 75 22 100 L 30 100 Q 32 75 35 55 Z" fill="#6a6a6a"/>
+      <path d="M 72 50 Q 82 75 78 100 L 70 100 Q 68 75 65 55 Z" fill="#6a6a6a"/>
+      <circle cx="26" cy="100" r="5" fill="#e8c098"/>
+      <circle cx="74" cy="100" r="5" fill="#e8c098"/>
+      <!-- 腿 -->
+      <rect x="36" y="128" width="10" height="28" fill="#4a4a4a"/>
+      <rect x="54" y="128" width="10" height="28" fill="#4a4a4a"/>
+      <ellipse cx="41" cy="156" rx="8" ry="3" fill="#1a1a1a"/>
+      <ellipse cx="59" cy="156" rx="8" ry="3" fill="#1a1a1a"/>
+    </svg>`;
+  }
+  if (enemyName.includes("老僧")) {
+    return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <!-- 念珠 -->
+      <circle cx="35" cy="60" r="2" fill="#8b6914"/>
+      <circle cx="33" cy="65" r="2" fill="#8b6914"/>
+      <circle cx="35" cy="70" r="2" fill="#8b6914"/>
+      <circle cx="38" cy="68" r="2" fill="#8b6914"/>
+      <!-- 禪杖 -->
+      <line x1="78" y1="20" x2="82" y2="130" stroke="#5a3020" stroke-width="3"/>
+      <circle cx="78" cy="20" r="6" fill="#d4af37"/>
+      <circle cx="78" cy="20" r="3" fill="#8b6914"/>
+      <!-- 光頭 -->
+      <circle cx="50" cy="28" r="14" fill="#e8c098"/>
+      <!-- 戒疤 -->
+      <circle cx="46" cy="18" r="1" fill="#8b0000"/>
+      <circle cx="50" cy="16" r="1" fill="#8b0000"/>
+      <circle cx="54" cy="18" r="1" fill="#8b0000"/>
+      <!-- 怒目 -->
+      <ellipse cx="44" cy="28" rx="2.5" ry="3" fill="#fff"/>
+      <ellipse cx="56" cy="28" rx="2.5" ry="3" fill="#fff"/>
+      <ellipse cx="44" cy="28" rx="1.5" ry="2" fill="#000"/>
+      <ellipse cx="56" cy="28" rx="1.5" ry="2" fill="#000"/>
+      <!-- 白眉 -->
+      <path d="M 40 22 Q 44 19 48 22" stroke="#fff" stroke-width="2" fill="none"/>
+      <path d="M 52 22 Q 56 19 60 22" stroke="#fff" stroke-width="2" fill="none"/>
+      <!-- 白鬍 -->
+      <path d="M 40 38 Q 50 50 60 38 L 58 48 Q 50 55 42 48 Z" fill="#f0f0f0"/>
+      <!-- 黃袈裟 -->
+      <path d="M 32 42 Q 25 50 25 90 L 28 130 Q 35 135 50 135 Q 65 135 72 130 L 75 90 Q 75 50 68 42 Z" fill="#c9a961"/>
+      <!-- 袈裟條紋 -->
+      <line x1="40" y1="60" x2="60" y2="60" stroke="#8b6914" stroke-width="1"/>
+      <line x1="38" y1="80" x2="62" y2="80" stroke="#8b6914" stroke-width="1"/>
+      <line x1="36" y1="100" x2="64" y2="100" stroke="#8b6914" stroke-width="1"/>
+      <!-- 紅腰帶 -->
+      <rect x="28" y="90" width="44" height="5" fill="#8b0000"/>
+      <!-- 手臂 -->
+      <path d="M 28 50 Q 22 70 28 95 L 35 95 Q 35 70 35 55 Z" fill="#c9a961"/>
+      <path d="M 72 50 Q 78 70 72 95 L 65 95 Q 65 70 65 55 Z" fill="#c9a961"/>
+      <circle cx="32" cy="95" r="5" fill="#e8c098"/>
+      <circle cx="68" cy="95" r="5" fill="#e8c098"/>
+      <!-- 腿 -->
+      <rect x="36" y="130" width="10" height="26" fill="#a08040"/>
+      <rect x="54" y="130" width="10" height="26" fill="#a08040"/>
+      <ellipse cx="41" cy="156" rx="8" ry="3" fill="#3a2010"/>
+      <ellipse cx="59" cy="156" rx="8" ry="3" fill="#3a2010"/>
+    </svg>`;
+  }
+  if (enemyName.includes("護法")) {
+    return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <!-- 血劍 -->
+      <line x1="80" y1="35" x2="95" y2="100" stroke="#8b0000" stroke-width="3"/>
+      <line x1="80" y1="35" x2="95" y2="100" stroke="#ff0000" stroke-width="1"/>
+      <rect x="78" y="33" width="6" height="8" fill="#1a0805"/>
+      <!-- 頭巾 -->
+      <path d="M 33 22 Q 50 10 67 22 L 67 33 Q 50 28 33 33 Z" fill="#1a0805"/>
+      <!-- 頭 -->
+      <circle cx="50" cy="30" r="13" fill="#a08070"/>
+      <!-- 紅眼 -->
+      <ellipse cx="44" cy="29" rx="2" ry="2.5" fill="#ff0000"/>
+      <ellipse cx="56" cy="29" rx="2" ry="2.5" fill="#ff0000"/>
+      <ellipse cx="44" cy="29" rx="1" ry="1.5" fill="#8b0000"/>
+      <ellipse cx="56" cy="29" rx="1" ry="1.5" fill="#8b0000"/>
+      <!-- 面具下半 -->
+      <path d="M 40 38 L 60 38 L 58 44 L 42 44 Z" fill="#1a0805"/>
+      <!-- 黑袍 -->
+      <path d="M 32 42 Q 25 50 25 90 L 28 130 Q 35 135 50 135 Q 65 135 72 130 L 75 90 Q 75 50 68 42 Z" fill="#0a0302"/>
+      <!-- 血色魔紋 -->
+      <path d="M 50 50 L 45 60 L 50 65 L 55 60 Z" fill="#8b0000"/>
+      <circle cx="50" cy="75" r="5" fill="none" stroke="#8b0000" stroke-width="1"/>
+      <path d="M 47 75 L 53 75 M 50 72 L 50 78" stroke="#8b0000" stroke-width="1"/>
+      <!-- 血色腰帶 -->
+      <rect x="28" y="92" width="44" height="5" fill="#8b0000"/>
+      <!-- 黑披風 -->
+      <path d="M 25 42 Q 12 80 16 130 L 25 80 Z" fill="#1a0302"/>
+      <path d="M 75 42 Q 88 80 84 130 L 75 80 Z" fill="#1a0302"/>
+      <!-- 手臂 -->
+      <path d="M 28 50 Q 20 75 25 100 L 32 100 Q 32 75 35 55 Z" fill="#0a0302"/>
+      <path d="M 72 50 Q 80 75 75 100 L 68 100 Q 68 75 65 55 Z" fill="#0a0302"/>
+      <circle cx="28" cy="100" r="5" fill="#a08070"/>
+      <circle cx="72" cy="100" r="5" fill="#a08070"/>
+      <!-- 腿 -->
+      <rect x="36" y="130" width="10" height="26" fill="#0a0302"/>
+      <rect x="54" y="130" width="10" height="26" fill="#0a0302"/>
+      <ellipse cx="41" cy="156" rx="8" ry="3" fill="#000"/>
+      <ellipse cx="59" cy="156" rx="8" ry="3" fill="#000"/>
+    </svg>`;
+  }
+  if (enemyName.includes("血天尊")) {
+    return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <!-- 血色光環 -->
+      <circle cx="50" cy="80" r="60" fill="url(#bloodAura)" opacity="0.3"/>
+      <defs>
+        <radialGradient id="bloodAura">
+          <stop offset="0%" stop-color="#ff0000" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#8b0000" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- 魔劍 -->
+      <line x1="82" y1="25" x2="98" y2="105" stroke="#8b0000" stroke-width="4"/>
+      <line x1="82" y1="25" x2="98" y2="105" stroke="#ff0000" stroke-width="1.5"/>
+      <rect x="80" y="22" width="8" height="10" fill="#000"/>
+      <circle cx="84" cy="20" r="3" fill="#ff0000"/>
+      <!-- 王冠 -->
+      <path d="M 35 18 L 40 8 L 45 16 L 50 5 L 55 16 L 60 8 L 65 18 Z" fill="#8b0000" stroke="#ffd700" stroke-width="0.5"/>
+      <circle cx="50" cy="12" r="2" fill="#ffd700"/>
+      <!-- 頭 -->
+      <circle cx="50" cy="30" r="14" fill="#c89080"/>
+      <!-- 邪眼 -->
+      <ellipse cx="44" cy="29" rx="3" ry="3" fill="#ff0000"/>
+      <ellipse cx="56" cy="29" rx="3" ry="3" fill="#ff0000"/>
+      <ellipse cx="44" cy="29" rx="1.5" ry="2" fill="#000"/>
+      <ellipse cx="56" cy="29" rx="1.5" ry="2" fill="#000"/>
+      <!-- 邪笑 -->
+      <path d="M 42 38 Q 50 44 58 38" stroke="#000" stroke-width="1.5" fill="none"/>
+      <!-- 長鬚 -->
+      <path d="M 42 40 Q 38 55 36 65" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+      <path d="M 58 40 Q 62 55 64 65" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+      <!-- 血袍 -->
+      <path d="M 30 42 Q 22 50 22 95 L 25 132 Q 35 138 50 138 Q 65 138 75 132 L 78 95 Q 78 50 70 42 Z" fill="#5a0000"/>
+      <!-- 血袍紋 -->
+      <path d="M 50 55 L 42 70 L 50 78 L 58 70 Z" fill="#000" opacity="0.7"/>
+      <circle cx="50" cy="70" r="3" fill="#ff0000"/>
+      <path d="M 38 90 L 50 100 L 62 90" stroke="#000" stroke-width="2" fill="none"/>
+      <!-- 金腰帶 -->
+      <rect x="25" y="95" width="50" height="6" fill="#d4af37"/>
+      <rect x="25" y="95" width="50" height="2" fill="#ffd700"/>
+      <!-- 大紅披風 -->
+      <path d="M 22 42 Q 8 80 12 138 L 22 80 Z" fill="#3a0000"/>
+      <path d="M 78 42 Q 92 80 88 138 L 78 80 Z" fill="#3a0000"/>
+      <!-- 手臂 -->
+      <path d="M 25 50 Q 15 75 20 105 L 28 105 Q 30 75 32 55 Z" fill="#5a0000"/>
+      <path d="M 75 50 Q 85 75 80 105 L 72 105 Q 70 75 68 55 Z" fill="#5a0000"/>
+      <circle cx="24" cy="105" r="6" fill="#c89080"/>
+      <circle cx="76" cy="105" r="6" fill="#c89080"/>
+      <!-- 腿 -->
+      <rect x="34" y="132" width="12" height="24" fill="#3a0000"/>
+      <rect x="54" y="132" width="12" height="24" fill="#3a0000"/>
+      <ellipse cx="40" cy="156" rx="9" ry="3" fill="#000"/>
+      <ellipse cx="60" cy="156" rx="9" ry="3" fill="#000"/>
+    </svg>`;
+  }
+  // 預設
+  return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+    <circle cx="50" cy="30" r="13" fill="#c89060"/>
+    <rect x="35" y="42" width="30" height="80" fill="#5a3020"/>
+    <rect x="36" y="125" width="10" height="30" fill="#3a2010"/>
+    <rect x="54" y="125" width="10" height="30" fill="#3a2010"/>
+  </svg>`;
+}
+
+// ============ 戰鬥動畫 ============
+function playerAttackAnim(skillName, dmg, callback) {
+  const stage = document.getElementById('battleStage');
+  const playerEl = document.getElementById('fighterPlayer');
+  const enemyEl = document.getElementById('fighterEnemy');
+  if (!stage || !playerEl || !enemyEl) { if (callback) callback(); return; }
+  
+  // 招式名橫幅
+  const banner = document.createElement('div');
+  banner.className = 'skill-name-banner';
+  banner.textContent = `【${skillName}】`;
+  stage.appendChild(banner);
+  
+  setTimeout(() => {
+    playerEl.classList.add('attacking-right');
+    
+    setTimeout(() => {
+      // 命中特效
+      const slash = document.createElement('div');
+      slash.className = 'effect slash-effect';
+      slash.style.left = '78%';
+      slash.style.top = '50%';
+      slash.innerHTML = `<svg width="120" height="120" viewBox="0 0 120 120">
+        <path d="M 10 60 L 110 60" stroke="#ffeb3b" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M 10 60 L 110 60" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M 30 30 L 90 90" stroke="#ff8800" stroke-width="3" fill="none" opacity="0.6"/>
+      </svg>`;
+      stage.appendChild(slash);
+      
+      // 傷害數字
+      const dmgText = document.createElement('div');
+      dmgText.className = 'damage-text';
+      dmgText.textContent = `-${dmg}`;
+      dmgText.style.left = '78%';
+      dmgText.style.top = '40%';
+      stage.appendChild(dmgText);
+      
+      enemyEl.classList.add('hit');
+      setTimeout(() => enemyEl.classList.remove('hit'), 500);
+    }, 250);
+    
+    setTimeout(() => {
+      playerEl.classList.remove('attacking-right');
+      // 清理效果
+      stage.querySelectorAll('.effect, .damage-text, .skill-name-banner').forEach(el => {
+        setTimeout(() => el.remove(), 100);
+      });
+      if (callback) callback();
+    }, 700);
+  }, 400);
+}
+
+function enemyAttackAnim(dmg, callback) {
+  const stage = document.getElementById('battleStage');
+  const playerEl = document.getElementById('fighterPlayer');
+  const enemyEl = document.getElementById('fighterEnemy');
+  if (!stage || !playerEl || !enemyEl) { if (callback) callback(); return; }
+  
+  enemyEl.classList.add('attacking-left');
+  
+  setTimeout(() => {
+    const burst = document.createElement('div');
+    burst.className = 'effect burst-effect';
+    burst.style.left = '22%';
+    burst.style.top = '50%';
+    burst.innerHTML = `<svg width="100" height="100" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="20" fill="#ff3030" opacity="0.6"/>
+      <circle cx="50" cy="50" r="35" fill="none" stroke="#ff6060" stroke-width="3"/>
+    </svg>`;
+    stage.appendChild(burst);
+    
+    const dmgText = document.createElement('div');
+    dmgText.className = 'damage-text';
+    dmgText.textContent = `-${dmg}`;
+    dmgText.style.left = '22%';
+    dmgText.style.top = '40%';
+    stage.appendChild(dmgText);
+    
+    playerEl.classList.add('hit');
+    setTimeout(() => playerEl.classList.remove('hit'), 500);
+  }, 250);
+  
+  setTimeout(() => {
+    enemyEl.classList.remove('attacking-left');
+    stage.querySelectorAll('.effect, .damage-text').forEach(el => el.remove());
+    if (callback) callback();
+  }, 700);
+}
+
+function healAnim(amount, isHp) {
+  const stage = document.getElementById('battleStage');
+  const playerEl = document.getElementById('fighterPlayer');
+  if (!stage || !playerEl) return;
+  
+  const dmgText = document.createElement('div');
+  dmgText.className = 'damage-text heal';
+  dmgText.textContent = `+${amount}`;
+  dmgText.style.left = '22%';
+  dmgText.style.top = '40%';
+  stage.appendChild(dmgText);
+  setTimeout(() => dmgText.remove(), 1000);
+}
+
+function updateMiniHpBars() {
+  const pBar = document.getElementById('playerMiniHp');
+  const eBar = document.getElementById('enemyMiniHp');
+  if (pBar) pBar.style.width = `${100*player.hp/player.hpMax}%`;
+  if (eBar && currentEnemy) eBar.style.width = `${100*currentEnemy.hp/currentEnemy.hpMax}%`;
+}
+
+function defeatAnim(isPlayer) {
+  const el = document.getElementById(isPlayer ? 'fighterPlayer' : 'fighterEnemy');
+  if (el) el.classList.add('defeated');
+}
+
+function useSkill(skillKey) {
+  const sk = skillData[skillKey];
+  if (player.mp < sk.cost) return;
+  player.mp -= sk.cost;
+  
+  const dmg = Math.max(1, rand(sk.dmg[0], sk.dmg[1]) + player.atk - currentEnemy.def);
+  currentEnemy.hp -= dmg;
+  
+  // 禁用按鈕避免重複點擊
+  document.querySelectorAll('.skill-btn, .item-tag, .choice-btn').forEach(b => b.style.pointerEvents = 'none');
+  
+  playerAttackAnim(sk.name, dmg, () => {
+    addScene(`你施展【${sk.name}】，對 ${currentEnemy.name} 造成 ${dmg} 點傷害！`, 'battle-msg');
+    updateMiniHpBars();
+    
+    if (currentEnemy.hp <= 0) {
+      defeatAnim(false);
+      setTimeout(() => winBattle(), 800);
+      return;
+    }
+    enemyTurn();
+  });
+}
+
+function useItem(name) {
+  if (player.items[name] <= 0) return;
+  if (name === "金創藥") {
+    const heal = 50;
+    player.hp = Math.min(player.hpMax, player.hp + heal);
+    addScene(`你服下金創藥，恢復 ${heal} 點氣血。`, 'system-msg');
+    if (inBattle) healAnim(heal, true);
+  } else if (name === "凝神丹") {
+    const heal = 30;
+    player.mp = Math.min(player.mpMax, player.mp + heal);
+    addScene(`你服下凝神丹，恢復 ${heal} 點內力。`, 'system-msg');
+  } else if (name === "九轉還魂丹") {
+    player.hp = player.hpMax;
+    player.mp = player.mpMax;
+    addScene(`你服下九轉還魂丹，氣血內力盡復！`, 'system-msg');
+    if (inBattle) healAnim(player.hpMax, true);
+  }
+  player.items[name]--;
+  updateStats();
+  if (inBattle) {
+    updateMiniHpBars();
+    document.querySelectorAll('.skill-btn, .item-tag, .choice-btn').forEach(b => b.style.pointerEvents = 'none');
+    setTimeout(() => enemyTurn(), 500);
+  }
+}
+
+function enemyTurn() {
+  updateStats();
+  setTimeout(() => {
+    const dmg = Math.max(1, currentEnemy.atk + rand(-3, 3) - player.def);
+    player.hp -= dmg;
+    
+    enemyAttackAnim(dmg, () => {
+      addScene(`${currentEnemy.name} 攻來一記，你受傷 ${dmg} 點！`, 'battle-msg');
+      updateMiniHpBars();
+      updateStats();
+      
+      if (player.hp <= 0) {
+        player.hp = 0;
+        updateStats();
+        defeatAnim(true);
+        setTimeout(() => gameOver(), 1200);
+        return;
+      }
+      showBattleUI();
+    });
+  }, 400);
+}
+
+function flee() {
+  if (Math.random() < 0.6) {
+    addScene("你瞅準時機，腳尖一點，瀟灑離去……", 'system-msg');
+    inBattle = false;
+    currentEnemy = null;
+    setTimeout(() => returnToMap(), 800);
+  } else {
+    addScene("逃跑失敗！敵人緊追不捨！", 'battle-msg');
+    enemyTurn();
+  }
+}
+
+function winBattle() {
+  const e = currentEnemy;
+  addScene(`⚔ 你擊敗了 ${e.name}！`, 'reward-msg');
+  addScene(`獲得經驗 ${e.exp}，紋銀 ${e.gold} 兩。`, 'reward-msg');
+  player.exp += e.exp;
+  player.gold += e.gold;
+  
+  // 機率掉落道具
+  if (Math.random() < 0.3) {
+    const drop = Math.random() < 0.5 ? "金創藥" : "凝神丹";
+    player.items[drop] = (player.items[drop] || 0) + 1;
+    addScene(`敵人身上掉落了【${drop}】！`, 'reward-msg');
+  }
+  
+  while (player.exp >= player.expNext) {
+    levelUp();
+  }
+  
+  inBattle = false;
+  const onWin = currentEnemy.onWin;
+  currentEnemy = null;
+  updateStats();
+  
+  setTimeout(() => {
+    if (onWin) onWin();
+    else returnToMap();
+  }, 1200);
+}
+
+function levelUp() {
+  player.exp -= player.expNext;
+  player.level++;
+  player.expNext = Math.floor(player.expNext * 1.5);
+  player.hpMax += 20;
+  player.mpMax += 10;
+  player.atk += 4;
+  player.def += 2;
+  player.hp = player.hpMax;
+  player.mp = player.mpMax;
+  addScene(`✦ 修為精進！突破至 Lv.${player.level} ✦`, 'level-up');
+  addScene(`氣血 +20，內力 +10，攻擊 +4，防禦 +2`, 'reward-msg');
+  
+  // 學習新招式
+  if (player.level === 2 && !player.skills.includes('jiyun')) {
+    player.skills.push('jiyun');
+    addScene(`✦ 領悟新招式：【急雲斬】 ✦`, 'level-up');
+  }
+  if (player.level === 4 && !player.skills.includes('qixing')) {
+    player.skills.push('qixing');
+    addScene(`✦ 領悟新招式：【七星貫日】 ✦`, 'level-up');
+  }
+  if (player.level === 7 && !player.skills.includes('jianqi')) {
+    player.skills.push('jianqi');
+    addScene(`✦ 領悟新招式：【御劍千里】 ✦`, 'level-up');
+  }
+}
+
+function gameOver() {
+  addScene("✦ 你倒在血泊之中，江湖夢碎…… ✦", 'level-up');
+  setActions(`
+    <button class="choice-btn" onclick="restart()">⟲ 重新開始</button>
+  `);
+}
+
+function restart() {
+  location.reload();
+}
+
+// ============ 劇情系統 ============
+function startGame() {
+  sceneText = [];
+  addScene("時值大宋年間，江湖風雲詭譎，魔教橫行，正道式微。");
+  addScene("你乃青城山下一名平凡少年，自幼父母雙亡，由村中老者撫養成人。");
+  addScene("某夜，村口老槐樹下，一名白衣人飄然而至，將一柄古樸長劍與一本《青鋒劍譜》塞於你手……");
+  addScene("「孩子，你父母乃當年正派俠士，遭魔教所害。今授你此劍，望你早日學成，重出江湖，報仇雪恨！」", 'dialogue');
+  addScene("白衣人言罷，化作一道清風消逝。三年後，你藝成下山……");
+  
+  setActions(`
+    <button class="choice-btn" onclick="scene_villageRoad()">▶ 踏上江湖之路</button>
+  `);
+}
+
+function scene_villageRoad() {
+  addScene("你背負長劍，行至山下小鎮外的官道之上。秋風蕭瑟，落葉紛飛。");
+  addScene("忽聞前方林中傳來打鬥聲，夾雜著呼救之聲！");
+  setActions(`
+    <button class="choice-btn" onclick="scene_helpStranger()">⚔ 路見不平，拔劍相助</button>
+    <button class="choice-btn" onclick="scene_avoidTrouble()">👣 多一事不如少一事，繞道而行</button>
+  `);
+}
+
+function scene_helpStranger() {
+  addScene("你大喝一聲：「住手！」拔劍衝入林中。");
+  addScene("只見三名山賊正圍攻一名老者，老者已身負輕傷。");
+  startBattle('bandit', () => {
+    addScene("其餘山賊見勢不妙，倉皇逃走。", 'system-msg');
+    addScene("老者拱手道：「多謝少俠相救！老朽姓張，乃藥王谷弟子。這枚【凝神丹】贈與少俠，聊表謝意。」", 'dialogue');
+    player.items["凝神丹"] = (player.items["凝神丹"] || 0) + 2;
+    addScene("獲得【凝神丹】×2", 'reward-msg');
+    player.flags.savedElder = true;
+    updateStats();
+    setTimeout(() => scene_townEntry(), 1000);
+  });
+}
+
+function scene_avoidTrouble() {
+  addScene("你心想多一事不如少一事，悄悄繞道而行。");
+  addScene("行不多時，林中傳出一聲淒厲慘叫，隨後歸於沉寂……");
+  addScene("你心中隱隱不安，但已無力回天。", 'system-msg');
+  player.flags.coward = true;
+  setTimeout(() => scene_townEntry(), 1500);
+}
+
+function scene_townEntry() {
+  addScene("———————————", 'system-msg');
+  addScene("你來到了「臨安鎮」，鎮中酒肆林立，商旅往來。");
+  addScene("茶館中傳出說書人的聲音：「……話說那魔教血天尊，盤踞黑風嶺已有數年，正派群雄束手無策……」", 'dialogue');
+  setActions(`
+    <button class="choice-btn" onclick="scene_inn()">🍶 進入酒樓打探消息</button>
+    <button class="choice-btn" onclick="scene_shop()">🏪 前往藥鋪購買物資</button>
+    <button class="choice-btn" onclick="scene_blackWindMt()">🏔 直奔黑風嶺尋仇</button>
+  `);
+}
+
+function scene_inn() {
+  addScene("你步入「醉仙樓」，要了一壺竹葉青與兩碟小菜。");
+  addScene("鄰桌一名滿身酒氣的劍客打量著你，忽然一拍桌子站起：");
+  addScene("「小子！你這劍法路數，可是青鋒一脈？多年未見青鋒傳人，今日老子要會會你！」", 'dialogue');
+  setActions(`
+    <button class="choice-btn" onclick="scene_drunkFight()">⚔ 既然如此，便領教一二</button>
+    <button class="choice-btn" onclick="scene_drunkAvoid()">🍵 前輩誤會，在下不願動手</button>
+  `);
+}
+
+function scene_drunkFight() {
+  addScene("你拔劍而立：「前輩既要切磋，晚輩奉陪！」", 'dialogue');
+  startBattle('swordsman', () => {
+    addScene("劍客倒地大笑：「好！好個青鋒傳人！老夫『醉劍』李長風，這套【醉劍譜】贈你！」", 'dialogue');
+    if (!player.skills.includes('qixing')) {
+      player.skills.push('qixing');
+      addScene("✦ 習得武學：【七星貫日】 ✦", 'level-up');
+    }
+    player.items["九轉還魂丹"] = (player.items["九轉還魂丹"] || 0) + 1;
+    addScene("獲得【九轉還魂丹】×1", 'reward-msg');
+    updateStats();
+    setTimeout(() => scene_townEntry(), 1200);
+  });
+}
+
+function scene_drunkAvoid() {
+  addScene("你抱拳道：「前輩誤會，晚輩確是青鋒一脈，但不願與前輩動手。」", 'dialogue');
+  addScene("劍客哈哈大笑：「也罷，算你識趣！」", 'dialogue');
+  setTimeout(() => scene_townEntry(), 1200);
+}
+
+function scene_shop() {
+  addScene("你來到「百草堂」藥鋪，櫃檯後一位白髮老者正在抓藥。");
+  setActions(`
+    <button class="choice-btn" onclick="buyItem('金創藥', 15)">買【金創藥】 - 15兩 (回50氣血)</button>
+    <button class="choice-btn" onclick="buyItem('凝神丹', 20)">買【凝神丹】 - 20兩 (回30內力)</button>
+    <button class="choice-btn" onclick="buyItem('九轉還魂丹', 100)">買【九轉還魂丹】 - 100兩 (滿血滿氣)</button>
+    <button class="choice-btn" onclick="scene_townEntry()">↩ 離開藥鋪</button>
+  `);
+}
+
+function buyItem(name, price) {
+  if (player.gold < price) {
+    addScene("紋銀不足，買不起。", 'system-msg');
+    return;
+  }
+  player.gold -= price;
+  player.items[name] = (player.items[name] || 0) + 1;
+  addScene(`你購買了【${name}】，花費 ${price} 兩。`, 'reward-msg');
+  updateStats();
+  scene_shop();
+}
+
+function scene_blackWindMt() {
+  addScene("———————————", 'system-msg');
+  addScene("你來到黑風嶺山腳，但見群山連綿，黑雲壓頂。");
+  addScene("一條崎嶇山路通向嶺上魔教總壇。");
+  setActions(`
+    <button class="choice-btn" onclick="scene_mountainPath()">⚔ 沿山路上行</button>
+    <button class="choice-btn" onclick="scene_oldTemple()">🏯 探查山腰古廟</button>
+    <button class="choice-btn" onclick="scene_townEntry()">↩ 暫且回鎮</button>
+  `);
+}
+
+function scene_mountainPath() {
+  addScene("你沿山路而上，行至半山腰，忽然殺氣大作！");
+  addScene("數名黑衣人從林中躍出，當先一人正是黑風寨主！");
+  startBattle('banditLeader', () => {
+    addScene("黑風寨主臨死前嘶聲：「你……你逃不出此山的……教主已盯上你了……」", 'dialogue');
+    player.gold += 50;
+    addScene("從寨主身上搜出 50 兩紋銀。", 'reward-msg');
+    updateStats();
+    setTimeout(() => scene_blackWindMt(), 1200);
+  });
+}
+
+function scene_oldTemple() {
+  addScene("你來到山腰一座荒廢古廟，廟中蛛網密布，佛像斑駁。");
+  addScene("殿後忽然傳出嘶啞笑聲：「嘿嘿……三十年了，總算又有人來陪老衲解悶！」", 'dialogue');
+  startBattle('monk', () => {
+    addScene("老僧倒地長嘆：「好……好俊的劍法！老衲三十年不曾敗過……今日輸得心服口服。」", 'dialogue');
+    addScene("「這本《九陽真經》殘卷贈你，望你扳倒魔教，還江湖朗朗乾坤……」", 'dialogue');
+    if (!player.skills.includes('jianqi')) {
+      player.skills.push('jianqi');
+      addScene("✦ 習得絕學：【御劍千里】 ✦", 'level-up');
+    }
+    player.hpMax += 50;
+    player.mpMax += 30;
+    player.hp = player.hpMax;
+    player.mp = player.mpMax;
+    addScene("✦ 內功大進！氣血 +50，內力 +30 ✦", 'reward-msg');
+    player.flags.metMonk = true;
+    updateStats();
+    setTimeout(() => scene_blackWindMt(), 1500);
+  });
+}
+
+function scene_finalApproach() {
+  if (player.level < 5) {
+    addScene("你感覺自己修為尚淺，貿然上山恐難全身而退……", 'system-msg');
+    addScene("（建議至少達到 Lv.5 再挑戰魔教總壇）", 'system-msg');
+    setTimeout(() => scene_blackWindMt(), 1200);
+    return;
+  }
+  addScene("———————————", 'system-msg');
+  addScene("你登上黑風嶺絕頂，但見血色大殿巍然聳立，殿前血旗飄揚！");
+  addScene("一名黑衣護法迎面殺來！");
+  startBattle('demon', () => {
+    addScene("護法臨死爆喝：「教主……為我報仇——！」", 'dialogue');
+    setTimeout(() => scene_finalBoss(), 1000);
+  });
+}
+
+function scene_finalBoss() {
+  addScene("你推開血色殿門，殿中血天尊高坐主位，雙目如電！");
+  addScene("「你便是青鋒傳人？哼，當年你父母也是死在我手下。今日……便讓你父子團聚！」", 'dialogue');
+  setActions(`
+    <button class="choice-btn" onclick="scene_bossFight()">⚔ 為父母報仇雪恨！</button>
+  `);
+}
+
+function scene_bossFight() {
+  startBattle('boss', () => {
+    addScene("血天尊踉蹌倒地，血袍盡染：「我……我竟敗了……江湖……江湖是你的了……」", 'dialogue');
+    setTimeout(() => scene_ending(), 1500);
+  });
+}
+
+function scene_ending() {
+  addScene("———————————", 'system-msg');
+  addScene("✦ ✦ ✦ 終章 ✦ ✦ ✦", 'level-up');
+  addScene("血天尊伏誅，魔教土崩瓦解。江湖正道齊聚黑風嶺，共推你為武林盟主。");
+  addScene("你手持青鋒劍，立於絕頂，遠眺群山。");
+  addScene("白衣人臨終之言猶在耳畔，父母之仇已報，江湖太平。");
+  
+  if (player.flags.savedElder && player.flags.metMonk) {
+    addScene("✦ 結局：俠之大者 ✦", 'level-up');
+    addScene("你行俠仗義，廣結善緣，被後世尊為「天下第一劍」，名揚千古！");
+  } else if (player.flags.metMonk) {
+    addScene("✦ 結局：劍道至尊 ✦", 'level-up');
+    addScene("你劍法通神，江湖人稱「青鋒劍神」，獨步武林！");
+  } else {
+    addScene("✦ 結局：仗劍江湖 ✦", 'level-up');
+    addScene("你了卻心願，從此飄然江湖，行蹤莫測。");
+  }
+  
+  addScene(`最終境界：Lv.${player.level}　紋銀：${player.gold} 兩`, 'reward-msg');
+  addScene("—— 完 ——", 'system-msg');
+  
+  setActions(`
+    <button class="choice-btn" onclick="restart()">⟲ 再戰江湖</button>
+  `);
+}
+
+function returnToMap() {
+  // 根據劇情進度回到合適的場景
+  if (player.flags.metMonk || player.level >= 5) {
+    setActions(`
+      <button class="choice-btn" onclick="scene_finalApproach()">⚔ 直闖魔教總壇 (Lv.5+ 推薦)</button>
+      <button class="choice-btn" onclick="scene_blackWindMt()">↩ 回黑風嶺山腳</button>
+      <button class="choice-btn" onclick="scene_townEntry()">🏘 回臨安鎮</button>
+    `);
+  } else {
+    scene_blackWindMt();
+  }
+}
+
+// ============ 啟動 ============
+updateStats();
+startGame();
+</script>
+</body>
+</html>
