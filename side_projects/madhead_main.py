@@ -1,5 +1,9 @@
 import time
 import sys
+import time
+import sys
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+import argparse
 import argparse
 from selenium.webdriver.common.by import By
 
@@ -176,7 +180,7 @@ summary = f"""[巴哈神魔之塔] {args.mode.upper()} 模式爬取結果
 {content_lines}"""
 
 print("\n===== 通知摘要 =====")
-print(summary)
+print(summary.encode('utf-8', errors='replace').decode('utf-8'))
 print("====================\n")
 
 # LINE 推送

@@ -1,8 +1,6 @@
 # Created: 2026-04-16
 """使用 LINE Messaging API 推送訊息到你的 LINE。
 
-⚠️ LINE Notify 已於 2025/03/31 停止服務，所以這邊改用 Messaging API。
-
 前置準備：
     1. 到 https://developers.line.biz/console/ 建立一個 Provider
     2. 在 Provider 底下新增 Messaging API channel
@@ -15,11 +13,19 @@
     6. 將 token 與 userId 放進環境變數：
           LINE_CHANNEL_ACCESS_TOKEN
           LINE_USER_ID
+簡易流程：
+    你的 Python 程式
+      ↓ 透過 requests.post 發出 HTTP 請求
+      ↓ （帶著 token 證明你是合法使用者）
+      ↓
+    LINE 官方伺服器 (api.line.me)
+        ↓ 驗證 token、找到 user_id
+        ↓
+    你的手機 LINE App ← 收到訊息
 """
 import os
 
 import requests
-
 
 class LineNotifier:
     PUSH_URL = "https://api.line.me/v2/bot/message/push"
