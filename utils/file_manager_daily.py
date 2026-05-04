@@ -35,8 +35,16 @@ class DailyFileHandler:
         回傳:
         - str, 加上今天日期後綴的新路徑
         """
+        # 1. 將路徑拆解成「主檔名」與「副檔名」
+        # 例如: 'logs/test.txt' -> base='logs/test', ext='.txt'
         base, ext = os.path.splitext(file_path)
+        
+        # 2. 取得系統當下的日期，並格式化為字串
+        # 這是決定分類基準的地方：datetime.now() 抓取執行程式的那一刻
         today = datetime.now().strftime("%Y-%m-%d")
+        
+        # 3. 把日期組合成新的檔名並回傳
+        # 結果會變成：'logs/test_2026-05-04.txt'
         return f"{base}_{today}{ext}"
 
     def _ensure_parent_dir(self, file_path):
