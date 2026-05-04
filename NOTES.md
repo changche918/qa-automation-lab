@@ -531,6 +531,10 @@ selenium 的 workflow API 模式 / web 模式 (主程式的工作流)
 ---
 ## 20260503
 1. [必做] 請 AI 計算跑 routing 時間區段是怎麼算的 ? (e.g. 冷門時段? 依據?)
+    - 官方文件 : https://code.claude.com/docs/en/routines#add-a-schedule-trigger
+        - 意思是 : 時間以本地時區輸入並自動換算，因此無論雲端基礎設施位於何處，Routine 都會在該牆鐘時間執行。由於 stagger 機制，執行可能在排定時間後幾分鐘才開始。每個 Routine 的偏移量是固定的。
+        - 與 AI 對話 : https://claude.ai/chat/51d35315-13b5-4526-aec0-09d4954b106c
+
     - 流程大概像是 : 根據資料查證發生原因 > 做出相應決策與判斷 > 與對方討論是否可接受 > 調整流程
     - * 補充 : 講話不要講太滿，不確定的話可以說 - 猜測、再確認一下等等 ...
     - * 補充 : 可以先請 AI 提供佐證資料 ( 例如直接看 AI document 的來源 + 限時提供 Solution 解法 )，要檢視論壇或討論區的答案 ( 不一定是正確 )

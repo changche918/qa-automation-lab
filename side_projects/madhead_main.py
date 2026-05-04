@@ -19,6 +19,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from utils.file_manager import FileHandler
+
+from utils.file_manager_daily import DailyFileHandler
 from side_projects.utils.drivers import WebController
 from side_projects.utils.mailer import Mailer
 from side_projects.utils.line_notifier import LineNotifier
@@ -30,7 +32,8 @@ file_extension = "log.txt"
 file_path = f"{log_dir}post_{file_extension}"
 content_path = f"{log_dir}content_{file_extension}"
 
-log = FileHandler()
+# log = FileHandler()
+log = DailyFileHandler()
 
 # 1. 建立參數解析器
 parser = argparse.ArgumentParser(description="爬蟲與 API 執行工具")
